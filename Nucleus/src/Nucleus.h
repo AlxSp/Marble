@@ -2,7 +2,7 @@
 
 //For use of Nucleus applications
 #include "Nucleus/Application.h"
-
+#include "Nucleus/Log.h"
 
 //----Entry Point----//
 #include "Nucleus/EntryPoint.h"
