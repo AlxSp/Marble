@@ -1,5 +1,8 @@
+#include "ncpch.h"
 #include "Application.h"
 
+#include "Nucleus/Events/ApplicationEvent.h"
+#include "Nucleus/Log.h"
 
 namespace Nucleus {
 	Application::Application()
@@ -12,6 +15,9 @@ namespace Nucleus {
 	}
 
 	void Application::Run(){
+		WindowResizeEvent e(1280, 720);
+		NC_TRACE(e);
+
 		while (true);
 	}
 }

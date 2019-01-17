@@ -17,12 +17,16 @@ project "Nucleus"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+    pchheader "ncpch.h"
+    pchsource "Nucleus/src/ncpch.cpp"
+
     files {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp"
     }
 
     includedirs {
+        "%{prj.name}/src",
         "%{prj.name}/thirdParty/spdlog/include"
     }
 

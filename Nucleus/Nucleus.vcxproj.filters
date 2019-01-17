@@ -4,6 +4,9 @@
     <Filter Include="Nucleus">
       <UniqueIdentifier>{C4212690-3001-A52B-3919-3002A5770B8D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nucleus\Events">
+      <UniqueIdentifier>{28A9B353-1477-A759-FD0A-1880E97783BE}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Nucleus.h" />
@@ -16,9 +19,22 @@
     <ClInclude Include="src\Nucleus\EntryPoint.h">
       <Filter>Nucleus</Filter>
     </ClInclude>
+    <ClInclude Include="src\Nucleus\Events\ApplicationEvent.h">
+      <Filter>Nucleus\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nucleus\Events\Event.h">
+      <Filter>Nucleus\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nucleus\Events\KeyEvent.h">
+      <Filter>Nucleus\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nucleus\Events\MouseEvent.h">
+      <Filter>Nucleus\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Nucleus\Log.h">
       <Filter>Nucleus</Filter>
     </ClInclude>
+    <ClInclude Include="src\ncpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Nucleus\Application.cpp">
@@ -27,5 +43,6 @@
     <ClCompile Include="src\Nucleus\Log.cpp">
       <Filter>Nucleus</Filter>
     </ClCompile>
+    <ClCompile Include="src\ncpch.cpp" />
   </ItemGroup>
 </Project>

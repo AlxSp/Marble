@@ -1,8 +1,9 @@
 #pragma once
 
-#include <memory.h>
+#include "ncpch.h"
 #include "Core.h"
 #include "spdlog/spdlog.h"
+#include "spdlog/fmt/ostr.h"
 
 namespace Nucleus {
 	class NUCLEUS_API Log

@@ -9,3 +9,5 @@
 #else
 	#error Nucleus only supports Windows at the moment!	
 #endif //NC_PLATFORM_WINDOWS
+
+#define BIT(x) (1 << x)
