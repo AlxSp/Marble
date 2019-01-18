@@ -9,6 +9,12 @@ workspace "Nucleus"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "Nucleus/thirdParty/GLFW/include"
+
+include "Nucleus/thirdParty/GLFW"
+
 project "Nucleus"
     location "Nucleus"
     kind "SharedLib"
@@ -27,7 +33,13 @@ project "Nucleus"
 
     includedirs {
         "%{prj.name}/src",
-        "%{prj.name}/thirdParty/spdlog/include"
+        "%{prj.name}/thirdParty/spdlog/include",
+        "%{IncludeDir.GLFW}"
+    }
+
+    links {
+        "GLFW",
+        "opengl32.lib"
     }
 
     filter "system:windows"
