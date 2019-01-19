@@ -64,6 +64,7 @@ namespace Nucleus {
 			return ss.str();
 		}
 
+		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
 	class NUCLEUS_API MouseButtonReleasedEvent : public MouseButtonEvent {
