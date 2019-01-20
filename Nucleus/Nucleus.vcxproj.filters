@@ -7,6 +7,12 @@
     <Filter Include="Nucleus\Events">
       <UniqueIdentifier>{28A9B353-1477-A759-FD0A-1880E97783BE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Nucleus.h" />
@@ -31,21 +37,39 @@
     <ClInclude Include="src\Nucleus\Events\MouseEvent.h">
       <Filter>Nucleus\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Nucleus\Layer.h">
+      <Filter>Nucleus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nucleus\LayerStack.h">
+      <Filter>Nucleus</Filter>
+    </ClInclude>
     <ClInclude Include="src\Nucleus\Log.h">
       <Filter>Nucleus</Filter>
     </ClInclude>
+    <ClInclude Include="src\Nucleus\Window.h">
+      <Filter>Nucleus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\ncpch.h" />
-    <ClInclude Include="src\Nucleus\Window.h" />
-    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Nucleus\Application.cpp">
       <Filter>Nucleus</Filter>
     </ClCompile>
+    <ClCompile Include="src\Nucleus\Layer.cpp">
+      <Filter>Nucleus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Nucleus\LayerStack.cpp">
+      <Filter>Nucleus</Filter>
+    </ClCompile>
     <ClCompile Include="src\Nucleus\Log.cpp">
       <Filter>Nucleus</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\ncpch.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>

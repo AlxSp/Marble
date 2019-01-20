@@ -12,8 +12,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Nucleus/thirdParty/GLFW/include"
+IncludeDir["Glad"] = "Nucleus/thirdParty/Glad/include"
 
 include "Nucleus/thirdParty/GLFW"
+include "Nucleus/thirdParty/Glad"
 
 project "Nucleus"
     location "Nucleus"
@@ -34,10 +36,12 @@ project "Nucleus"
     includedirs {
         "%{prj.name}/src",
         "%{prj.name}/thirdParty/spdlog/include",
-        "%{IncludeDir.GLFW}"
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.Glad}"
     }
 
     links {
+        "Glad",
         "GLFW",
         "opengl32.lib"
     }
@@ -49,7 +53,8 @@ project "Nucleus"
 
         defines {
             "NC_PLATFORM_WINDOWS",
-            "NC_BUILD_DLL"
+            "NC_BUILD_DLL",
+            "GLFW_INCLUDE_NONE"
         }
         
         postbuildcommands {
@@ -58,14 +63,17 @@ project "Nucleus"
 
     filter "configurations:Debug"
         defines "NC_DEBUG"
+        buildoptions "/MDd"
         symbols "On"
 
     filter "configurations:Release"
         defines "NC_RELEASE"
+        buildoptions "/MD"
         optimize "On"
 
     filter "configurations:Dist"
         defines "NC_DIST"
+        buildoptions "/MD"
         optimize "On"
 
 project "Sandbox"
@@ -101,12 +109,15 @@ project "Sandbox"
 
     filter "configurations:Debug"
         defines "NC_DEBUG"
+        buildoptions "/MDd"
         symbols "On"
 
     filter "configurations:Release"
         defines "NC_RELEASE"
+        buildoptions "/MD"
         optimize "On"
 
     filter "configurations:Dist"
         defines "NC_DIST"
+        buildoptions "/MD"
         optimize "On"
