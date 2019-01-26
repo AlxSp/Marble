@@ -2,11 +2,12 @@
 #include "Application.h"
 
 #include "Nucleus/Log.h"
+//MAy not be needed
+#include <glad/glad.h>
 
-//#include <GLFW/glfw3.h>
 namespace Nucleus {
 
-#define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+//#define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
 	Application* Application::s_Instance = nullptr;
 
@@ -15,7 +16,7 @@ namespace Nucleus {
 		NC_CORE_ASSERT(!s_Instance, "Application Already Exists!!");
 		s_Instance = this; 
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+		m_Window->SetEventCallback(NC_BIND_EVENT_FN(Application::OnEvent));
 	}
 
 
@@ -36,7 +37,7 @@ namespace Nucleus {
 
 	void Application::OnEvent(Event &e) {
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowCloseEvent>(NC_BIND_EVENT_FN(Application::OnWindowClose));
 
 		//NC_CORE_TRACE("{0}", e);
 
@@ -49,10 +50,12 @@ namespace Nucleus {
 
 	void Application::Run() {
 		while (m_Running) {
+			//glClearColor(1, 0, 1, 1);
+			glClear(GL_COLOR_BUFFER_BIT);
+
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
-			}
-				
+			}	
 
 			m_Window->OnUpdate();
 		}

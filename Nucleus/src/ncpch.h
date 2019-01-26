@@ -16,4 +16,4 @@
 
 #ifdef NC_PLATFORM_WINDOWS
 	#include <Windows.h>
-#endif
+#endif //NC_PLATFORM_WINDOWS

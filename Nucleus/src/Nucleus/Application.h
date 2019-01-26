@@ -1,12 +1,11 @@
 #pragma once
+
 #include "Core.h"
 
 #include "Window.h"
 #include "Nucleus/LayerStack.h"
 #include "Nucleus/Events/Event.h"
 #include "Nucleus/Events/ApplicationEvent.h"
-
-
 
 namespace Nucleus {
 	class NUCLEUS_API Application
@@ -36,6 +35,7 @@ namespace Nucleus {
 		static Application* s_Instance;
 	};
 
+	//To be defined in Client
 	Application* CreateApplication();
 
 }
