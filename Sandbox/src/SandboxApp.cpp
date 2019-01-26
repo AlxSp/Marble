@@ -20,6 +20,7 @@ public:
 	Sandbox() {
 		
 		PushLayer(new ExampleLayer());
+		PushOverlay(new Nucleus::ImGuiLayer());
 	}
 
 	~Sandbox() {

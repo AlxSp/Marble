@@ -4,3 +4,6 @@
 [submodule "Nucleus/thirdParty/GLFW"]
 	path = Nucleus/thirdParty/GLFW
 	url = https://github.com/glfw/glfw.git
+[submodule "Nucleus/thirdParty/imgui"]
+	path = Nucleus/thirdParty/imgui
+	url = https://github.com/ocornut/imgui
