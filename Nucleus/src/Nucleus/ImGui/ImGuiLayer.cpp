@@ -6,6 +6,8 @@
 
 #include "Nucleus/Application.h"
 
+//TEMPORARY PROPABLY MOVE TO NCPCH.H
+#include "Nucleus/KeyCodes.h"
 //TEMPORARY
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -28,27 +30,27 @@ namespace Nucleus {
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
 		// Temporary: should eventually use Hazel key codes
-		io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
-		io.KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
-		io.KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
-		io.KeyMap[ImGuiKey_UpArrow] = GLFW_KEY_UP;
-		io.KeyMap[ImGuiKey_DownArrow] = GLFW_KEY_DOWN;
-		io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
-		io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
-		io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
-		io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
-		io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
-		io.KeyMap[ImGuiKey_Delete] = GLFW_KEY_DELETE;
-		io.KeyMap[ImGuiKey_Backspace] = GLFW_KEY_BACKSPACE;
-		io.KeyMap[ImGuiKey_Space] = GLFW_KEY_SPACE;
-		io.KeyMap[ImGuiKey_Enter] = GLFW_KEY_ENTER;
-		io.KeyMap[ImGuiKey_Escape] = GLFW_KEY_ESCAPE;
-		io.KeyMap[ImGuiKey_A] = GLFW_KEY_A;
-		io.KeyMap[ImGuiKey_C] = GLFW_KEY_C;
-		io.KeyMap[ImGuiKey_V] = GLFW_KEY_V;
-		io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
-		io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
-		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
+		io.KeyMap[ImGuiKey_Tab] = NC_KEY_TAB;
+		io.KeyMap[ImGuiKey_LeftArrow] = NC_KEY_LEFT;
+		io.KeyMap[ImGuiKey_RightArrow] = NC_KEY_RIGHT;
+		io.KeyMap[ImGuiKey_UpArrow] = NC_KEY_UP;
+		io.KeyMap[ImGuiKey_DownArrow] = NC_KEY_DOWN;
+		io.KeyMap[ImGuiKey_PageUp] = NC_KEY_PAGE_UP;
+		io.KeyMap[ImGuiKey_PageDown] = NC_KEY_PAGE_DOWN;
+		io.KeyMap[ImGuiKey_Home] = NC_KEY_HOME;
+		io.KeyMap[ImGuiKey_End] = NC_KEY_END;
+		io.KeyMap[ImGuiKey_Insert] = NC_KEY_INSERT;
+		io.KeyMap[ImGuiKey_Delete] = NC_KEY_DELETE;
+		io.KeyMap[ImGuiKey_Backspace] = NC_KEY_BACKSPACE;
+		io.KeyMap[ImGuiKey_Space] = NC_KEY_SPACE;
+		io.KeyMap[ImGuiKey_Enter] = NC_KEY_ENTER;
+		io.KeyMap[ImGuiKey_Escape] = NC_KEY_ESCAPE;
+		io.KeyMap[ImGuiKey_A] = NC_KEY_A;
+		io.KeyMap[ImGuiKey_C] = NC_KEY_C;
+		io.KeyMap[ImGuiKey_V] = NC_KEY_V;
+		io.KeyMap[ImGuiKey_X] = NC_KEY_X;
+		io.KeyMap[ImGuiKey_Y] = NC_KEY_Y;
+		io.KeyMap[ImGuiKey_Z] = NC_KEY_Z;
 
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
@@ -124,10 +126,10 @@ namespace Nucleus {
 		io.KeysDown[e.GetKeyCode()] = true;
 
 		// Modifiers are not reliable across systems
-		io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
-		io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
-		io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
-		io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+		io.KeyCtrl = io.KeysDown[NC_KEY_LEFT_CONTROL] || io.KeysDown[NC_KEY_RIGHT_CONTROL];
+		io.KeyShift = io.KeysDown[NC_KEY_LEFT_SHIFT] || io.KeysDown[NC_KEY_RIGHT_SHIFT];
+		io.KeyAlt = io.KeysDown[NC_KEY_LEFT_ALT] || io.KeysDown[NC_KEY_RIGHT_ALT];
+		io.KeySuper = io.KeysDown[NC_KEY_LEFT_SUPER] || io.KeysDown[NC_KEY_RIGHT_SUPER];
 		return false;
 	}
 

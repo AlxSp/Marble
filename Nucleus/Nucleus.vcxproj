@@ -158,6 +158,7 @@
     <ClInclude Include="src\Nucleus\Events\KeyEvent.h" />
     <ClInclude Include="src\Nucleus\Events\MouseEvent.h" />
     <ClInclude Include="src\Nucleus\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Nucleus\KeyCodes.h" />
     <ClInclude Include="src\Nucleus\Layer.h" />
     <ClInclude Include="src\Nucleus\LayerStack.h" />
     <ClInclude Include="src\Nucleus\Log.h" />
