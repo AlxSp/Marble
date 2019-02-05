@@ -17,9 +17,11 @@ IncludeDir["GLFW"] = "Nucleus/thirdParty/GLFW/include"
 IncludeDir["Glad"] = "Nucleus/thirdParty/Glad/include"
 IncludeDir["ImGui"] = "Nucleus/thirdParty/imgui"
 
-include "Nucleus/thirdParty/GLFW"
-include "Nucleus/thirdParty/Glad"
-include "Nucleus/thirdParty/ImGui"
+group "Dependencies"
+    include "Nucleus/thirdParty/GLFW"
+    include "Nucleus/thirdParty/Glad"
+    include "Nucleus/thirdParty/ImGui"
+group ""
 
 project "Nucleus"
     location "Nucleus"
@@ -64,7 +66,7 @@ project "Nucleus"
         }
         
         postbuildcommands {
-            ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+            ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
         }
 
     filter "configurations:Debug"
