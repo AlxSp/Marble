@@ -16,6 +16,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Nucleus/thirdParty/GLFW/include"
 IncludeDir["Glad"] = "Nucleus/thirdParty/Glad/include"
 IncludeDir["ImGui"] = "Nucleus/thirdParty/imgui"
+IncludeDir["glm"] = "Nucleus/thirdParty/glm"
 
 group "Dependencies"
     include "Nucleus/thirdParty/GLFW"
@@ -37,15 +38,18 @@ project "Nucleus"
 
     files {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/thirdParty/glm/glm/**.hpp",
+        "%{prj.name}/thirdParty/glm/glm/**.inl",
     }
 
     includedirs {
         "%{prj.name}/src",
         "%{prj.name}/thirdParty/spdlog/include",
         "%{IncludeDir.GLFW}",
+        "%{IncludeDir.Glad}",
         "%{IncludeDir.ImGui}",
-        "%{IncludeDir.Glad}"
+        "%{IncludeDir.glm}"
     }
 
     links {
@@ -100,7 +104,8 @@ project "Sandbox"
 
     includedirs {
         "Nucleus/thirdParty/spdlog/include",
-        "Nucleus/src"
+        "Nucleus/src",
+        "%{IncludeDir.glm}"
     }
 
     links {

@@ -3,7 +3,7 @@
 class ExampleLayer : public Nucleus::Layer {
 public:
 	ExampleLayer() : Layer("Example") {
-		
+
 	}
 
 	void OnUpdate() override {

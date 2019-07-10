@@ -7,3 +7,6 @@
 [submodule "Nucleus/thirdParty/imgui"]
 	path = Nucleus/thirdParty/imgui
 	url = https://github.com/ocornut/imgui
+[submodule "Nucleus\\thirdParty\\glm"]
+	path = Nucleus\\thirdParty\\glm
+	url = https://github.com/g-truc/glm
