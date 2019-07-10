@@ -158,12 +158,14 @@
     <ClInclude Include="src\Nucleus\Events\KeyEvent.h" />
     <ClInclude Include="src\Nucleus\Events\MouseEvent.h" />
     <ClInclude Include="src\Nucleus\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Nucleus\Input.h" />
     <ClInclude Include="src\Nucleus\KeyCodes.h" />
     <ClInclude Include="src\Nucleus\Layer.h" />
     <ClInclude Include="src\Nucleus\LayerStack.h" />
     <ClInclude Include="src\Nucleus\Log.h" />
     <ClInclude Include="src\Nucleus\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\ncpch.h" />
   </ItemGroup>
@@ -174,6 +176,7 @@
     <ClCompile Include="src\Nucleus\LayerStack.cpp" />
     <ClCompile Include="src\Nucleus\Log.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\ncpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

@@ -5,6 +5,8 @@
 //MAy not be needed
 #include <glad/glad.h>
 
+#include "Input.h"
+
 namespace Nucleus {
 
 //#define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
@@ -56,6 +58,8 @@ namespace Nucleus {
 				layer->OnUpdate();
 			}	
 
+			auto[x, y] = Input::GetMousePosition();
+			NC_CORE_TRACE("{0}, {1}", x, y);
 			m_Window->OnUpdate();
 		}
 	}
