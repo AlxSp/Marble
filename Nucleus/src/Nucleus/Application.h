@@ -7,6 +7,8 @@
 #include "Nucleus/Events/Event.h"
 #include "Nucleus/Events/ApplicationEvent.h"
 
+#include "Nucleus/ImGui/ImGuiLayer.h"
+
 namespace Nucleus {
 	class NUCLEUS_API Application
 	{
@@ -22,12 +24,13 @@ namespace Nucleus {
 		void PushOverlay(Layer* layer);
 
 		inline static Application& Get() { return *s_Instance; }
-		inline Window& getWindow() { return *m_Window; }
+		inline Window& GetWindow() { return *m_Window; }
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 

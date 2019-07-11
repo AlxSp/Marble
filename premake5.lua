@@ -105,6 +105,7 @@ project "Sandbox"
     includedirs {
         "Nucleus/thirdParty/spdlog/include",
         "Nucleus/src",
+        "Nucleus/thirdParty",
         "%{IncludeDir.glm}"
     }
 
