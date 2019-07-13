@@ -1,7 +1,10 @@
 #pragma once
 
 #include "Nucleus/Window.h"
+#include "Nucleus/Renderer/GraphicsContext.h"
 #include <GLFW/glfw3.h>
+
+
 
 namespace Nucleus {
 	class WindowsWindow : public Window {
@@ -25,6 +28,7 @@ namespace Nucleus {
 		virtual void Shutdown();
 
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData {
 			std::string Title;
