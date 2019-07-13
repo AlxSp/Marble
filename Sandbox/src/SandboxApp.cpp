@@ -9,7 +9,7 @@ public:
 	}
 
 	void OnUpdate() override {
-		NC_INFO("ExampleLayer::Update");
+		//NC_INFO("ExampleLayer::Update");
 
 		if (Nucleus::Input::isKeyPressed(NC_KEY_TAB))
 			NC_TRACE("Tab key pressed");

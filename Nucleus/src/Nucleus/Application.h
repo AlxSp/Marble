@@ -9,6 +9,8 @@
 
 #include "Nucleus/ImGui/ImGuiLayer.h"
 
+#include "Nucleus/Renderer/Shader.h"
+
 namespace Nucleus {
 	class NUCLEUS_API Application
 	{
@@ -33,6 +35,9 @@ namespace Nucleus {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+
+		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
 
 	private:
 		static Application* s_Instance;
