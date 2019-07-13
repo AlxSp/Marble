@@ -13,8 +13,14 @@
     <Filter Include="src\Nucleus\ImGui">
       <UniqueIdentifier>{454F4FB0-B165-4D46-FADC-D86766321ECE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Nucleus\Renderer">
+      <UniqueIdentifier>{E1ABAA6D-CD3A-3437-7659-483262C744DD}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform\OpenGL">
+      <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Platform\Windows">
       <UniqueIdentifier>{5B054582-4794-CE4B-F0B2-E246DC20DFF1}</UniqueIdentifier>
@@ -87,8 +93,26 @@
     <ClInclude Include="src\Nucleus\MouseButtonCodes.h">
       <Filter>src\Nucleus</Filter>
     </ClInclude>
+    <ClInclude Include="src\Nucleus\Renderer\Buffer.h">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nucleus\Renderer\GraphicsContext.h">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nucleus\Renderer\Renderer.h">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nucleus\Renderer\Shader.h">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Nucleus\Window.h">
       <Filter>src\Nucleus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
       <Filter>src\Platform\Windows</Filter>
@@ -1191,10 +1215,6 @@
     <ClInclude Include="thirdParty\glm\glm\vector_relational.hpp">
       <Filter>thirdParty\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Nucleus\Renderer.h" />
-    <ClInclude Include="src\Nucleus\Renderer\GraphicsContext.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
-    <ClInclude Include="src\Nucleus\Renderer\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Nucleus\Application.cpp">
@@ -1215,6 +1235,21 @@
     <ClCompile Include="src\Nucleus\Log.cpp">
       <Filter>src\Nucleus</Filter>
     </ClCompile>
+    <ClCompile Include="src\Nucleus\Renderer\Buffer.cpp">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Nucleus\Renderer\Renderer.cpp">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Nucleus\Renderer\Shader.cpp">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
@@ -1224,7 +1259,5 @@
     <ClCompile Include="src\ncpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
-    <ClCompile Include="src\Nucleus\Renderer\Shader.cpp" />
   </ItemGroup>
 </Project>
