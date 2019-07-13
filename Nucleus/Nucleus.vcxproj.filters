@@ -1215,6 +1215,7 @@
     <ClInclude Include="thirdParty\glm\glm\vector_relational.hpp">
       <Filter>thirdParty\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Nucleus\Application.cpp">
@@ -1259,5 +1260,6 @@
     <ClCompile Include="src\ncpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>
