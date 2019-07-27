@@ -159,10 +159,12 @@
     <ClInclude Include="src\Nucleus\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Nucleus\Renderer\Renderer.h" />
     <ClInclude Include="src\Nucleus\Renderer\Shader.h" />
+    <ClInclude Include="src\Nucleus\Renderer\VertexArray.h" />
     <ClInclude Include="src\Nucleus\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\ncpch.h" />
@@ -541,9 +543,11 @@
     <ClCompile Include="src\Nucleus\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Nucleus\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Nucleus\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Nucleus\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\ncpch.cpp">

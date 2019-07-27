@@ -11,24 +11,6 @@ namespace Nucleus {
 
 	Application* Application::s_Instance = nullptr;
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
-		switch (type) {
-		case ShaderDataType::Float:		return GL_FLOAT;
-		case ShaderDataType::Float2:	return GL_FLOAT;
-		case ShaderDataType::Float3:	return GL_FLOAT;
-		case ShaderDataType::Float4:	return GL_FLOAT;
-		case ShaderDataType::Mat3:		return GL_FLOAT;
-		case ShaderDataType::Mat4:		return GL_FLOAT;
-		case ShaderDataType::Int:		return GL_INT;
-		case ShaderDataType::Int2:		return GL_INT;
-		case ShaderDataType::Int3:		return GL_INT;
-		case ShaderDataType::Int4:		return GL_INT;
-		case ShaderDataType::Bool:		return GL_BOOL;
-		}
-		NC_CORE_ASSERT(false, "Unknown ShaderDataType!");
-		return 0;
-	}
-
 	Application::Application()
 	{
 		NC_CORE_ASSERT(!s_Instance, "Application Already Exists!!");
@@ -39,45 +21,65 @@ namespace Nucleus {
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
-
 		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f, 1.0f,
-			0.0f, 0.5f, 0.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+			0.5f, -0.5f, 0.0f,  0.2f, 0.3f, 0.8f, 1.0f,
+			0.0f, 0.5f, 0.0f,  0.8f, 0.8f, 0.2f, 1.0f,
 		};
 
+		m_VertexArray.reset(VertexArray::Create());
+
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
 		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
-		{
-			BufferLayout layout = {
-				{ ShaderDataType::Float3, "a_Position"},
-				{ ShaderDataType::Float4, "a_Color"},
-			};
 
-			m_VertexBuffer->SetLayout(layout);
-		}
+		BufferLayout layout = {
+			{ ShaderDataType::Float3, "a_Position"},
+			{ ShaderDataType::Float4, "a_Color"},
+		};
 
 		
-
-		uint32_t index = 0;
-		const auto& layout = m_VertexBuffer->GetLayout();
-		for (const auto& element : layout) {
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(	index,
-									element.GetComponentCount(),
-									ShaderDataTypeToOpenGLBaseType(element.Type),
-									element.Normalized ? GL_TRUE : GL_FALSE,
-									layout.GetStride(),
-									(const void*)element.Offset
-								 );
-			index++;
-		}
+		m_VertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		
 
 		uint32_t indices[3] = { 0, 1, 2 };
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;
 		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+
+
+		float Squarevertices[4 * 3] = {
+			-0.7f, -0.7f, 0.0f,
+			 0.7f, -0.7f, 0.0f, 
+			 0.7f,  0.7f, 0.0f,  
+			-0.7f,  0.7f, 0.0f,
+		};
+
+		m_SquareVertexArray.reset(VertexArray::Create());
+		std::shared_ptr<VertexBuffer> m_SquareVertexBuffer;
+		m_SquareVertexBuffer.reset(VertexBuffer::Create(Squarevertices, sizeof(Squarevertices)));
+		//m_SquareVertexBuffer.reset(VertexBuffer::Create(Squarevertices, sizeof(Squarevertices)));
+
+
+		BufferLayout m_Squarelayout = {
+			{ ShaderDataType::Float3, "a_Position"},
+		};
+
+
+		m_SquareVertexBuffer->SetLayout(m_Squarelayout);
+		m_SquareVertexArray->AddVertexBuffer(m_SquareVertexBuffer);
+
+
+		uint32_t m_Squareindices[6] = { 0, 1, 2, 2, 3, 0 };
+		//m_SquareIndexBuffer.reset(IndexBuffer::Create(m_Squareindices, sizeof(m_Squareindices) / sizeof(uint32_t)));
+		std::shared_ptr<IndexBuffer> m_SquareIndexBuffer;
+		m_SquareIndexBuffer.reset(IndexBuffer::Create(m_Squareindices, sizeof(m_Squareindices) / sizeof(uint32_t)));
+		m_SquareVertexArray->SetIndexBuffer(m_SquareIndexBuffer);
+		//m_SquareVertexArray->SetIndexBuffer(m_SquareIndexBuffer);
+
+
+
 
 		std::string vertexSrc = R"(
 			#version 410 core
@@ -111,6 +113,35 @@ namespace Nucleus {
 		)";
 
 		m_Shader.reset(Shader::Create(vertexSrc, fragmentSrc));
+
+		std::string vertexSrc2 = R"(
+			#version 410 core
+
+			layout(location = 0) in vec3 a_Position;
+
+			out vec3 v_Position;
+
+			void main(){
+				v_Position = a_Position;
+				gl_Position = vec4(a_Position, 1.0);
+			}
+
+		)";
+
+		std::string fragmentSrc2 = R"(
+			#version 410 core
+
+			layout(location = 0) out vec4 a_Color;
+
+			in vec3 v_Position;
+
+			void main(){
+				a_Color = vec4(0.2, 0.3, 0.8, 1.0); 
+			}
+
+		)";
+
+		m_Shader2.reset(Shader::Create(vertexSrc2, fragmentSrc2));
 	}
 
 
@@ -147,9 +178,14 @@ namespace Nucleus {
 			glClearColor(0.1f, 0.1f, 0.1f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			m_SquareVertexArray->Bind();
+			m_Shader2->Bind();
+			glDrawElements(GL_TRIANGLES, m_SquareVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
 			m_Shader->Bind();
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			m_VertexArray->Bind();
+			
+			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
