@@ -30,7 +30,7 @@ namespace Nucleus {
 			return new OpenGLIndexBuffer(indices, count);
 		}
 
-		NC_CORE_ASSERT(false, "Unknown error!");
+		NC_CORE_ASSERT(false, "Unknown RenderAPI error!");
 		return nullptr;
 	}
 }
