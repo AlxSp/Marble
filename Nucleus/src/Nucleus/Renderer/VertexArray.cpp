@@ -9,14 +9,14 @@ namespace Nucleus {
 
 	VertexArray* VertexArray::Create() {
 		switch (Renderer::GetAPI()) {
-			case RendererAPI::None:
+			case RendererAPI::API::None:
 				NC_CORE_ASSERT(false, "RendererAPI::None is currently not supported");
 				return nullptr;
-			case RendererAPI::OpenGL:
+			case RendererAPI::API::OpenGL:
 				return new OpenGLVertexArray();
 		}
 
-		NC_CORE_ASSERT(false, "Unknown error!");
+		NC_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 }

@@ -99,10 +99,19 @@
     <ClInclude Include="src\Nucleus\Renderer\GraphicsContext.h">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Nucleus\Renderer\RenderCommand.h">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Nucleus\Renderer\Renderer.h">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Nucleus\Renderer\RendererAPI.h">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Nucleus\Renderer\Shader.h">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nucleus\Renderer\VertexArray.h">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Nucleus\Window.h">
@@ -112,6 +121,15 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
@@ -1215,9 +1233,6 @@
     <ClInclude Include="thirdParty\glm\glm\vector_relational.hpp">
       <Filter>thirdParty\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
-    <ClInclude Include="src\Nucleus\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Nucleus\Application.cpp">
@@ -1241,16 +1256,34 @@
     <ClCompile Include="src\Nucleus\Renderer\Buffer.cpp">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Nucleus\Renderer\RenderCommand.cpp">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Nucleus\Renderer\Renderer.cpp">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Nucleus\Renderer\RendererAPI.cpp">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Nucleus\Renderer\Shader.cpp">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Nucleus\Renderer\VertexArray.cpp">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
@@ -1262,8 +1295,5 @@
     <ClCompile Include="src\ncpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
-    <ClCompile Include="src\Nucleus\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
   </ItemGroup>
 </Project>
