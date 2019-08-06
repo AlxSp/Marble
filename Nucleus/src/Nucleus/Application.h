@@ -9,14 +9,8 @@
 
 #include "Nucleus/ImGui/ImGuiLayer.h"
 
-#include "Nucleus/Renderer/Shader.h"
-#include "Nucleus/Renderer/Buffer.h"
-#include "Nucleus/Renderer/VertexArray.h"
-
-#include "Nucleus/Renderer/OrthographicCamera.h"
-
 namespace Nucleus {
-	class NUCLEUS_API Application
+	class Application
 	{
 	public:
 		Application();
@@ -39,16 +33,6 @@ namespace Nucleus {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
-
-
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-
-		std::shared_ptr<Shader> m_Shader2;
-		std::shared_ptr<VertexArray>	m_SquareVertexArray;
-		
-		OrthographicCamera m_Camera;
 
 	private:
 		static Application* s_Instance;
