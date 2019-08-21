@@ -1234,6 +1234,7 @@
       <Filter>thirdParty\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\Nucleus\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\Nucleus\Core\TimeStep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Nucleus\Application.cpp">

@@ -5,6 +5,8 @@
 #include "Nucleus/Layer.h"
 #include "Nucleus/Log.h"
 
+#include "Nucleus/Core/TimeStep.h"
+
 #include "Nucleus/Input.h"
 #include "Nucleus/KeyCodes.h"
 #include "Nucleus/MouseButtonCodes.h"

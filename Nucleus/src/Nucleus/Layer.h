@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Nucleus/Core.h"
+#include "Nucleus/Core/TimeStep.h"
 #include "Nucleus/Events/Event.h"
 
 namespace Nucleus {
@@ -12,7 +13,7 @@ namespace Nucleus {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(TimeStep ts) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 

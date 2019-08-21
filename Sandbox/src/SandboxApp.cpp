@@ -135,26 +135,28 @@ public:
 		m_BlueShader.reset(Nucleus::Shader::Create(vertexSrc2, fragmentSrc2));
 	}
 
-	void OnUpdate() override {
+	void OnUpdate(Nucleus::TimeStep ts) override {
+		NC_TRACE("Delta time: {0}s ({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
+
 		if (Nucleus::Input::IsKeyPressed(NC_KEY_LEFT)) {
-			m_CameraPosition.x -= m_CameraMovementSpeed;
+			m_CameraPosition.x -= m_CameraMovementSpeed * ts;
 		}
 		else if (Nucleus::Input::IsKeyPressed(NC_KEY_RIGHT) ) {
-			m_CameraPosition.x += m_CameraMovementSpeed;
+			m_CameraPosition.x += m_CameraMovementSpeed * ts;
 		}
 
 		if (Nucleus::Input::IsKeyPressed(NC_KEY_UP) ) {
-			m_CameraPosition.y += m_CameraMovementSpeed;
+			m_CameraPosition.y += m_CameraMovementSpeed * ts;
 		}
 		else if (Nucleus::Input::IsKeyPressed(NC_KEY_DOWN)) {
-			m_CameraPosition.y -= m_CameraMovementSpeed;
+			m_CameraPosition.y -= m_CameraMovementSpeed * ts;
 		}
 
 		if (Nucleus::Input::IsKeyPressed(NC_KEY_A)) {
-			m_CameraRotation += m_CameraRotationSpeed;
+			m_CameraRotation += m_CameraRotationSpeed * ts;
 		}
 		else if (Nucleus::Input::IsKeyPressed(NC_KEY_D)) {
-			m_CameraRotation -= m_CameraRotationSpeed;
+			m_CameraRotation -= m_CameraRotationSpeed * ts;
 		}
 
 
@@ -192,8 +194,8 @@ private:
 
 	Nucleus::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
-	float m_CameraMovementSpeed = 0.01f;
-	float m_CameraRotationSpeed = 0.1f;
+	float m_CameraMovementSpeed = 5.0f;
+	float m_CameraRotationSpeed = 90.0f;
 
 	float m_CameraRotation = 0.0f;
 };
