@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef NC_PLATFORM_WINDOWS
 #if NC_DYNAMIC_LINK
 	#ifdef NC_BUILD_DLL
@@ -30,3 +32,12 @@
 #define BIT(x) (1 << x)
 
 #define NC_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
+namespace Nucleus {
+	
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+	
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}
