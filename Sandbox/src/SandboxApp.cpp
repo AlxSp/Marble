@@ -181,6 +181,7 @@ public:
 		m_TextureShader.reset(Nucleus::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
 
 		m_Texture = Nucleus::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_FlowerTexture = Nucleus::Texture2D::Create("assets/textures/transparentFlower.png");
 
 		std::dynamic_pointer_cast<Nucleus::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<Nucleus::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
@@ -239,6 +240,9 @@ public:
 		m_Texture->Bind();
 		Nucleus::Renderer::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
+		m_FlowerTexture->Bind();
+		Nucleus::Renderer::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
 		Nucleus::Renderer::EndScene();
 
 		//Renderer::Flush();
@@ -260,7 +264,7 @@ private:
 	Nucleus::Ref<Nucleus::Shader> flatColorShader, m_TextureShader;
 	Nucleus::Ref<Nucleus::VertexArray>	m_SquareVertexArray;
 
-	Nucleus::Ref<Nucleus::Texture2D> m_Texture;
+	Nucleus::Ref<Nucleus::Texture2D> m_Texture, m_FlowerTexture;
 
 	Nucleus::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
