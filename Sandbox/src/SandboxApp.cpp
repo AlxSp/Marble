@@ -43,11 +43,11 @@ public:
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
 
-		float Squarevertices[4 * 3] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f,
+		float Squarevertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
 		};
 
 		m_SquareVertexArray.reset(Nucleus::VertexArray::Create());
@@ -58,6 +58,7 @@ public:
 
 		Nucleus::BufferLayout m_Squarelayout = {
 			{ Nucleus::ShaderDataType::Float3, "a_Position"},
+			{ Nucleus::ShaderDataType::Float2, "a_TexCoord"}
 		};
 
 
@@ -143,6 +144,46 @@ public:
 		)";
 
 		flatColorShader.reset(Nucleus::Shader::Create(vertexSrc2, flatColorShaderFragmentSrc));
+
+		std::string textureShaderVertexSrc = R"(
+			#version 410 core
+
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+			
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+
+			void main(){
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+			}
+
+		)";
+
+		std::string textureShaderFragmentSrc = R"(
+			#version 410 core
+
+			layout(location = 0) out vec4 a_Color;
+
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
+			void main(){
+				a_Color = texture(u_Texture, v_TexCoord); 
+			}
+
+		)";
+
+		m_TextureShader.reset(Nucleus::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
+
+		m_Texture = Nucleus::Texture2D::Create("assets/textures/Checkerboard.png");
+
+		std::dynamic_pointer_cast<Nucleus::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Nucleus::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Nucleus::TimeStep ts) override {
@@ -193,8 +234,10 @@ public:
 			}
 		}
 		
-
-		Nucleus::Renderer::Submit(m_Shader, m_VertexArray);
+		//Triangle
+		//Nucleus::Renderer::Submit(m_Shader, m_VertexArray);
+		m_Texture->Bind();
+		Nucleus::Renderer::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		Nucleus::Renderer::EndScene();
 
@@ -214,8 +257,10 @@ private:
 	Nucleus::Ref<Nucleus::Shader> m_Shader;
 	Nucleus::Ref<Nucleus::VertexArray> m_VertexArray;
 
-	Nucleus::Ref<Nucleus::Shader> flatColorShader;
+	Nucleus::Ref<Nucleus::Shader> flatColorShader, m_TextureShader;
 	Nucleus::Ref<Nucleus::VertexArray>	m_SquareVertexArray;
+
+	Nucleus::Ref<Nucleus::Texture2D> m_Texture;
 
 	Nucleus::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;

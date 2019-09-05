@@ -17,6 +17,7 @@ IncludeDir["GLFW"] = "Nucleus/thirdParty/GLFW/include"
 IncludeDir["Glad"] = "Nucleus/thirdParty/Glad/include"
 IncludeDir["ImGui"] = "Nucleus/thirdParty/imgui"
 IncludeDir["glm"] = "Nucleus/thirdParty/glm"
+IncludeDir["stb_image"] = "Nucleus/thirdParty/stb_image"
 
 group "Dependencies"
     include "Nucleus/thirdParty/GLFW"
@@ -40,6 +41,8 @@ project "Nucleus"
     files {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
+        "%{prj.name}/thirdParty/stb_image/**.h",
+        "%{prj.name}/thirdParty/stb_image/**.cpp",
         "%{prj.name}/thirdParty/glm/glm/**.hpp",
         "%{prj.name}/thirdParty/glm/glm/**.inl",
     }
@@ -54,7 +57,8 @@ project "Nucleus"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.ImGui}",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}",
     }
 
     links {

@@ -7,6 +7,9 @@
     <Filter Include="src\Nucleus">
       <UniqueIdentifier>{DB216099-47D7-D88E-D0CB-D2653C80CF92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Nucleus\Core">
+      <UniqueIdentifier>{13A7EF71-FF9F-0EC4-28D2-F348142AEECF}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Nucleus\Events">
       <UniqueIdentifier>{5FC997B1-4BAD-5807-B40D-535AA0104389}</UniqueIdentifier>
     </Filter>
@@ -46,6 +49,9 @@
     <Filter Include="thirdParty\glm\glm\gtx">
       <UniqueIdentifier>{B0EB5E96-9CE5-87E8-8552-1EF971EBED54}</UniqueIdentifier>
     </Filter>
+    <Filter Include="thirdParty\stb_image">
+      <UniqueIdentifier>{CA81F256-B610-7C20-5F2F-901B4B9D8CC6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Nucleus.h">
@@ -56,6 +62,9 @@
     </ClInclude>
     <ClInclude Include="src\Nucleus\Core.h">
       <Filter>src\Nucleus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nucleus\Core\TimeStep.h">
+      <Filter>src\Nucleus\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Nucleus\EntryPoint.h">
       <Filter>src\Nucleus</Filter>
@@ -99,6 +108,9 @@
     <ClInclude Include="src\Nucleus\Renderer\GraphicsContext.h">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Nucleus\Renderer\OrthographicCamera.h">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Nucleus\Renderer\RenderCommand.h">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClInclude>
@@ -109,6 +121,9 @@
       <Filter>src\Nucleus\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Nucleus\Renderer\Shader.h">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nucleus\Renderer\Texture.h">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Nucleus\Renderer\VertexArray.h">
@@ -127,6 +142,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
@@ -1233,8 +1251,9 @@
     <ClInclude Include="thirdParty\glm\glm\vector_relational.hpp">
       <Filter>thirdParty\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Nucleus\Renderer\OrthographicCamera.h" />
-    <ClInclude Include="src\Nucleus\Core\TimeStep.h" />
+    <ClInclude Include="thirdParty\stb_image\stb_image.h">
+      <Filter>thirdParty\stb_image</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Nucleus\Application.cpp">
@@ -1258,6 +1277,9 @@
     <ClCompile Include="src\Nucleus\Renderer\Buffer.cpp">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Nucleus\Renderer\OrthographicCamera.cpp">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Nucleus\Renderer\RenderCommand.cpp">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClCompile>
@@ -1268,6 +1290,9 @@
       <Filter>src\Nucleus\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Nucleus\Renderer\Shader.cpp">
+      <Filter>src\Nucleus\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Nucleus\Renderer\Texture.cpp">
       <Filter>src\Nucleus\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Nucleus\Renderer\VertexArray.cpp">
@@ -1285,6 +1310,9 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1297,6 +1325,8 @@
     <ClCompile Include="src\ncpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Nucleus\Renderer\OrthographicCamera.cpp" />
+    <ClCompile Include="thirdParty\stb_image\stb_image.cpp">
+      <Filter>thirdParty\stb_image</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
