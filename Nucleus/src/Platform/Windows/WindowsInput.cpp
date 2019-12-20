@@ -1,7 +1,7 @@
 #include "ncpch.h"
 #include "WindowsInput.h"
 
-#include "Nucleus/Application.h"
+#include "Nucleus/Core/Application.h"
 #include <GLFW/glfw3.h>
 
 namespace Nucleus {

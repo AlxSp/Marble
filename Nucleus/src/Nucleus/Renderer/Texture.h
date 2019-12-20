@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Nucleus/Core.h"
+#include "Nucleus/Core/Core.h"
 
 namespace Nucleus {
 	

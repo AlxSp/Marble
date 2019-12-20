@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Nucleus/Input.h"
+#include "Nucleus/Core/Input.h"
 
 namespace Nucleus {
 

@@ -2,7 +2,7 @@
 
 #include "ncpch.h"
 
-#include "Nucleus/Core.h"
+#include "Nucleus/Core/Core.h"
 #include "Nucleus/Events/Event.h"
 
 namespace Nucleus {

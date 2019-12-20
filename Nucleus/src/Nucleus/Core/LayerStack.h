@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Nucleus/Core.h"
+#include "Nucleus/Core/Core.h"
 #include "Layer.h"
 
 #include <vector>

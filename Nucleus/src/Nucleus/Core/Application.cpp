@@ -1,7 +1,7 @@
 #include "ncpch.h"
 #include "Application.h"
 
-#include "Nucleus/Log.h"
+#include "Nucleus/Core/Log.h"
 #include "Nucleus/Renderer/Renderer.h"
 
 #include "Input.h"

@@ -1,16 +1,16 @@
 #pragma once
 
 //For use of Nucleus applications
-#include "Nucleus/Application.h"
-#include "Nucleus/Layer.h"
-#include "Nucleus/Log.h"
+#include "Nucleus/Core/Application.h"
+#include "Nucleus/Core/Layer.h"
+#include "Nucleus/Core/Log.h"
 
 #include "Nucleus/Core/TimeStep.h"
 
-#include "Nucleus/Input.h"
-#include "Nucleus/KeyCodes.h"
-#include "Nucleus/MouseButtonCodes.h"
-#include "Nucleus/OrthographicCameraController.h"
+#include "Nucleus/Core/Input.h"
+#include "Nucleus/Core/KeyCodes.h"
+#include "Nucleus/Core/MouseButtonCodes.h"
+#include "Nucleus/Renderer/OrthographicCameraController.h"
 
 #include "Nucleus/ImGui/ImGuiLayer.h"
 
@@ -29,5 +29,5 @@
 
 
 //----Entry Point----//
-#include "Nucleus/EntryPoint.h"
+#include "Nucleus/Core/EntryPoint.h"
 //----Entry Point

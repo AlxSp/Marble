@@ -1,6 +1,6 @@
 #pragma once
 #include "ncpch.h"
-#include "Nucleus/Core.h"
+#include "Nucleus/Core/Core.h"
 
 
 

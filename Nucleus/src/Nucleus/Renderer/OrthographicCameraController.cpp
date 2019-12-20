@@ -1,8 +1,8 @@
 #include "ncpch.h"
 #include "OrthographicCameraController.h"
 
-#include "Nucleus/Input.h"
-#include "Nucleus/KeyCodes.h"
+#include "Nucleus/Core/Input.h"
+#include "Nucleus/Core/KeyCodes.h"
 
 namespace Nucleus {
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)

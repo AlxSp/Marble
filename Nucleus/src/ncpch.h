@@ -12,8 +12,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Nucleus/Log.h"
-#include "Nucleus/KeyCodes.h"
+#include "Nucleus/Core/Log.h"
+#include "Nucleus/Core/KeyCodes.h"
 
 #ifdef NC_PLATFORM_WINDOWS
 	#include <Windows.h>
