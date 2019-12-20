@@ -42,6 +42,7 @@ public:
 		m_IndexBuffer.reset(Nucleus::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
+		m_SquareVertexArray.reset(Nucleus::VertexArray::Create());
 
 		float Squarevertices[5 * 4] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -50,28 +51,21 @@ public:
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
 		};
 
-		m_SquareVertexArray.reset(Nucleus::VertexArray::Create());
+		
 		Nucleus::Ref<Nucleus::VertexBuffer> m_SquareVertexBuffer;
 		m_SquareVertexBuffer.reset(Nucleus::VertexBuffer::Create(Squarevertices, sizeof(Squarevertices)));
-		//m_SquareVertexBuffer.reset(VertexBuffer::Create(Squarevertices, sizeof(Squarevertices)));
 
-
-		Nucleus::BufferLayout m_Squarelayout = {
+		m_SquareVertexBuffer->SetLayout({
 			{ Nucleus::ShaderDataType::Float3, "a_Position"},
 			{ Nucleus::ShaderDataType::Float2, "a_TexCoord"}
-		};
-
-
-		m_SquareVertexBuffer->SetLayout(m_Squarelayout);
+			});
 		m_SquareVertexArray->AddVertexBuffer(m_SquareVertexBuffer);
 
 
 		uint32_t m_Squareindices[6] = { 0, 1, 2, 2, 3, 0 };
-		//m_SquareIndexBuffer.reset(IndexBuffer::Create(m_Squareindices, sizeof(m_Squareindices) / sizeof(uint32_t)));
 		Nucleus::Ref<Nucleus::IndexBuffer> m_SquareIndexBuffer;
 		m_SquareIndexBuffer.reset(Nucleus::IndexBuffer::Create(m_Squareindices, sizeof(m_Squareindices) / sizeof(uint32_t)));
 		m_SquareVertexArray->SetIndexBuffer(m_SquareIndexBuffer);
-		//m_SquareVertexArray->SetIndexBuffer(m_SquareIndexBuffer);
 
 		std::string vertexSrc = R"(
 			#version 410 core
@@ -179,7 +173,6 @@ public:
 		//Nucleus::Renderer::Submit(m_Shader, m_VertexArray);
 		m_Texture->Bind();
 		Nucleus::Renderer::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
 		m_FlowerTexture->Bind();
 		Nucleus::Renderer::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
