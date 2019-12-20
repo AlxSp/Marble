@@ -555,6 +555,12 @@
     <ClInclude Include="thirdParty\glm\glm\ext\scalar_int_sized.hpp">
       <Filter>thirdParty\glm\glm\ext</Filter>
     </ClInclude>
+    <ClInclude Include="thirdParty\glm\glm\ext\scalar_integer.hpp">
+      <Filter>thirdParty\glm\glm\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdParty\glm\glm\ext\scalar_integer.inl">
+      <Filter>thirdParty\glm\glm\ext</Filter>
+    </ClInclude>
     <ClInclude Include="thirdParty\glm\glm\ext\scalar_relational.hpp">
       <Filter>thirdParty\glm\glm\ext</Filter>
     </ClInclude>
@@ -670,6 +676,12 @@
       <Filter>thirdParty\glm\glm\ext</Filter>
     </ClInclude>
     <ClInclude Include="thirdParty\glm\glm\ext\vector_int4_precision.hpp">
+      <Filter>thirdParty\glm\glm\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdParty\glm\glm\ext\vector_integer.hpp">
+      <Filter>thirdParty\glm\glm\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdParty\glm\glm\ext\vector_integer.inl">
       <Filter>thirdParty\glm\glm\ext</Filter>
     </ClInclude>
     <ClInclude Include="thirdParty\glm\glm\ext\vector_relational.hpp">
