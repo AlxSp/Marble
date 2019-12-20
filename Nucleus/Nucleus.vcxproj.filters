@@ -1254,6 +1254,7 @@
     <ClInclude Include="thirdParty\stb_image\stb_image.h">
       <Filter>thirdParty\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Nucleus\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Nucleus\Application.cpp">
@@ -1328,5 +1329,6 @@
     <ClCompile Include="thirdParty\stb_image\stb_image.cpp">
       <Filter>thirdParty\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Nucleus\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

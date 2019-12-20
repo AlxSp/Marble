@@ -11,7 +11,7 @@
 
 class ExampleLayer : public Nucleus::Layer {
 public:
-	ExampleLayer() : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f) {
+	ExampleLayer() : Layer("Example"), m_CameraController(1920.0f / 1080.0f, true) {
 
 		m_VertexArray.reset(Nucleus::VertexArray::Create());
 
@@ -152,38 +152,14 @@ public:
 	}
 
 	void OnUpdate(Nucleus::TimeStep ts) override {
-		NC_TRACE("Delta time: {0}s ({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
+		//Update
+		m_CameraController.OnUpdate(ts);
 
-		if (Nucleus::Input::IsKeyPressed(NC_KEY_LEFT)) {
-			m_CameraPosition.x -= m_CameraMovementSpeed * ts;
-		}
-		else if (Nucleus::Input::IsKeyPressed(NC_KEY_RIGHT) ) {
-			m_CameraPosition.x += m_CameraMovementSpeed * ts;
-		}
-
-		if (Nucleus::Input::IsKeyPressed(NC_KEY_UP) ) {
-			m_CameraPosition.y += m_CameraMovementSpeed * ts;
-		}
-		else if (Nucleus::Input::IsKeyPressed(NC_KEY_DOWN)) {
-			m_CameraPosition.y -= m_CameraMovementSpeed * ts;
-		}
-
-		if (Nucleus::Input::IsKeyPressed(NC_KEY_A)) {
-			m_CameraRotation += m_CameraRotationSpeed * ts;
-		}
-		else if (Nucleus::Input::IsKeyPressed(NC_KEY_D)) {
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
-		}
-
-
+		//Render
 		Nucleus::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Nucleus::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-
-		Nucleus::Renderer::BeginScene(m_Camera);
-
+		Nucleus::Renderer::BeginScene(m_CameraController.GetCamera());
 		
 		static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -218,7 +194,8 @@ public:
 		ImGui::End();
 	}
 
-	void OnEvent(Nucleus::Event& event) override {
+	void OnEvent(Nucleus::Event& e) override {
+		m_CameraController.OnEvent(e);
 	}
 
 private:
@@ -230,12 +207,7 @@ private:
 
 	Nucleus::Ref<Nucleus::Texture2D> m_Texture, m_FlowerTexture;
 
-	Nucleus::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraMovementSpeed = 5.0f;
-
-	float m_CameraRotationSpeed = 90.0f;
-	float m_CameraRotation = 0.0f;
+	Nucleus::OrthographicCameraController m_CameraController;
 
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };

@@ -159,6 +159,7 @@
     <ClInclude Include="src\Nucleus\Renderer\Buffer.h" />
     <ClInclude Include="src\Nucleus\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Nucleus\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\Nucleus\OrthographicCameraController.h" />
     <ClInclude Include="src\Nucleus\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Nucleus\Renderer\Renderer.h" />
     <ClInclude Include="src\Nucleus\Renderer\RendererAPI.h" />
@@ -548,6 +549,7 @@
     <ClCompile Include="src\Nucleus\Layer.cpp" />
     <ClCompile Include="src\Nucleus\LayerStack.cpp" />
     <ClCompile Include="src\Nucleus\Log.cpp" />
+    <ClCompile Include="src\Nucleus\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Nucleus\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Nucleus\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Nucleus\Renderer\RenderCommand.cpp" />

@@ -62,6 +62,7 @@ namespace Nucleus {
 			data.Height = height;
 
 			WindowResizeEvent event(width, height);
+			NC_CORE_WARNING("{0}, {1}", width, height);
 			data.EventCallback(event);
 		});
 
@@ -138,6 +139,7 @@ namespace Nucleus {
 
 	void WindowsWindow::OnUpdate() {
 		glfwPollEvents();
+
 		m_Context->SwapBuffers();
 
 	}

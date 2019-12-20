@@ -10,6 +10,7 @@
 #include "Nucleus/Input.h"
 #include "Nucleus/KeyCodes.h"
 #include "Nucleus/MouseButtonCodes.h"
+#include "Nucleus/OrthographicCameraController.h"
 
 #include "Nucleus/ImGui/ImGuiLayer.h"
 
