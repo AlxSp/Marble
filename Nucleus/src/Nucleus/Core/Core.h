@@ -2,16 +2,54 @@
 
 #include <memory>
 
-#ifdef NC_PLATFORM_WINDOWS
-#if NC_DYNAMIC_LINK
-	#ifdef NC_BUILD_DLL
-		#define NUCLEUS_API __declspec(dllexport)
+#ifdef _WIN32
+	/*Windows x64/x86*/
+	#ifdef _WIN64
+		/*Windows x64*/
+		#define NC_PLATFORM_WINDOWS
 	#else
-		#define NUCLEUS_API __declspec(dllimport)
-	#endif //NC_BUILD_DLL
+		/*Windows x86*/
+		#error "x86 Builds are not supported"
+	#endif // _WIN64
+#elif defined(__APPLE__) || defined(__MACH__)
+	#include <TargetConditionals.h>
+	/* TARGET_OS_MAC exists on all the platforms
+	 * so we must check all of them (in this order)
+	 * to ensure that we're running on MAC
+	 * and not some other Apple platform */
+	#if TARGET_IPHONE_SIMULATOR == 1
+		#error "IOS simulator is not supported!"
+	#elif TARGET_OS_IPHONE == 1
+		#define NC_PLATFORM_IOS
+	#error "IOS is not supported!"
+		#elif TARGET_OS_MAC == 1
+	#define NC_PLATFORM_MACOS
+		#error "MacOS is not supported!"
+	#else
+		#error "Unknown Apple platform!"
+	#endif
+#elif defined(__ANDROID__)
+	#define NC_PLATFORM_ANDROID
+	#error "Android is not supported!"
+#elif defined(__linux__)
+	#define NC_PLATFORM_LINUX
+	#error "Linux is not supported!"
 #else
-	#define NUCLEUS_API
-#endif
+	/*Unknown compiler or platform*/
+	#error "unknown platform!"
+#endif // _WIN32
+
+
+#ifdef NC_PLATFORM_WINDOWS
+	#if NC_DYNAMIC_LINK
+		#ifdef NC_BUILD_DLL
+			#define NUCLEUS_API __declspec(dllexport)
+		#else
+			#define NUCLEUS_API __declspec(dllimport)
+		#endif //NC_BUILD_DLL
+	#else
+		#define NUCLEUS_API
+	#endif
 #else
 	#error Nucleus only supports Windows at the moment!	
 #endif //NC_PLATFORM_WINDOWS

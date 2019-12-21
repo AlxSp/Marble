@@ -4,6 +4,4 @@
 namespace Nucleus {
 	Layer::Layer(const std::string& debugMame) 
 		: m_DebugName(debugMame) {}
-
-	Layer::~Layer() {}
 }

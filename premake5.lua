@@ -72,7 +72,6 @@ project "Nucleus"
         systemversion "latest"
 
         defines {
-            "NC_PLATFORM_WINDOWS",
             "NC_BUILD_DLL",
             "GLFW_INCLUDE_NONE"
         }

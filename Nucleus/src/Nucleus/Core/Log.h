@@ -25,11 +25,11 @@ namespace Nucleus {
 #define NC_CORE_INFO(...)    ::Nucleus::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define NC_CORE_WARNING(...) ::Nucleus::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define NC_CORE_ERROR(...)   ::Nucleus::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define NC_CORE_FATAL(...)   ::Nucleus::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+#define NC_CORE_CRITICAL(...)   ::Nucleus::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 //Client log macros
 #define NC_TRACE(...)        ::Nucleus::Log::GetClientLogger()->trace(__VA_ARGS__)
 #define NC_INFO(...)         ::Nucleus::Log::GetClientLogger()->info(__VA_ARGS__)
-#define NC_WARNING(...)      ::Nucleus::Log::GetClientLogger()->warning(__VA_ARGS__)
+#define NC_WARNING(...)      ::Nucleus::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define NC_ERROR(...)        ::Nucleus::Log::GetClientLogger()->error(__VA_ARGS__)
-#define NC_FATAL(...)        ::Nucleus::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define NC_FATAL_CRITICAL(...)        ::Nucleus::Log::GetClientLogger()->critical(__VA_ARGS__)

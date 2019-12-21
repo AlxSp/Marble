@@ -1,4 +1,5 @@
 #include <Nucleus.h>
+#include <Nucleus/Core/EntryPoint.h>
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
@@ -7,13 +8,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Sandbox2D.h"
 
 
 class ExampleLayer : public Nucleus::Layer {
 public:
 	ExampleLayer() : Layer("Example"), m_CameraController(1920.0f / 1080.0f, true) {
 
-		m_VertexArray.reset(Nucleus::VertexArray::Create());
+		m_VertexArray = Nucleus::VertexArray::Create();
 
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -42,7 +44,7 @@ public:
 		m_IndexBuffer.reset(Nucleus::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-		m_SquareVertexArray.reset(Nucleus::VertexArray::Create());
+		m_SquareVertexArray = Nucleus::VertexArray::Create();
 
 		float Squarevertices[5 * 4] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -101,7 +103,7 @@ public:
 
 		)";
 
-		m_Shader.reset(Nucleus::Shader::Create(vertexSrc, fragmentSrc));
+		m_Shader = Nucleus::Shader::Create("VertexPosTriangle", vertexSrc, fragmentSrc);
 
 		std::string vertexSrc2 = R"(
 			#version 410 core
@@ -134,9 +136,9 @@ public:
 
 		)";
 
-		flatColorShader.reset(Nucleus::Shader::Create(vertexSrc2, flatColorShaderFragmentSrc));
+		flatColorShader = Nucleus::Shader::Create("FlatColor", vertexSrc2, flatColorShaderFragmentSrc);
 
-		m_TextureShader.reset(Nucleus::Shader::Create("assets/shaders/Texture.glsl"));
+		m_TextureShader = Nucleus::Shader::Create("assets/shaders/Texture.glsl");
 
 		m_Texture = Nucleus::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_FlowerTexture = Nucleus::Texture2D::Create("assets/textures/transparentFlower.png");
@@ -208,7 +210,8 @@ private:
 class Sandbox : public Nucleus::Application {
 public:
 	Sandbox() {
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox() {

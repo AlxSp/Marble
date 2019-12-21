@@ -28,6 +28,3 @@
 //----Renderer
 
 
-//----Entry Point----//
-#include "Nucleus/Core/EntryPoint.h"
-//----Entry Point

@@ -17,7 +17,8 @@ namespace Nucleus {
 		return 0;
 	}
 
-	OpenGLShader::OpenGLShader(const std::string & vertexSrc, const std::string & fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string & vertexSrc, const std::string & fragmentSrc)
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -30,6 +31,12 @@ namespace Nucleus {
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
+
+		auto lastShlash = filepath.find_last_of("/\\");
+		lastShlash = lastShlash == std::string::npos ? 0 : lastShlash + 1;
+		auto lastDot = filepath.rfind('.');
+		auto count = lastDot == std::string::npos ? filepath.size() - lastShlash : lastDot - lastShlash;
+		m_Name = filepath.substr(lastShlash, count);
 	}
 
 	OpenGLShader::~OpenGLShader()
@@ -39,7 +46,7 @@ namespace Nucleus {
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath) {
 		std::string result;
-		std::ifstream in(filepath, std::ios::in, std::ios::binary);
+		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
@@ -80,7 +87,9 @@ namespace Nucleus {
 	void  OpenGLShader::Compile(std::unordered_map<GLenum, std::string>& shaderSources) {
 
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIDs(shaderSources.size());
+		NC_CORE_ASSERT(shaderSources.size() <= 2, "Maximum shader limit (2) exceeded");
+		std::array<GLenum, 2> glShaderIDs;
+		int glShaderIDIndex = 0;
 
 		for (auto& keyValue : shaderSources) {
 			GLenum type = keyValue.first;
@@ -114,7 +123,7 @@ namespace Nucleus {
 			}
 
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderIDIndex++] = shader;
 		}
 		// Link our program
 		glLinkProgram(program);
