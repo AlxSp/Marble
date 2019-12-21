@@ -21,6 +21,8 @@ private:
 	Nucleus::Ref<Nucleus::VertexArray> m_SquareVertexArray;
 	Nucleus::Ref<Nucleus::Shader> m_FlatColorShader;
 
+	Nucleus::Ref<Nucleus::Texture2D> m_TextureShader;
+
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 };
