@@ -14,6 +14,8 @@
 #include <unordered_set>
 
 #include "Nucleus/Core/Log.h"
+#include "Nucleus/Debug/Instrumentor.h"
+
 #include "Nucleus/Core/KeyCodes.h"
 
 #ifdef NC_PLATFORM_WINDOWS

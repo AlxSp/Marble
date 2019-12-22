@@ -13,7 +13,7 @@
 
 class ExampleLayer : public Nucleus::Layer {
 public:
-	ExampleLayer() : Layer("Example"), m_CameraController(1920.0f / 1080.0f, true) {
+	ExampleLayer() : Layer("Example"), m_CameraController(1280.0f / 720.0f, true) {
 
 		m_VertexArray = Nucleus::VertexArray::Create();
 

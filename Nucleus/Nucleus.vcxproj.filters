@@ -1270,6 +1270,7 @@
       <Filter>thirdParty\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Nucleus\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Nucleus\Debug\Instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Nucleus\Core\Application.cpp">
