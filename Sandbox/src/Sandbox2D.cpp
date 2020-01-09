@@ -16,22 +16,23 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
+	NC_PROFILE_FUNCTION();
+
 	m_TextureShader = Nucleus::Texture2D::Create("assets/textures/transparentFlower.png");
 }
 
 void Sandbox2D::OnDetach()
 {
+	NC_PROFILE_FUNCTION();
+
 }
 
 void Sandbox2D::OnUpdate(Nucleus::TimeStep ts)
 {
 	NC_PROFILE_FUNCTION();
 	// Update
-	{
-		NC_PROFILE_SCOPE("CamerController::OnUpdate");
-
-		m_CameraController.OnUpdate(ts);
-	}
+	m_CameraController.OnUpdate(ts);
+	
 	// Render
 	{
 		NC_PROFILE_SCOPE("Render Prep");
@@ -45,8 +46,8 @@ void Sandbox2D::OnUpdate(Nucleus::TimeStep ts)
 		Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 		Nucleus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		Nucleus::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f }, -1.0f);
-		Nucleus::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_TextureShader, -2.0f);
+		Nucleus::Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f }, -45.0f);
+		Nucleus::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_TextureShader, -45.0f, 10.0f);
 
 		Nucleus::Renderer2D::EndScene();
 	}

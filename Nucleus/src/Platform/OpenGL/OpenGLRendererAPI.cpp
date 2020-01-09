@@ -5,8 +5,13 @@
 #include <glad/glad.h>
 
 namespace Nucleus {
+
+	//#define 
+
 	void OpenGLRendererAPI::Init()
 	{
+		NC_PROFILE_FUNCTION();
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);

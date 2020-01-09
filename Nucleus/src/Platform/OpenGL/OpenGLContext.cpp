@@ -14,6 +14,8 @@ namespace Nucleus {
 	}
 	void OpenGLContext::Init()
 	{
+		NC_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(m_windowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		NC_CORE_ASSERT(status, "failed to initialize glad");
@@ -34,6 +36,8 @@ namespace Nucleus {
 	}
 	void OpenGLContext::SwapBuffers()
 	{
+		NC_PROFILE_FUNCTION();
+
 		glfwSwapBuffers(m_windowHandle);
 	}
 }
