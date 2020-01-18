@@ -1,7 +1,15 @@
 #Directories
-.vs/
+
 bin/
 bin-int/
+!thirdParty/bin/premake/
 
-#Files
-*.user
+#Sandbox files 
+Sandbox/*.json
+
+# Visual Studio Files and folder
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
