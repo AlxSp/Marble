@@ -22,7 +22,7 @@ IncludeDir["stb_image"] = "Nucleus/thirdParty/stb_image"
 group "Dependencies"
     include "Nucleus/thirdParty/GLFW"
     include "Nucleus/thirdParty/Glad"
-    include "Nucleus/thirdParty/ImGui"
+    include "Nucleus/thirdParty/imgui"
 group ""
 
 project "Nucleus"

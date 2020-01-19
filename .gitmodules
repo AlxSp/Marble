@@ -1,12 +1,12 @@
 [submodule "Nucleus/thirdParty/spdlog"]
 	path = Nucleus/thirdParty/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "Nucleus/thirdParty/GLFW"]
-	path = Nucleus/thirdParty/GLFW
-	url = https://github.com/glfw/glfw.git
-[submodule "Nucleus/thirdParty/imgui"]
-	path = Nucleus/thirdParty/imgui
-	url = https://github.com/ocornut/imgui
 [submodule "Nucleus\\thirdParty\\glm"]
 	path = Nucleus\\thirdParty\\glm
 	url = https://github.com/g-truc/glm
+[submodule "Nucleus/thirdParty/GLFW"]
+	path = Nucleus/thirdParty/GLFW
+	url = https://github.com/AlxSp/glfw.git
+[submodule "Nucleus/thirdParty/imgui"]
+	path = Nucleus/thirdParty/imgui
+	url = https://github.com/AlxSp/imgui.git
