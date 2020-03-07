@@ -3,6 +3,7 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "Renderer2D.h"
+#include "BatchRenderer2D.h"
 
 namespace Nucleus {
 
@@ -14,11 +15,13 @@ namespace Nucleus {
 
 		RenderCommand::Init();
 		Renderer2D::Init();
+		BatchRenderer2D::Init();
 	}
 
 	void Renderer::Shutdown()
 	{
 		Renderer2D::Shutdown();
+		BatchRenderer2D::Shutdown();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)

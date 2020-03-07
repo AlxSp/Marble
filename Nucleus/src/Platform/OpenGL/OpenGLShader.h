@@ -23,6 +23,8 @@ namespace Nucleus {
 		virtual void SetFloat4(const std::string& name,const glm::vec4& value) override;
 		virtual void SetMat4(const std::string& name, const glm::mat4& value) override;
 
+		virtual void SetSamplers(const std::string& name, int* samplers, const int size) override;
+
 		virtual const std::string& GetName() const override { return m_Name; }
 
 		void UploadUniformInt(const std::string& name, int value);
@@ -34,6 +36,8 @@ namespace Nucleus {
 
 		void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+
+		void UploadSamplers(const std::string& name, int* samplers, const int size);
 
 	private:
 		std::string ReadFile(const std::string& filepath);

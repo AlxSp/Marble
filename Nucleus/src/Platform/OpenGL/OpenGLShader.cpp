@@ -219,6 +219,13 @@ namespace Nucleus {
 		UploadUniformMat4(name, value);
 	}
 
+	void OpenGLShader::SetSamplers(const std::string& name, int* samplers, const int size)
+	{
+		NC_PROFILE_FUNCTION();
+
+		UploadSamplers(name, samplers, size);
+	}
+
 	void OpenGLShader::UploadUniformInt(const std::string & name, int value)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
@@ -259,6 +266,12 @@ namespace Nucleus {
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	void OpenGLShader::UploadSamplers(const std::string& name, int* samplers, const int size)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniform1iv(location, size, samplers);
 	}
 	
 }

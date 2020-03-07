@@ -18,6 +18,7 @@ namespace Nucleus {
 		virtual void SetData(void* data, uint32_t size) override;
 
 		virtual void Bind(uint32_t slot = 0) const override;
+
 	private:
 		std::string m_Path;
 		uint32_t m_Width, m_Height;

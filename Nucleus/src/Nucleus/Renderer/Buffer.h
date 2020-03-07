@@ -58,6 +58,10 @@ namespace Nucleus {
 		}
 	};
 
+	enum class BufferType {
+		None = 0, Static, Dynamic, Stream
+	};
+
 	class BufferLayout {
 	public:
 		BufferLayout() {}
@@ -98,10 +102,12 @@ namespace Nucleus {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+		virtual void StreamTo(uint32_t offset, uint32_t size, float* data) = 0;
+
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 		virtual const BufferLayout& GetLayout() const = 0;
 
-		static VertexBuffer* Create(float* vertices, uint32_t size);
+		static VertexBuffer* Create(float* vertices, uint32_t size, BufferType type = BufferType::Static);
 	};
 
 	class IndexBuffer {
@@ -113,7 +119,7 @@ namespace Nucleus {
 
 		virtual uint32_t GetCount() const = 0;
 
-		static IndexBuffer* Create(uint32_t* indices, uint32_t count);
+		static IndexBuffer* Create(uint32_t* indices, uint32_t count, BufferType type = BufferType::Static);
 
 	};
 }

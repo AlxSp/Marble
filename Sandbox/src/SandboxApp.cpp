@@ -10,7 +10,7 @@
 
 #include "Sandbox2D.h"
 
-
+/*
 class ExampleLayer : public Nucleus::Layer {
 public:
 	ExampleLayer() : Layer("Example"), m_CameraController(1280.0f / 720.0f, true) {
@@ -206,7 +206,7 @@ private:
 
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
-
+*/
 class Sandbox : public Nucleus::Application {
 public:
 	Sandbox() {

@@ -138,7 +138,7 @@ namespace Nucleus {
 
 }
 
-#define NC_PROFILE 1
+#define NC_PROFILE 0
 
 #if NC_PROFILE
     #define NC_PROFILE_BEGIN_SESSION(name, filepath) ::Nucleus::Instrumentor::Get().BeginSession(name, filepath)
