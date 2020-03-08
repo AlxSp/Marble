@@ -20,7 +20,6 @@ namespace Nucleus {
 		float* QuadBuffer = nullptr;
 		float* QuadBufferPtr = nullptr;
 
-		Ref<Texture2D> WhiteTexture;
 		uint32_t WhiteTextureSlot = 0;
 
 		uint32_t IndexCount = 0;
@@ -71,11 +70,10 @@ namespace Nucleus {
 		m_SquareIndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		s_BatchData.QuadVertexArray->SetIndexBuffer(m_SquareIndexBuffer);
 
-		s_BatchData.WhiteTexture = Texture2D::Create(1, 1);
+		s_BatchData.TextureSlots[0] = Texture2D::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
-		s_BatchData.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
-
-		s_BatchData.TextureSlots[0] = s_BatchData.WhiteTexture;
+		s_BatchData.TextureSlots[0]->SetData(&whiteTextureData, sizeof(uint32_t));
+		
 		for (size_t i = 1; i < MaxTextures; i++) {
 			s_BatchData.TextureSlots[i] = 0;
 		}
@@ -88,6 +86,8 @@ namespace Nucleus {
 			samplers[i] = i;
 
 		s_BatchData.BatchShader->SetSamplers("u_Textures", samplers, MaxTextures);
+
+		
 	}
 
 	void BatchRenderer2D::Shutdown()
@@ -106,14 +106,16 @@ namespace Nucleus {
 		s_BatchData.BatchShader->Bind();
 		s_BatchData.BatchShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 		s_BatchData.BatchShader->SetMat4("u_Transform", glm::translate(glm::mat4(1.0f), glm::vec3(0.0f)));
-		
-		s_BatchData.WhiteTexture->Bind();
+
+		s_BatchData.TextureSlots[0]->Bind(s_BatchData.WhiteTextureSlot);
 	}
 
 	void BatchRenderer2D::EndScene()
 	{
 		NC_PROFILE_FUNCTION();
-		//EndBatch();
+		
+		EndBatch();
+		Flush();
 	}
 
 	void BatchRenderer2D::BeginBatch()
@@ -138,17 +140,13 @@ namespace Nucleus {
 
 		s_BatchData.QuadVertexArray->Bind();
 
-		for (int i = 0; i < s_BatchData.TextureSlotIndex; i++) {
-			s_BatchData.TextureSlots[i]->Bind(i);
-		}
-		
-		RenderCommand::DrawIndexed(s_BatchData.QuadVertexArray);
+		RenderCommand::DrawIndexed(DrawMode::Triangles, s_BatchData.IndexCount);
 
 		s_BatchData.IndexCount = 0;
 		s_BatchData.TextureSlotIndex = 1;
 	}
 
-	void BatchRenderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4 color)
+	void BatchRenderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		NC_PROFILE_FUNCTION();
 
@@ -160,81 +158,26 @@ namespace Nucleus {
 
 		float textureIndex = 0.0f;
 
-		s_BatchData.QuadBufferPtr[0] = position.x;
-		s_BatchData.QuadBufferPtr[1] = position.y;
-		s_BatchData.QuadBufferPtr[2] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[3] = color.x;
-		s_BatchData.QuadBufferPtr[4] = color.y;
-		s_BatchData.QuadBufferPtr[5] = color.z;
-		s_BatchData.QuadBufferPtr[6] = color.w;
-
-		s_BatchData.QuadBufferPtr[7] = 0.0f;
-		s_BatchData.QuadBufferPtr[8] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[9] = textureIndex;
-
-		s_BatchData.QuadBufferPtr += 10;
-
-
-
-		s_BatchData.QuadBufferPtr[0] = position.x + size.x;
-		s_BatchData.QuadBufferPtr[1] = position.y;
-		s_BatchData.QuadBufferPtr[2] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[3] = color.x;
-		s_BatchData.QuadBufferPtr[4] = color.y;
-		s_BatchData.QuadBufferPtr[5] = color.z;
-		s_BatchData.QuadBufferPtr[6] = color.w;
-
-		s_BatchData.QuadBufferPtr[7] = 1.0f;
-		s_BatchData.QuadBufferPtr[8] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[9] = textureIndex;
-
-		s_BatchData.QuadBufferPtr += 10;
-
-
-		s_BatchData.QuadBufferPtr[0] = position.x + size.x;
-		s_BatchData.QuadBufferPtr[1] = position.y + size.y;
-		s_BatchData.QuadBufferPtr[2] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[3] = color.x;
-		s_BatchData.QuadBufferPtr[4] = color.y;
-		s_BatchData.QuadBufferPtr[5] = color.z;
-		s_BatchData.QuadBufferPtr[6] = color.w;
-
-		s_BatchData.QuadBufferPtr[7] = 1.0f;
-		s_BatchData.QuadBufferPtr[8] = 1.0f;
-
-		s_BatchData.QuadBufferPtr[9] = textureIndex;
-
-
-
-		s_BatchData.QuadBufferPtr += 10;
-
-		s_BatchData.QuadBufferPtr[0] = position.x;
-		s_BatchData.QuadBufferPtr[1] = position.y + size.y;
-		s_BatchData.QuadBufferPtr[2] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[3] = color.x;
-		s_BatchData.QuadBufferPtr[4] = color.y;
-		s_BatchData.QuadBufferPtr[5] = color.z;
-		s_BatchData.QuadBufferPtr[6] = color.w;
-
-		s_BatchData.QuadBufferPtr[7] = 1.0f;
-		s_BatchData.QuadBufferPtr[8] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[9] = textureIndex;
-
-		s_BatchData.QuadBufferPtr += 10;
+		DrawVertex({ position.x, position.y, position.z }, color, { 0.0f, 0.0f }, textureIndex);
+		DrawVertex({ position.x + size.x, position.y, position.z }, color, { 1.0f, 0.0f }, textureIndex);
+		DrawVertex({ position.x + size.x, position.y + size.y, position.z }, color, { 1.0f, 1.0f }, textureIndex);
+		DrawVertex({ position.x, position.y + size.y, position.z }, color, { 1.0f, 0.0f }, textureIndex);
 
 		s_BatchData.IndexCount += 6;
 
 	}
 
-	void BatchRenderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tintColor)
+	void BatchRenderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
+		NC_PROFILE_FUNCTION();
+
+		DrawQuad({ position.x, position.y, 0.0f }, size, color);
+	}
+
+	void BatchRenderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tintColor)
+	{
+		NC_PROFILE_FUNCTION();
+
 		if (s_BatchData.IndexCount >= MaxIndexCount - 6 || s_BatchData.TextureSlotIndex > 31) {
 			EndBatch();
 			Flush();
@@ -251,81 +194,45 @@ namespace Nucleus {
 		}
 
 		if (textureIndex == 0.0f) {
-			textureIndex = (float)s_BatchData.TextureSlotIndex;
+			texture->Bind(s_BatchData.TextureSlotIndex);
 			s_BatchData.TextureSlots[s_BatchData.TextureSlotIndex] = texture;
+
+			textureIndex = (float)s_BatchData.TextureSlotIndex;
 			s_BatchData.TextureSlotIndex++;
 		}
 
-		s_BatchData.QuadBufferPtr[0] = position.x;
-		s_BatchData.QuadBufferPtr[1] = position.y;
-		s_BatchData.QuadBufferPtr[2] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[3] = tintColor.x;
-		s_BatchData.QuadBufferPtr[4] = tintColor.y;
-		s_BatchData.QuadBufferPtr[5] = tintColor.z;
-		s_BatchData.QuadBufferPtr[6] = tintColor.w;
-
-		s_BatchData.QuadBufferPtr[7] = 0.0f;
-		s_BatchData.QuadBufferPtr[8] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[9] = textureIndex;
-
-		s_BatchData.QuadBufferPtr += 10;
-
-
-
-		s_BatchData.QuadBufferPtr[0] = position.x + size.x;
-		s_BatchData.QuadBufferPtr[1] = position.y;
-		s_BatchData.QuadBufferPtr[2] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[3] = tintColor.x;
-		s_BatchData.QuadBufferPtr[4] = tintColor.y;
-		s_BatchData.QuadBufferPtr[5] = tintColor.z;
-		s_BatchData.QuadBufferPtr[6] = tintColor.w;
-
-		s_BatchData.QuadBufferPtr[7] = 1.0f;
-		s_BatchData.QuadBufferPtr[8] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[9] = textureIndex;
-
-		s_BatchData.QuadBufferPtr += 10;
-
-
-		s_BatchData.QuadBufferPtr[0] = position.x + size.x;
-		s_BatchData.QuadBufferPtr[1] = position.y + size.y;
-		s_BatchData.QuadBufferPtr[2] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[3] = tintColor.x;
-		s_BatchData.QuadBufferPtr[4] = tintColor.y;
-		s_BatchData.QuadBufferPtr[5] = tintColor.z;
-		s_BatchData.QuadBufferPtr[6] = tintColor.w;
-
-		s_BatchData.QuadBufferPtr[7] = 1.0f;
-		s_BatchData.QuadBufferPtr[8] = 1.0f;
-
-		s_BatchData.QuadBufferPtr[9] = textureIndex;
-
-
-
-		s_BatchData.QuadBufferPtr += 10;
-
-		s_BatchData.QuadBufferPtr[0] = position.x;
-		s_BatchData.QuadBufferPtr[1] = position.y + size.y;
-		s_BatchData.QuadBufferPtr[2] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[3] = tintColor.x;
-		s_BatchData.QuadBufferPtr[4] = tintColor.y;
-		s_BatchData.QuadBufferPtr[5] = tintColor.z;
-		s_BatchData.QuadBufferPtr[6] = tintColor.w;
-
-		s_BatchData.QuadBufferPtr[7] = 1.0f;
-		s_BatchData.QuadBufferPtr[8] = 0.0f;
-
-		s_BatchData.QuadBufferPtr[9] = textureIndex;
-
-		s_BatchData.QuadBufferPtr += 10;
+		DrawVertex({ position.x, position.y, position.z }, tintColor, { 0.0f, 0.0f }, textureIndex);
+		DrawVertex({ position.x + size.x, position.y, position.z }, tintColor, { 1.0f, 0.0f }, textureIndex);
+		DrawVertex({ position.x + size.x, position.y + size.y, position.z }, tintColor, { 1.0f, 1.0f }, textureIndex);
+		DrawVertex({ position.x, position.y + size.y, position.z }, tintColor, { 1.0f, 0.0f }, textureIndex);
 
 		s_BatchData.IndexCount += 6;
+	}
+
+	void BatchRenderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tintColor)
+	{
+		NC_PROFILE_FUNCTION();
+
+		DrawQuad({ position.x, position.y, 0.0f }, size, texture, tintColor);
+	}
+
+	void BatchRenderer2D::DrawVertex(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, const float& textureIndex)
+	{
+		s_BatchData.QuadBufferPtr[0] = position.x;
+		s_BatchData.QuadBufferPtr[1] = position.y;
+		s_BatchData.QuadBufferPtr[2] = position.z;
+
+		s_BatchData.QuadBufferPtr[3] = color.x;
+		s_BatchData.QuadBufferPtr[4] = color.y;
+		s_BatchData.QuadBufferPtr[5] = color.z;
+		s_BatchData.QuadBufferPtr[6] = color.w;
+
+		s_BatchData.QuadBufferPtr[7] = textureCoordinates[0];
+		s_BatchData.QuadBufferPtr[8] = textureCoordinates[1];
+
+		s_BatchData.QuadBufferPtr[9] = textureIndex;
+
+		s_BatchData.QuadBufferPtr += 10;
 	}
 }
 

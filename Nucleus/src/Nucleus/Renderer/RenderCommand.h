@@ -19,6 +19,7 @@ namespace Nucleus {
 		inline static void Clear() { s_RendererAPI->Clear(); };
 
 		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray) { s_RendererAPI->DrawIndexed(vertexArray); }
+		inline static void DrawIndexed(const DrawMode& mode, const uint32_t& count) { s_RendererAPI->DrawIndexed(mode, count); }
 
 	private:
 		static RendererAPI* s_RendererAPI;

@@ -6,6 +6,10 @@
 
 namespace Nucleus {
 
+	enum class DrawMode {
+		None = 0, Points, Lines, Triangles
+	};
+
 	class RendererAPI {
 	public:
 		enum class API
@@ -14,6 +18,8 @@ namespace Nucleus {
 			OpenGL	= 1,
 		};
 
+
+
 	public:
 		virtual void Init() = 0;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
@@ -21,6 +27,8 @@ namespace Nucleus {
 		virtual void Clear() = 0;
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;
+
+		virtual void DrawIndexed(const DrawMode& mode, const uint32_t& count) = 0;
 
 		inline static API GetAPI() { return s_API;}
 

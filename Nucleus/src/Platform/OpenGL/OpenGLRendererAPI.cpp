@@ -6,7 +6,15 @@
 
 namespace Nucleus {
 
-	//#define 
+	static GLenum DrawModeToOpenGLDrawMode(DrawMode mode) {
+		switch (mode) {
+			case DrawMode::Points:		return GL_POINTS;
+			case DrawMode::Lines:		return GL_LINES;
+			case DrawMode::Triangles:	return GL_TRIANGLES;
+		}
+		NC_CORE_ASSERT(false, "Unknown BufferType!");
+		return 0;
+	}
 
 	void OpenGLRendererAPI::Init()
 	{
@@ -36,6 +44,11 @@ namespace Nucleus {
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray)
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	void OpenGLRendererAPI::DrawIndexed(const DrawMode& mode, const uint32_t& count)
+	{
+		glDrawElements(DrawModeToOpenGLDrawMode(mode), count, GL_UNSIGNED_INT, nullptr);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }

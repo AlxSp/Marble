@@ -12,5 +12,7 @@ namespace Nucleus {
 		virtual void Clear() override;
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
+
+		virtual void DrawIndexed(const DrawMode& mode, const uint32_t& count) override;
 	};
 }
