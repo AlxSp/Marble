@@ -14,6 +14,8 @@
 
 #include "Nucleus/ImGui/ImGuiLayer.h"
 
+#include "Nucleus/Random/Lehmer.h"
+
 
 //----Renderer------//
 #include "Nucleus/Renderer/Renderer.h"
