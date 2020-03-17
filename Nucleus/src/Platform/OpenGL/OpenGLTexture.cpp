@@ -82,7 +82,7 @@ namespace Nucleus {
 		NC_PROFILE_FUNCTION();
 		
 		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
-		NC_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
+		//NC_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
 	}
 

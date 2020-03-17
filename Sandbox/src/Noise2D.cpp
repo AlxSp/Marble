@@ -9,7 +9,7 @@ void Noise2D::OnAttach()
 	NC_PROFILE_FUNCTION();
 
 	//m_FlowerTexture = Nucleus::Texture2D::Create("assets/textures/transparentFlower.png");
-	m_NoiseTexture = Nucleus::Texture2D::Create(128, 128);
+	m_NoiseTexture = Nucleus::Texture2D::Create(1024, 1024);
 	uint32_t whiteTextureData = 0xffffffff;
 	m_NoiseTexture->SetData(&NoiseMap, sizeof(float) * 128 * 128);
 }
@@ -30,15 +30,22 @@ void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 		Nucleus::RenderCommand::Clear();
 	}
 
-	Lehmer32 rng = Lehmer32();
+	Nucleus::Lehmer32 rng = Nucleus::Lehmer32();
 
 	for (int x = 0; x < 128; x++) {
 		for (int y = 0; y < 128; y++) {
+			//glm::vec4 color = { (x + 10) / 20.0f, 0.2f, (y + 10) / 20.0f, 1.0f };
+			NoiseMap[y][x * 4] = x * 2 ;
+			NoiseMap[y][x * 4 + 1] = 51;
+			NoiseMap[y][x * 4 + 2] = y * 2;
+			NoiseMap[y][x * 4 + 3] = 255;
+			/*
 			int randInt = rng.randInt(0, 255);
 			NoiseMap[y][x * 4] = randInt;
 			NoiseMap[y][x * 4 + 1] = randInt;
 			NoiseMap[y][x * 4 + 2] = randInt;
 			NoiseMap[y][x * 4 + 3] = 255;
+			*/
 		}
 	}   
 

@@ -16,7 +16,7 @@ public:
 private:
 	Nucleus::OrthographicCameraController m_CameraController;
 
-	std::array<std::array<uint8_t, 128 * 4>, 128> NoiseMap;
+	std::array<std::array<uint32_t, 128 * 4>, 128> NoiseMap;
 
 	Nucleus::Ref<Nucleus::Texture2D> m_NoiseTexture;
 
