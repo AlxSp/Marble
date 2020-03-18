@@ -16,7 +16,11 @@ public:
 private:
 	Nucleus::OrthographicCameraController m_CameraController;
 
-	std::array<std::array<uint32_t, 128 * 4>, 128> NoiseMap;
+	int m_Width = 64;
+	int m_Height = 64;
+
+	uint8_t NoiseMap[64][64][4];
+	//std::array<std::array<uint8_t, 3 * 4>, 3> NoiseMap;
 
 	Nucleus::Ref<Nucleus::Texture2D> m_NoiseTexture;
 

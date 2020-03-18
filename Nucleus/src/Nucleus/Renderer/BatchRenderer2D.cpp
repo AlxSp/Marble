@@ -158,10 +158,10 @@ namespace Nucleus {
 
 		float textureIndex = 0.0f;
 
-		DrawVertex({ position.x, position.y, position.z }, color, { 0.0f, 0.0f }, textureIndex);
-		DrawVertex({ position.x + size.x, position.y, position.z }, color, { 1.0f, 0.0f }, textureIndex);
-		DrawVertex({ position.x + size.x, position.y + size.y, position.z }, color, { 1.0f, 1.0f }, textureIndex);
-		DrawVertex({ position.x, position.y + size.y, position.z }, color, { 1.0f, 0.0f }, textureIndex);
+		DrawVertex({ position.x,			position.y,				position.z }, color, { 0.0f, 0.0f }, textureIndex);
+		DrawVertex({ position.x + size.x,	position.y,				position.z }, color, { 1.0f, 0.0f }, textureIndex);
+		DrawVertex({ position.x + size.x,	position.y + size.y,	position.z }, color, { 1.0f, 1.0f }, textureIndex);
+		DrawVertex({ position.x,			position.y + size.y,	position.z }, color, { 0.0f, 1.0f }, textureIndex);
 
 		s_BatchData.IndexCount += 6;
 
@@ -201,10 +201,10 @@ namespace Nucleus {
 			s_BatchData.TextureSlotIndex++;
 		}
 
-		DrawVertex({ position.x, position.y, position.z }, tintColor, { 0.0f, 0.0f }, textureIndex);
-		DrawVertex({ position.x + size.x, position.y, position.z }, tintColor, { 1.0f, 0.0f }, textureIndex);
-		DrawVertex({ position.x + size.x, position.y + size.y, position.z }, tintColor, { 1.0f, 1.0f }, textureIndex);
-		DrawVertex({ position.x, position.y + size.y, position.z }, tintColor, { 1.0f, 0.0f }, textureIndex);
+		DrawVertex({ position.x,			position.y,				position.z }, tintColor, { 0.0f, 0.0f }, textureIndex);
+		DrawVertex({ position.x + size.x,	position.y,				position.z }, tintColor, { 1.0f, 0.0f }, textureIndex);
+		DrawVertex({ position.x + size.x,	position.y + size.y,	position.z }, tintColor, { 1.0f, 1.0f }, textureIndex);
+		DrawVertex({ position.x,			position.y + size.y,	position.z }, tintColor, { 0.0f, 1.0f }, textureIndex);
 
 		s_BatchData.IndexCount += 6;
 	}
@@ -222,13 +222,13 @@ namespace Nucleus {
 		s_BatchData.QuadBufferPtr[1] = position.y;
 		s_BatchData.QuadBufferPtr[2] = position.z;
 
-		s_BatchData.QuadBufferPtr[3] = color.x;
-		s_BatchData.QuadBufferPtr[4] = color.y;
-		s_BatchData.QuadBufferPtr[5] = color.z;
-		s_BatchData.QuadBufferPtr[6] = color.w;
+		s_BatchData.QuadBufferPtr[3] = color.r;
+		s_BatchData.QuadBufferPtr[4] = color.g;
+		s_BatchData.QuadBufferPtr[5] = color.b;
+		s_BatchData.QuadBufferPtr[6] = color.a;
 
-		s_BatchData.QuadBufferPtr[7] = textureCoordinates[0];
-		s_BatchData.QuadBufferPtr[8] = textureCoordinates[1];
+		s_BatchData.QuadBufferPtr[7] = textureCoordinates.x;
+		s_BatchData.QuadBufferPtr[8] = textureCoordinates.y;
 
 		s_BatchData.QuadBufferPtr[9] = textureIndex;
 
