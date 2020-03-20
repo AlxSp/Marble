@@ -16,15 +16,13 @@ public:
 private:
 	Nucleus::OrthographicCameraController m_CameraController;
 
-	int m_Width = 128;
-	int m_Height = 128;
+	int m_Width = 64;
+	int m_Height = 64;
 
-	uint8_t NoiseMap[128][128][4];
+	uint8_t NoiseMap[64][64][4];
 	//std::array<std::array<uint8_t, 3 * 4>, 3> NoiseMap;
-	float addXoffseet = 0.0f;
-	Nucleus::Ref<Nucleus::Texture2D> m_NoiseTexture;
 
-	Nucleus::SimplexNoise* simplexNoise;
+	Nucleus::Ref<Nucleus::Texture2D> m_NoiseTexture;
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
@@ -35,12 +33,5 @@ private:
 		const char* Name;
 		float Time;
 	};
-
-private:
-	float m_Frequency = .1f;
-	float m_Amplitude = 1.0f;
-	float m_Lacunarity = 2.0f;
-	float m_Persistence = 0.5f;
-	int m_Octaves = 1.0f;
 
 };

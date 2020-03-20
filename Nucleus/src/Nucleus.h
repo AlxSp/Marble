@@ -14,8 +14,10 @@
 
 #include "Nucleus/ImGui/ImGuiLayer.h"
 
+//----Mathematical------//
 #include "Nucleus/Random/Lehmer.h"
-
+#include "Nucleus/Noise/SimplexNoise.h"
+//----Mathematical------
 
 //----Renderer------//
 #include "Nucleus/Renderer/Renderer.h"

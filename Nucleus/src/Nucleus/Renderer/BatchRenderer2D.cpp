@@ -14,16 +14,22 @@ namespace Nucleus {
 	static const size_t MaxIndexCount = MaxQuadCount * 6;
 	static const size_t MaxTextures = 32;
 
+	static const Nucleus::BufferLayout BatchRenderer2DStandardLayout {
+		{ ShaderDataType::Float3, "a_Position"},
+		{ ShaderDataType::Float4, "a_Color" },
+		{ ShaderDataType::Float2, "a_TexCoord" },
+		{ ShaderDataType::Float,  "TexIndex" }
+	};
+
 	struct BatchRenderer2DStorage {
 		Ref<VertexArray> QuadVertexArray;
 
 		float* QuadBuffer = nullptr;
 		float* QuadBufferPtr = nullptr;
 
-		uint32_t WhiteTextureSlot = 0;
-
 		uint32_t IndexCount = 0;
 
+		uint32_t WhiteTextureSlot = 0;
 		std::array<Ref<Nucleus::Texture2D>, MaxTextures> TextureSlots;
 		uint32_t TextureSlotIndex = 1;
 
@@ -43,12 +49,7 @@ namespace Nucleus {
 		Ref<VertexBuffer> m_QuadVertexBuffer;
 		m_QuadVertexBuffer.reset(VertexBuffer::Create(s_BatchData.QuadBuffer, sizeof(float) * MaxBufferSize, BufferType::Dynamic));
 
-		m_QuadVertexBuffer->SetLayout({
-			{ ShaderDataType::Float3, "a_Position"},
-			{ ShaderDataType::Float4, "a_Color"},
-			{ ShaderDataType::Float2, "a_TexCoord"},
-		    { ShaderDataType::Float,  "TexIndex"}
-		});
+		m_QuadVertexBuffer->SetLayout(BatchRenderer2DStandardLayout);
 
 		s_BatchData.QuadVertexArray->AddVertexBuffer(m_QuadVertexBuffer);
 
@@ -144,6 +145,15 @@ namespace Nucleus {
 
 		s_BatchData.IndexCount = 0;
 		s_BatchData.TextureSlotIndex = 1;
+	}
+
+	void BatchRenderer2D::SetStandardLayout()
+	{
+		EndBatch();
+		Flush();
+
+		s_BatchData.QuadVertexArray->GetVertexBuffers()[0]->SetLayout(BatchRenderer2DStandardLayout);
+		BeginBatch();
 	}
 
 	void BatchRenderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)

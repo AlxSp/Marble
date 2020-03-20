@@ -6,8 +6,6 @@
 
 namespace Nucleus {
 
-
-
 	class BatchRenderer2D 
 	{
 	public:
@@ -20,7 +18,11 @@ namespace Nucleus {
 		static void BeginBatch();
 		static void EndBatch();
 		static void Flush();
+
+
 		//static void SetLayout();
+
+		static void SetStandardLayout();
 
 		//static void Draw();
 
