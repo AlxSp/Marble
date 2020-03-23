@@ -6,13 +6,31 @@
 
 namespace Nucleus {
 
+	
+
+	/*
+	number of cornder for n dimension simplex:
+		Corners = n + 1
+
+	number of n dimension simplexes required to fill a n dimension hypercube:
+		SimplexNumber = n!
+
+	Skew factor formula for n dimension: 	
+		SkewFactor = (sqrt(n + 1) - 1) / n
+
+	Unskew factor formula for n dimension:
+		UnskewFactor = SkewFactor / sqrt(n + 1)
+	*/
+
 	// Skewing/Unskewing factors for 2D
-	static const float SkewFactor2D = 0.366025403f;  // F2 = (sqrt(3) - 1) / 2
-	static const float UnSkewFactor2D = 0.211324865f;  // G2 = (3 - sqrt(3)) / 6   = F2 / (1 + 2 * K)
+	static const float SkewFactor2D   = 0.366025403f;	// SkewFactor2D = (sqrt(2 + 1) -1 ) / 2;
+	static const float UnskewFactor2D = 0.211324865f;	// UnskewFactor2D = SkewFactor2D / sqrt(2 + 1)
 	// Skewing/Unskewing factors for 3D
-	static const float SkewFactor3D = 1.0f / 3.0f;
-	static const float UnSkewFactor3D = 1.0f / 6.0f;
+	static const float SkewFactor3D   = 0.333333333f;	// SkewFactor3D = (sqrt(3 + 1) - 1) / 3;
+	static const float UnskewFactor3D = 0.166666666f;	// UnskewFactor3D = SkewFactor3D / sqrt(3 + 1)
 	// Skewing/Unskewing factors for 4D
+	static const float SkewFactor4D	  = 0.309016994f;	// SkewFactor4D = (sqrt(4 + 1) - 1) / 4;
+	static const float UnskewFactor4D = 0.138196601f;	// UnskewFactor4D = SkewFactor4D / sqrt(4 + 1)
 
 	static inline int32_t fastfloor(float fp) {
 		return static_cast<int32_t>(fp + 32768.) - 32768;
@@ -92,7 +110,7 @@ namespace Nucleus {
 		const int32_t j = fastfloor(y + skewOffset);	//Get y-axis index of hypercube
 
 		// Unskew the hypercube's origin back to (x, y) space
-		const float t = static_cast<int32_t>(i + j)* UnSkewFactor2D;
+		const float t = static_cast<int32_t>(i + j)* UnskewFactor2D;
 		const float X0 = i - t;
 		const float Y0 = j - t;
 		// Calculate distances between the hypercube's origin and x,y
@@ -110,10 +128,10 @@ namespace Nucleus {
 		}
 		// a step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
 		// a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
-		const float x1 = x0 - i1 + UnSkewFactor2D; // Offsets for middle corner in (x,y) unskewed coords
-		const float y1 = y0 - j1 + UnSkewFactor2D;
-		const float x2 = x0 - 1.0 + 2.0 * UnSkewFactor2D;
-		const float y2 = y0 - 1.0 + 2.0 * UnSkewFactor2D;
+		const float x1 = x0 - i1 + UnskewFactor2D; // Offsets for middle corner in (x,y) unskewed coords
+		const float y1 = y0 - j1 + UnskewFactor2D;
+		const float x2 = x0 - 1.0 + 2.0 * UnskewFactor2D;
+		const float y2 = y0 - 1.0 + 2.0 * UnskewFactor2D;
 
 		// Calculate the hashed gradient indices of the three simplex corners
 		const int gi0 = hash(i + hash(j));
@@ -168,7 +186,7 @@ namespace Nucleus {
 		const int32_t k = fastfloor(z + skewOffset);	//Get z-axis index of hypercube's origin
 
 		// Unskew the hypercube's origin back to (x, y, z) space (representing the 1st corner of the simplex cell)
-		const float t = static_cast<int32_t>(i + j + k) * UnSkewFactor2D;
+		const float t = static_cast<int32_t>(i + j + k) * UnskewFactor2D;
 		const float X0 = i - t;
 		const float Y0 = j - t;
 		const float Z0 = k - t;
@@ -207,17 +225,17 @@ namespace Nucleus {
 		// A step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
 		// A step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where
 		// Offsets for 2nd corner in (x,y,z) unskewed coords
-		const float x1 = x0 - i1 + UnSkewFactor3D; 
-		const float y1 = y0 - j1 + UnSkewFactor3D;
-		const float z1 = z0 - k1 + UnSkewFactor3D;
+		const float x1 = x0 - i1 + UnskewFactor3D; 
+		const float y1 = y0 - j1 + UnskewFactor3D;
+		const float z1 = z0 - k1 + UnskewFactor3D;
 		// Offsets for 3rd corner in (x,y,z) unskewed coords
-		const float x2 = x0 - 1.0 + 2.0 * UnSkewFactor3D;
-		const float y2 = y0 - 1.0 + 2.0 * UnSkewFactor3D;
-		const float z2 = z0 - 1.0 + 2.0 * UnSkewFactor3D;
+		const float x2 = x0 - 1.0 + 2.0 * UnskewFactor3D;
+		const float y2 = y0 - 1.0 + 2.0 * UnskewFactor3D;
+		const float z2 = z0 - 1.0 + 2.0 * UnskewFactor3D;
 		// Offsets for last 4th corner in (x,y,z) unskewed coords
-		float x3 = x0 - 1.0f + 3.0f * UnSkewFactor3D;
-		float y3 = y0 - 1.0f + 3.0f * UnSkewFactor3D;
-		float z3 = z0 - 1.0f + 3.0f * UnSkewFactor3D;
+		float x3 = x0 - 1.0f + 3.0f * UnskewFactor3D;
+		float y3 = y0 - 1.0f + 3.0f * UnskewFactor3D;
+		float z3 = z0 - 1.0f + 3.0f * UnskewFactor3D;
 
 		// Work out the hashed gradient indices of the four simplex corners
 		int gi0 = hash(i + hash(j + hash(k)));
@@ -234,6 +252,7 @@ namespace Nucleus {
 			t0 *= t0;
 			n0 = t0 * t0 * grad(gi0, x0, y0, z0);
 		}
+
 		float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
 		if (t1 < 0) {
 			n1 = 0.0;
@@ -242,6 +261,7 @@ namespace Nucleus {
 			t1 *= t1;
 			n1 = t1 * t1 * grad(gi1, x1, y1, z1);
 		}
+
 		float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
 		if (t2 < 0) {
 			n2 = 0.0;
@@ -250,6 +270,7 @@ namespace Nucleus {
 			t2 *= t2;
 			n2 = t2 * t2 * grad(gi2, x2, y2, z2);
 		}
+
 		float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
 		if (t3 < 0) {
 			n3 = 0.0;

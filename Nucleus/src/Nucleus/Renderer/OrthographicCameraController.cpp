@@ -54,6 +54,7 @@ namespace Nucleus {
 		dispatcher.Dispatch<MouseScrolledEvent>(BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
 	}
+
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent & e)
 	{
 		NC_PROFILE_FUNCTION();

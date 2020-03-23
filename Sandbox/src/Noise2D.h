@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Nucleus.h"
+#include "Container2D.h"
+#include "ObjectContainerManager2D.h"
 
 class Noise2D : public Nucleus::Layer {
 public:
 	Noise2D();
-	virtual ~Noise2D() = default;
+	virtual ~Noise2D() { delete ocm; }
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 
@@ -16,15 +18,23 @@ public:
 private:
 	Nucleus::OrthographicCameraController m_CameraController;
 
+	float perspective_width  = 0.0f;
+	float perspective_height = 0.0f;
+
 	int m_Width = 128;
 	int m_Height = 128;
 
-	uint8_t NoiseMap[128][128][4];
-	//std::array<std::array<uint8_t, 3 * 4>, 3> NoiseMap;
-	float addXoffseet = 0.0f;
-	Nucleus::Ref<Nucleus::Texture2D> m_NoiseTexture;
+	NoiseContainer2D* testContainer;
+	NoiseContainer2D* testContainer2;
 
-	Nucleus::SimplexNoise* simplexNoise;
+	ObjectContainerManager2D* ocm;
+
+	//uint8_t NoiseMap[128][128][4];
+	////std::array<std::array<uint8_t, 3 * 4>, 3> NoiseMap;
+	//float addXoffseet = 0.0f;
+	//Nucleus::Ref<Nucleus::Texture2D> m_NoiseTexture;
+
+	//Nucleus::SimplexNoise* simplexNoise;
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
