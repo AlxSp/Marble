@@ -42,11 +42,11 @@ public:
 	void FillChannel(int& channel, float xOffset = 0.0f, float yOffset = 0.0f);
 
 	void OnUpdate(Nucleus::TimeStep ts) {}
-	void OnRender() override { Nucleus::BatchRenderer2D::DrawQuad(Position, Size, NoiseTexture); }
+	void OnRender() override { Nucleus::BatchRenderer2D::DrawQuad(Position - Size / 2.0f, Size, NoiseTexture); }
 
 private:
 	uint8_t	m_Octaves = 4;
-	float m_Frequency = 1.f;
+	float m_Frequency = .1f;
 	float m_Amplitude = 1.0f;
 	float m_Lacunarity = 2.0f;
 	float m_Persistence = 0.5f;

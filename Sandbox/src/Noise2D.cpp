@@ -15,7 +15,7 @@ void Noise2D::OnAttach() {
 	m_CameraController.SetZoomLevel(10.0f);
 
 	float aspectRatio = m_CameraController.GetAspectRatio();
-	float zoomLevel = m_CameraController.GetZoomLevel();
+	float zoomLevel = m_CameraController.GetZoomLevel() * ZoomDifference;
 
 	perspective_width = aspectRatio * 2 * zoomLevel;
 	perspective_height = 1 * 2 * zoomLevel;
@@ -24,7 +24,7 @@ void Noise2D::OnAttach() {
 	//testContainer2 = new NoiseContainer2D({ 0.0f, perspective_height * -0.5f }, { perspective_height, perspective_height }, (uint32_t)128);
 
 	ocm = new ObjectContainerManager2D(m_CameraController.GetPosition(), { perspective_width, perspective_width });
-	ocm->SetPlayerView(m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel());
+	ocm->SetPlayerView(m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel() * ZoomDifference);
 	//testContainer->FillPixels(testContainer->GetPostion());
 	//testContainer2->FillPixels(testContainer2->GetPostion());
 	int chanel = 0;
@@ -49,7 +49,7 @@ void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 {
 	m_CameraController.OnUpdate(ts);
 
-	ocm->SetPlayerView(m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel());
+	ocm->SetPlayerView(m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel() * ZoomDifference);
 	ocm->SetPlayerPosition(m_CameraController.GetPosition());
 	
 	{
