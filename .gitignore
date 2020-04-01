@@ -1,8 +1,13 @@
-#Directories
+#OS specific directories
+#macOS
+.DS_Store
 
-bin/
+
+#Directories
+#bin/
 bin-int/
 !thirdParty/bin/premake/
+
 
 #Sandbox files 
 Sandbox/*.json
