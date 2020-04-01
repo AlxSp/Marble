@@ -64,12 +64,27 @@ project "Nucleus"
     links {
         "Glad",
         "GLFW",
-        "ImGui",
-        "opengl32.lib"
+        "ImGui"
     }
+
+    filter "system:linux"
+        pic "on"
+
+        links {
+            "X11",
+        }
+
+        defines {
+            "NC_BUILD_DLL",
+            "GLFW_INCLUDE_NONE"
+        }
 
     filter "system:windows"
         systemversion "latest"
+
+        links {
+            "opengl32.lib"
+        }
 
         defines {
             "NC_BUILD_DLL",
@@ -116,6 +131,18 @@ project "Sandbox"
     links {
         "Nucleus"
     }
+
+    filter "system:linux"
+        systemversion "latest"
+
+        links {
+            "X11",
+            "stdc++fs"
+        }
+
+        defines {
+            "NC_PLATFORM_LINUX"
+        }
 
     filter "system:windows"
         systemversion "latest"

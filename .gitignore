@@ -4,7 +4,7 @@
 
 
 #Directories
-#bin/
+bin/
 bin-int/
 !thirdParty/bin/premake/
 
@@ -12,9 +12,17 @@ bin-int/
 #Sandbox files 
 Sandbox/*.json
 
-# Visual Studio Files and folder
+# IDE files and folders 
+# Visual Studio files and folder
 .vs/
 **.sln
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+
+# vscode files
+.vscode/
+
+
+#GNU Make
+Makefile

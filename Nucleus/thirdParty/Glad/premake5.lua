@@ -16,6 +16,9 @@ project "Glad"
         "include"
     }
 
+    filter "system:linux"
+        pic "on"
+
     filter "system:windows"
         systemversion "latest"
 

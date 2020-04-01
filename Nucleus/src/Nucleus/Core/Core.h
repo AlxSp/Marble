@@ -33,14 +33,14 @@
 	#error "Android is not supported!"
 #elif defined(__linux__)
 	#define NC_PLATFORM_LINUX
-	#error "Linux is not supported!"
+	//#error "Linux is not supported!"
 #else
 	/*Unknown compiler or platform*/
 	#error "unknown platform!"
 #endif // _WIN32
 
 
-#ifdef NC_PLATFORM_WINDOWS
+#if defined NC_PLATFORM_WINDOWS
 	#if NC_DYNAMIC_LINK
 		#ifdef NC_BUILD_DLL
 			#define NUCLEUS_API __declspec(dllexport)
@@ -50,17 +50,35 @@
 	#else
 		#define NUCLEUS_API
 	#endif
+
+#elif defined NC_PLATFORM_LINUX
+	#if NC_DYNAMIC_LINK
+		#ifdef NC_BUILD_DLL
+			#define NUCLEUS_API __attribute__((visibility("default")))
+		#else
+			#define NUCLEUS_API
+		#endif
+	#else
+		#define NUCLEUS_API
+	#endif
 #else
 	#error Nucleus only supports Windows at the moment!	
 #endif //NC_PLATFORM_WINDOWS
 
-#ifdef NC_DEBUG
+#if defined NC_DEBUG
+	#if defined NC_PLATFORM_WINDOWS
+		#define NC_DEBUGBREAK() __debugbreak()
+	#elif defined NC_PLATFORM_LINUX
+		#include <signal.h>
+		#define NC_DEBUGBREAK() raise(SIGTRAP)
+	#endif 
+
 	#define NC_ENABLE_ASSERTS
 #endif //NC_DEBUG
 
 #ifdef NC_ENABLE_ASSERTS
-	#define NC_ASSERT(x, ...) {if(!(x)) { NC_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); }}
-	#define NC_CORE_ASSERT(x, ...) {if(!(x)) { NC_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); }}
+	#define NC_ASSERT(x, ...) {if(!(x)) { NC_ERROR("Assertion Failed: {0}", __VA_ARGS__); NC_DEBUGBREAK(); }}
+	#define NC_CORE_ASSERT(x, ...) {if(!(x)) { NC_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); NC_DEBUGBREAK(); }}
 #else
 	#define NC_ASSERT(x, ...)
 	#define NC_CORE_ASSERT(x, ...)
