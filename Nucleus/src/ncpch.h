@@ -5,6 +5,7 @@
 #include <memory>
 #include <algorithm>
 #include <utility>
+#include <filesystem>
 
 #include <sstream>
 #include <string>
@@ -18,6 +19,8 @@
 
 #include "Nucleus/Core/KeyCodes.h"
 
-#ifdef NC_PLATFORM_WINDOWS
+#if defined NC_PLATFORM_WINDOWS
 	#include <Windows.h>
+#elif defined NC_PLATFORM_LINUX
+	#include <unistd.h>
 #endif //NC_PLATFORM_WINDOWS

@@ -1,4 +1,4 @@
-#OS specific directories
+#OS specific files and folders
 #macOS
 .DS_Store
 
@@ -6,11 +6,13 @@
 #Directories
 bin/
 bin-int/
-!thirdParty/bin/premake/
+#ignore premake executables
+!thirdParty/bin/premake/    
 
 
 #Sandbox files 
 Sandbox/*.json
+Sandbox/*.ini
 
 # IDE files and folders 
 # Visual Studio files and folder

@@ -1,5 +1,6 @@
 workspace "Nucleus"
     architecture "x64"
+    startproject "Sandbox"
 
     configurations {
         "Debug",
@@ -7,7 +8,7 @@ workspace "Nucleus"
         "Dist"
     }
 
-    startproject "Sandbox"
+    
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -18,6 +19,13 @@ IncludeDir["Glad"] = "Nucleus/thirdParty/Glad/include"
 IncludeDir["ImGui"] = "Nucleus/thirdParty/imgui"
 IncludeDir["glm"] = "Nucleus/thirdParty/glm"
 IncludeDir["stb_image"] = "Nucleus/thirdParty/stb_image"
+
+PostBuildCmd = {}
+PostBuildCmd["SandboxAssets"] = {
+    ["EchoMessage"] = "{ECHO} Adding assets from \"%{prj.location}\".",
+    ["DeleteOld"] = "{Delete} \"%{cfg.buildtarget.directory}/assets/\"",
+    ["AddNew"] = "{COPY} \"%{prj.location}/assets\" \"%{cfg.buildtarget.directory}/assets/\"",
+}
 
 group "Dependencies"
     include "Nucleus/thirdParty/GLFW"
@@ -72,6 +80,7 @@ project "Nucleus"
 
         links {
             "X11",
+            "Xrandr",
         }
 
         defines {
@@ -136,7 +145,13 @@ project "Sandbox"
         systemversion "latest"
 
         links {
+            "GLFW",
+			"Glad",
+            "ImGui",
+            "dl",
             "X11",
+            "Xrandr",
+            "pthread",
             "stdc++fs"
         }
 
@@ -156,12 +171,28 @@ project "Sandbox"
         runtime "Debug"
         symbols "on"
 
+        postbuildcommands {
+            PostBuildCmd["SandboxAssets"]["EchoMessage"],
+            PostBuildCmd["SandboxAssets"]["AddNew"],
+        }
+
     filter "configurations:Release"
         defines "NC_RELEASE"
         runtime "Release"
         optimize "on"
 
+        postbuildcommands {
+            PostBuildCmd["SandboxAssets"]["EchoMessage"],
+            PostBuildCmd["SandboxAssets"]["AddNew"],
+        }
+
     filter "configurations:Dist"
         defines "NC_DIST"
         runtime "Release"
         optimize "on"
+
+        postbuildcommands {
+            PostBuildCmd["SandboxAssets"]["EchoMessage"],
+            PostBuildCmd["SandboxAssets"]["DeleteOld"],
+            PostBuildCmd["SandboxAssets"]["AddNew"],
+        }

@@ -23,7 +23,7 @@ namespace Nucleus {
 	*/
 
 	// Skewing/Unskewing factors for 2D
-	static const float SkewFactor2D   = 0.366025403f;	// SkewFactor2D = (sqrt(2 + 1) -1 ) / 2;
+	static const float SkewFactor2D   = 0.366025403f;	// SkewFactor2D = (sqrt(2 + 1) - 1 ) / 2;
 	static const float UnskewFactor2D = 0.211324865f;	// UnskewFactor2D = SkewFactor2D / sqrt(2 + 1)
 	// Skewing/Unskewing factors for 3D
 	static const float SkewFactor3D   = 0.333333333f;	// SkewFactor3D = (sqrt(3 + 1) - 1) / 3;

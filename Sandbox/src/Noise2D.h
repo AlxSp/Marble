@@ -21,7 +21,7 @@ private:
 	float perspective_width  = 0.0f;
 	float perspective_height = 0.0f;
 
-	float ZoomDifference = 1.0f;
+	float ZoomDifference = .1f;
 
 	ObjectContainerManager2D* ocm;
 

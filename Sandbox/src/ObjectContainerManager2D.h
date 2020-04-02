@@ -11,13 +11,17 @@ public:
 	ObjectContainerManager2D(const glm::vec2& playerPosition, const glm::vec2& containerSize);
 	~ObjectContainerManager2D();
 
-	void SetPlayerPosition(const glm::vec2& position) { PreviousPlayerPosition = PlayerPostion;  PlayerPostion = position; PlayerDirection = PlayerPostion - PreviousPlayerPosition;  UpdateContainers(); }
-	void SetPlayerView(const float& aspectRatio, const float& zoomLevel) { PlayerView = { aspectRatio * zoomLevel, zoomLevel }; ContainersInViewDistance = glm::ceil(PlayerView / ContainerSize); }
+	void SetPlayerStatus(Nucleus::OrthographicCameraController& controller, const float& zoomDifference = 1.0f);
+	void SetPlayerPosition(const glm::vec2& position) { PreviousPlayerPosition = PlayerPostion;  PlayerPostion = position; PlayerDirection = PlayerPostion - PreviousPlayerPosition;}
+	void SetPlayerView(const float& aspectRatio, const float& zoomLevel) { PlayerView = { aspectRatio * zoomLevel, aspectRatio * zoomLevel }; ContainersInViewDistance = glm::round(PlayerView / ContainerSize); }
 
+	void OnUpdate();
 	void OnRender();
 
+	void GenerateContainers();
+	
 private:
-	void UpdateContainers();
+	
 
 private:
 	glm::vec2 PlayerPostion;
@@ -26,12 +30,14 @@ private:
 	glm::vec2 PlayerView = { 0.0f, 0.0f };
 
 
+	float MaxViewDistance = 0.0f;
+
 	glm::vec2 InitiationOrigin = { 0.0f, 0.0f };
 	glm::vec2 ContainerSize;
 	glm::ivec2 ContainersInViewDistance = { 0, 0 };
 
 	//std::vector<NoiseContainer2D*> Containers;
-	std::unordered_map<glm::vec2, NoiseContainer2D*> ContainerMap;
+	std::unordered_map<glm::vec2, ColorContainer2D*> ContainerMap;
 	//tmp
 	int counter = 0;
 

@@ -20,6 +20,18 @@ public:
 	//virtual 
 };
 
+class ColorContainer2D : public VisibleContainer2D {
+public:
+	ColorContainer2D(const glm::vec2& postion, const glm::vec2& size, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }) : VisibleContainer2D(postion, size), m_Color(color) {}
+	~ColorContainer2D() = default;
+
+	void SetColor(const glm::vec4 color) { m_Color = color; }
+	void OnRender() override { Nucleus::BatchRenderer2D::DrawQuad(Position - Size / 2.0f, Size, m_Color); }
+
+private:
+	glm::vec4 m_Color = { 1.0f, 1.0f, 1.0f, 1.0f };
+};
+
 
 
 class NoiseContainer2D : public VisibleContainer2D {
@@ -56,49 +68,4 @@ private:
 	uint32_t Detail;
 	uint8_t Channels = 4;
 	Nucleus::Ref<Nucleus::Texture2D> NoiseTexture;
-};
-
-class LevelofDetailContainer : public Container2D {
-public:
-	LevelofDetailContainer(const glm::vec2& postion, const glm::vec2& size, const uint32_t& detail)
-		: Container2D(postion, size), Detail(detail) {
-		SubContainerSize = Size.x / Detail;
-		NumberOfContainers = Detail * Detail;
-
-		//SubContainers = new VisibleContainer2D*[NumberOfContainers];
-		//int detail = 128;
-		for (int i = 0; i < Detail; i++) {
-			for (int j = 0; j < Detail; j++) {
-				SubContainers.push_back(new NoiseContainer2D({ i * SubContainerSize , j * SubContainerSize }, { SubContainerSize, SubContainerSize }, 128));
-			}
-		}
-
-		for (int i = 0; i < Detail * Detail; i++) {
-			SubContainers[i]->FillPixels(SubContainers[i]->GetPostion());
-		}
-
-	}
-
-	~LevelofDetailContainer() {
-		for (int i = 0; i < Detail * Detail; i++) {
-			delete SubContainers[i];
-		}
-	}
-
-	void SetPlayerPosition(const glm::vec2& postion) { PlayerPostion = postion; }
-
-	void OnRender() {
-		for (int i = 0; i < Detail * Detail; i++) {
-			SubContainers[i]->OnRender();
-		}
-		
-		//for (int i = 0; i < NumberOfContainers)
-	}
-
-protected:
-	uint32_t Detail;
-	uint32_t NumberOfContainers = 1;
-	float SubContainerSize = 1.0f;
-	std::vector<NoiseContainer2D*> SubContainers;
-	glm::vec2 PlayerPostion;
 };
