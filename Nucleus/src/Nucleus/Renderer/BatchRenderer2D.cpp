@@ -18,7 +18,8 @@ namespace Nucleus {
 		{ ShaderDataType::Float3, "a_Position"},
 		{ ShaderDataType::Float4, "a_Color" },
 		{ ShaderDataType::Float2, "a_TexCoord" },
-		{ ShaderDataType::Float,  "TexIndex" }
+		{ ShaderDataType::Float,  "TexIndex" },
+		{ ShaderDataType::Float,  "TilingFactor" }
 	};
 
 	struct BatchRenderer2DStorage {
@@ -53,7 +54,7 @@ namespace Nucleus {
 
 		s_BatchData.QuadVertexArray->AddVertexBuffer(m_QuadVertexBuffer);
 
-		uint32_t indices[MaxIndexCount];
+		uint32_t* indices = new uint32_t[MaxIndexCount];
 		uint32_t offset = 0;
 		
 		for (int i = 0; i < MaxIndexCount; i += 6) {
@@ -67,17 +68,15 @@ namespace Nucleus {
 			offset += 4;
 		}
 		
-		Ref<IndexBuffer> m_SquareIndexBuffer;
-		m_SquareIndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
-		s_BatchData.QuadVertexArray->SetIndexBuffer(m_SquareIndexBuffer);
+		Ref<IndexBuffer> m_QuadIndexBuffer;
+		m_QuadIndexBuffer.reset(IndexBuffer::Create(indices, MaxIndexCount));
+		s_BatchData.QuadVertexArray->SetIndexBuffer(m_QuadIndexBuffer);
+		delete[] indices;
 
 		s_BatchData.TextureSlots[0] = Texture2D::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
 		s_BatchData.TextureSlots[0]->SetData(&whiteTextureData, sizeof(uint32_t));
 		
-		for (size_t i = 1; i < MaxTextures; i++) {
-			s_BatchData.TextureSlots[i] = 0;
-		}
 
 		s_BatchData.BatchShader = Shader::Create("assets/shaders/BatchShader.glsl");
 		s_BatchData.BatchShader->Bind();
@@ -86,7 +85,7 @@ namespace Nucleus {
 		for (int i = 0; i < MaxTextures; i++)
 			samplers[i] = i;
 
-		s_BatchData.BatchShader->SetSamplers("u_Textures", samplers, MaxTextures);
+		s_BatchData.BatchShader->SetIntArray("u_Textures", samplers, MaxTextures);
 
 		
 	}
@@ -156,6 +155,14 @@ namespace Nucleus {
 		BeginBatch();
 	}
 
+
+	void BatchRenderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+	{
+		NC_PROFILE_FUNCTION();
+
+		DrawQuad({ position.x, position.y, 0.0f }, size, color);
+	}
+
 	void BatchRenderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		NC_PROFILE_FUNCTION();
@@ -166,25 +173,26 @@ namespace Nucleus {
 			BeginBatch();
 		}
 
-		float textureIndex = 0.0f;
+		const float textureIndex = 0.0f; //White Texture Slot Index
+		const float tilingFactor = 1.0f; //White Texture Slot Index
 
-		DrawVertex({ position.x,			position.y,				position.z }, color, { 0.0f, 0.0f }, textureIndex);
-		DrawVertex({ position.x + size.x,	position.y,				position.z }, color, { 1.0f, 0.0f }, textureIndex);
-		DrawVertex({ position.x + size.x,	position.y + size.y,	position.z }, color, { 1.0f, 1.0f }, textureIndex);
-		DrawVertex({ position.x,			position.y + size.y,	position.z }, color, { 0.0f, 1.0f }, textureIndex);
+		DrawVertex({ position.x,			position.y,				position.z }, color, { 0.0f, 0.0f }, textureIndex, tilingFactor);
+		DrawVertex({ position.x + size.x,	position.y,				position.z }, color, { 1.0f, 0.0f }, textureIndex, tilingFactor);
+		DrawVertex({ position.x + size.x,	position.y + size.y,	position.z }, color, { 1.0f, 1.0f }, textureIndex, tilingFactor);
+		DrawVertex({ position.x,			position.y + size.y,	position.z }, color, { 0.0f, 1.0f }, textureIndex, tilingFactor);
 
 		s_BatchData.IndexCount += 6;
 
 	}
 
-	void BatchRenderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+	void BatchRenderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float& tilingFactor, const glm::vec4& tintColor)
 	{
 		NC_PROFILE_FUNCTION();
 
-		DrawQuad({ position.x, position.y, 0.0f }, size, color);
+		DrawQuad({ position.x, position.y, 0.0f }, size, texture, tilingFactor, tintColor);
 	}
 
-	void BatchRenderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tintColor)
+	void BatchRenderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float& tilingFactor, const glm::vec4& tintColor)
 	{
 		NC_PROFILE_FUNCTION();
 
@@ -197,7 +205,7 @@ namespace Nucleus {
 		float textureIndex = 0.0f;
 
 		for (uint32_t i = 1; i < s_BatchData.TextureSlotIndex; i++) {
-			if (s_BatchData.TextureSlots[i] == texture) {
+			if (*s_BatchData.TextureSlots[i].get() == *texture.get()) {
 				textureIndex = (float)i;
 				break;
 			}
@@ -211,22 +219,17 @@ namespace Nucleus {
 			s_BatchData.TextureSlotIndex++;
 		}
 
-		DrawVertex({ position.x,			position.y,				position.z }, tintColor, { 0.0f, 0.0f }, textureIndex);
-		DrawVertex({ position.x + size.x,	position.y,				position.z }, tintColor, { 1.0f, 0.0f }, textureIndex);
-		DrawVertex({ position.x + size.x,	position.y + size.y,	position.z }, tintColor, { 1.0f, 1.0f }, textureIndex);
-		DrawVertex({ position.x,			position.y + size.y,	position.z }, tintColor, { 0.0f, 1.0f }, textureIndex);
+		DrawVertex({ position.x,			position.y,				position.z }, tintColor, { 0.0f, 0.0f }, textureIndex, tilingFactor);
+		DrawVertex({ position.x + size.x,	position.y,				position.z }, tintColor, { 1.0f, 0.0f }, textureIndex, tilingFactor);
+		DrawVertex({ position.x + size.x,	position.y + size.y,	position.z }, tintColor, { 1.0f, 1.0f }, textureIndex, tilingFactor);
+		DrawVertex({ position.x,			position.y + size.y,	position.z }, tintColor, { 0.0f, 1.0f }, textureIndex, tilingFactor);
 
 		s_BatchData.IndexCount += 6;
 	}
 
-	void BatchRenderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tintColor)
-	{
-		NC_PROFILE_FUNCTION();
 
-		DrawQuad({ position.x, position.y, 0.0f }, size, texture, tintColor);
-	}
 
-	void BatchRenderer2D::DrawVertex(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, const float& textureIndex)
+	void BatchRenderer2D::DrawVertex(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, const float& textureIndex, const float& tilingFactor)
 	{
 		s_BatchData.QuadBufferPtr[0] = position.x;
 		s_BatchData.QuadBufferPtr[1] = position.y;
@@ -242,7 +245,11 @@ namespace Nucleus {
 
 		s_BatchData.QuadBufferPtr[9] = textureIndex;
 
-		s_BatchData.QuadBufferPtr += 10;
+		s_BatchData.QuadBufferPtr[10] = tilingFactor;
+
+
+
+		s_BatchData.QuadBufferPtr += 11;
 	}
 }
 

@@ -23,6 +23,8 @@ void Noise2D::OnAttach() {
 	ocm = new ObjectContainerManager2D(m_CameraController.GetPosition(), { perspective_width, perspective_width });
 	ocm->SetPlayerView(m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel() * ZoomDifference);
 	int channel = 0;
+
+	texture = Nucleus::Texture2D::Create("assets/textures/transparentFlower.png");
 }
 
 void Noise2D::OnDetach()
@@ -54,6 +56,8 @@ void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 	ocm->OnRender();
 	//testContainer->OnRender();
 	//testContainer2->OnRender();
+	Nucleus::BatchRenderer2D::DrawQuad({ 0.0f, 0.0f, 0.2f }, { 10.0f, 10.0f }, texture, 10.0f);
+	Nucleus::BatchRenderer2D::DrawQuad({ 0.0f, 0.0f, 0.3f }, { 10.0f, 10.0f }, texture, 1.0f);
 
 	Nucleus::BatchRenderer2D::EndScene();
 }

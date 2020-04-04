@@ -25,6 +25,8 @@ private:
 
 	ObjectContainerManager2D* ocm;
 
+	Nucleus::Ref<Nucleus::Texture2D> texture;
+
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 	int count = 0; 
