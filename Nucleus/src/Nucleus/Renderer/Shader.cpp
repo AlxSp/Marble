@@ -33,40 +33,40 @@ namespace Nucleus {
 		return nullptr;
 	}
 
-	void ShaderLibeary::Add(const std::string& name, const Ref<Shader>& shader)
+	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
 		NC_CORE_ASSERT(!Exists(name), "Shader already exist!");
 		m_Shaders[name] = shader;
 	}
 
-	void ShaderLibeary::Add(const Ref<Shader>& shader)
+	void ShaderLibrary::Add(const Ref<Shader>& shader)
 	{
 		auto& name = shader->GetName();
 		Add(name, shader);
 	}
 
 
-	Ref<Shader> ShaderLibeary::Load(const std::string& filepath)
+	Ref<Shader> ShaderLibrary::Load(const std::string& filepath)
 	{
 		auto shader = Shader::Create(filepath);
 		Add(shader);
 		return shader;
 	}
 
-	Ref<Shader> ShaderLibeary::Load(const std::string& name, const std::string& filepath)
+	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath)
 	{
 		auto shader = Shader::Create(filepath);
 		Add(name, shader);
 		return shader;
 	}
 
-	Ref<Shader> ShaderLibeary::Get(const std::string& name)
+	Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
 		NC_CORE_ASSERT(Exists(name), "Shader already exist!");
 		return m_Shaders[name];
 	}
 
-	bool ShaderLibeary::Exists(const std::string& name) const
+	bool ShaderLibrary::Exists(const std::string& name) const
 	{
 		return m_Shaders.find(name) != m_Shaders.end();
 	}

@@ -60,7 +60,7 @@ void ObjectContainerManager2D::OnRender() {
 		Containers[i]->OnRender();
 	}*/
 	glm::vec3 ViewOrigin = { PlayerPostion.x - PlayerView.x, PlayerPostion.y - PlayerView.y, 0.1f };
-	Nucleus::BatchRenderer2D::DrawQuad(ViewOrigin, PlayerView * 2.0f, { 1.0f, .0666f, .0666f, .4f });
+	Nucleus::BatchRenderer2D::DrawQuad(PlayerPostion, PlayerView * 2.0f, { 1.0f, .0666f, .0666f, .4f });
 	// Iterate over an unordered_map using range based for loop
 	for (std::pair<glm::vec2, ColorContainer2D* > element : ContainerMap)
 	{

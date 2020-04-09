@@ -79,8 +79,10 @@ project "Nucleus"
         pic "on"
 
         links {
+            "GL",
             "X11",
             "Xrandr",
+            "Xi",
         }
 
         defines {
@@ -145,12 +147,14 @@ project "Sandbox"
         systemversion "latest"
 
         links {
+            "Glad",
             "GLFW",
-			"Glad",
+            "GL",
             "ImGui",
-            "dl",
             "X11",
             "Xrandr",
+            "Xi",
+            "dl",
             "pthread",
             "stdc++fs"
         }

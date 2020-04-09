@@ -25,7 +25,7 @@ namespace Nucleus {
 		virtual const std::string& GetName() const = 0;
 	};
 
-	class ShaderLibeary {
+	class ShaderLibrary {
 	public:
 		void Add(const std::string& name, const Ref<Shader>& shader);
 		void Add(const Ref<Shader>& shader);

@@ -26,7 +26,7 @@ public:
 	~ColorContainer2D() = default;
 
 	void SetColor(const glm::vec4 color) { m_Color = color; }
-	void OnRender() override { Nucleus::BatchRenderer2D::DrawQuad(Position - Size / 2.0f, Size, m_Color); }
+	void OnRender() override { Nucleus::BatchRenderer2D::DrawQuad(Position, Size, m_Color); }
 
 private:
 	glm::vec4 m_Color = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -54,7 +54,7 @@ public:
 	void FillChannel(int& channel, float xOffset = 0.0f, float yOffset = 0.0f);
 
 	void OnUpdate(Nucleus::TimeStep ts) {}
-	void OnRender() override { Nucleus::BatchRenderer2D::DrawQuad(Position - Size / 2.0f, Size, NoiseTexture); }
+	void OnRender() override { Nucleus::BatchRenderer2D::DrawQuad(Position, Size, NoiseTexture); }
 
 private:
 	uint8_t	m_Octaves = 4;
