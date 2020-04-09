@@ -19,24 +19,24 @@ namespace Nucleus {
 	struct BatchRenderer2DStorage {
 		const uint32_t MaxQuadCount = 10000;
 		const uint32_t MaxVertexCount = MaxQuadCount * 4;
-		const uint32_t MaxBufferSize = MaxVertexCount * 11;
 		const uint32_t MaxIndexCount = MaxQuadCount * 6;
+		const uint32_t MaxBufferSize = MaxVertexCount * 11;
 		static const uint32_t MaxTextures = 32;
 
 		Ref<VertexArray> QuadVertexArray;
-
+		Ref<VertexBuffer> QuadVertexBuffer;
+		
 		float* QuadBuffer = nullptr;
 		float* QuadBufferPtr = nullptr;
-
 		uint32_t QuadIndexCount = 0;
 
-		uint32_t WhiteTextureSlot = 0;
+		glm::vec4 QuadVertexPositions[4];
+		
 		std::array<Ref<Nucleus::Texture2D>, MaxTextures> TextureSlots;
+		uint32_t WhiteTextureSlot = 0;
 		uint32_t TextureSlotIndex = 1;
 
 		Ref<Shader> BatchShader;
-
-		glm::vec4 QuadVertexPositions[4];
 	};
 
 	static BatchRenderer2DStorage s_BatchData;
@@ -45,48 +45,42 @@ namespace Nucleus {
 	{
 		NC_PROFILE_FUNCTION();
 
-		s_BatchData.QuadVertexArray = VertexArray::Create();
-
 		s_BatchData.QuadBuffer = new float[s_BatchData.MaxBufferSize];
 		
-		Ref<VertexBuffer> m_QuadVertexBuffer;
-		m_QuadVertexBuffer.reset(VertexBuffer::Create(s_BatchData.QuadBuffer, sizeof(float) * s_BatchData.MaxBufferSize, BufferType::Dynamic));
+		s_BatchData.QuadVertexBuffer = VertexBuffer::Create(sizeof(float) * s_BatchData.MaxBufferSize, BufferType::Dynamic);
+		s_BatchData.QuadVertexBuffer->SetLayout(BatchRenderer2DStandardLayout);
 
-		m_QuadVertexBuffer->SetLayout(BatchRenderer2DStandardLayout);
+		s_BatchData.QuadVertexArray = VertexArray::Create();
+		s_BatchData.QuadVertexArray->AddVertexBuffer(s_BatchData.QuadVertexBuffer);
 
-		s_BatchData.QuadVertexArray->AddVertexBuffer(m_QuadVertexBuffer);
+		uint32_t* quadIndices = new uint32_t[s_BatchData.MaxIndexCount];
 
-		uint32_t* indices = new uint32_t[s_BatchData.MaxIndexCount];
 		uint32_t offset = 0;
-		
 		for (int i = 0; i < s_BatchData.MaxIndexCount; i += 6) {
-			indices[i + 0] = 0 + offset;
-			indices[i + 1] = 1 + offset;
-			indices[i + 2] = 2 + offset;
-			indices[i + 3] = 2 + offset;
-			indices[i + 4] = 3 + offset;
-			indices[i + 5] = 0 + offset;
+			quadIndices[i + 0] = 0 + offset;
+			quadIndices[i + 1] = 1 + offset;
+			quadIndices[i + 2] = 2 + offset;
+			quadIndices[i + 3] = 2 + offset;
+			quadIndices[i + 4] = 3 + offset;
+			quadIndices[i + 5] = 0 + offset;
 
 			offset += 4;
 		}
 		
-		Ref<IndexBuffer> m_QuadIndexBuffer;
-		m_QuadIndexBuffer.reset(IndexBuffer::Create(indices, s_BatchData.MaxIndexCount));
+		Ref<IndexBuffer> m_QuadIndexBuffer = IndexBuffer::Create(quadIndices, s_BatchData.MaxIndexCount);
 		s_BatchData.QuadVertexArray->SetIndexBuffer(m_QuadIndexBuffer);
-		delete[] indices;
+		delete[] quadIndices;
 
-		s_BatchData.TextureSlots[0] = Texture2D::Create(1, 1);
+		s_BatchData.TextureSlots[s_BatchData.WhiteTextureSlot] = Texture2D::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
-		s_BatchData.TextureSlots[0]->SetData(&whiteTextureData, sizeof(uint32_t));
+		s_BatchData.TextureSlots[s_BatchData.WhiteTextureSlot]->SetData(&whiteTextureData, sizeof(uint32_t));
 		
-
-		s_BatchData.BatchShader = Shader::Create("assets/shaders/BatchShader.glsl");
-		s_BatchData.BatchShader->Bind();
-
 		int samplers[s_BatchData.MaxTextures];
 		for (int i = 0; i < s_BatchData.MaxTextures; i++)
 			samplers[i] = i;
 
+		s_BatchData.BatchShader = Shader::Create("assets/shaders/BatchShader.glsl");
+		s_BatchData.BatchShader->Bind();
 		s_BatchData.BatchShader->SetIntArray("u_Textures", samplers, s_BatchData.MaxTextures);
 
 		s_BatchData.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
@@ -107,12 +101,13 @@ namespace Nucleus {
 		NC_PROFILE_FUNCTION();
 
 		s_BatchData.QuadBufferPtr = s_BatchData.QuadBuffer;
+		s_BatchData.QuadIndexCount = 0;
+		
 
 		s_BatchData.BatchShader->Bind();
 		s_BatchData.BatchShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-		s_BatchData.BatchShader->SetMat4("u_Transform", glm::translate(glm::mat4(1.0f), glm::vec3(0.0f)));
 
-		s_BatchData.TextureSlots[0]->Bind(s_BatchData.WhiteTextureSlot);
+		s_BatchData.TextureSlotIndex = 1;
 	}
 
 	void BatchRenderer2D::EndScene()
@@ -128,6 +123,8 @@ namespace Nucleus {
 		NC_PROFILE_FUNCTION();
 
 		s_BatchData.QuadBufferPtr = s_BatchData.QuadBuffer;
+		s_BatchData.QuadIndexCount = 0;
+		s_BatchData.TextureSlotIndex = 1;
 	}
 
 	void BatchRenderer2D::EndBatch()
@@ -136,19 +133,19 @@ namespace Nucleus {
 
 		uint32_t size = (uint32_t*)s_BatchData.QuadBufferPtr - (uint32_t*)s_BatchData.QuadBuffer;
 		if (size > 0)
-			s_BatchData.QuadVertexArray->GetVertexBuffers()[0]->StreamTo(0, size * sizeof(float), s_BatchData.QuadBuffer);
+			s_BatchData.QuadVertexBuffer->SetData(s_BatchData.QuadBuffer, size * sizeof(float));
 	}
 
 	void BatchRenderer2D::Flush()
 	{
 		NC_PROFILE_FUNCTION();
 
+		for (uint32_t i = 0; i < s_BatchData.TextureSlotIndex; i++){
+			s_BatchData.TextureSlots[i]->Bind(i);
+		}
+
 		s_BatchData.QuadVertexArray->Bind();
-
 		RenderCommand::DrawIndexed(DrawMode::Triangles, s_BatchData.QuadIndexCount);
-
-		s_BatchData.QuadIndexCount = 0;
-		s_BatchData.TextureSlotIndex = 1;
 	}
 
 	void BatchRenderer2D::SetStandardLayout()
@@ -156,7 +153,7 @@ namespace Nucleus {
 		EndBatch();
 		Flush();
 
-		s_BatchData.QuadVertexArray->GetVertexBuffers()[0]->SetLayout(BatchRenderer2DStandardLayout);
+		s_BatchData.QuadVertexBuffer->SetLayout(BatchRenderer2DStandardLayout);
 		BeginBatch();
 	}
 
@@ -220,7 +217,6 @@ namespace Nucleus {
 		}
 
 		if (textureIndex == 0.0f) {
-			texture->Bind(s_BatchData.TextureSlotIndex);
 			s_BatchData.TextureSlots[s_BatchData.TextureSlotIndex] = texture;
 
 			textureIndex = (float)s_BatchData.TextureSlotIndex;
@@ -293,7 +289,6 @@ namespace Nucleus {
 		}
 
 		if (textureIndex == 0.0f) {
-			texture->Bind(s_BatchData.TextureSlotIndex);
 			s_BatchData.TextureSlots[s_BatchData.TextureSlotIndex] = texture;
 
 			textureIndex = (float)s_BatchData.TextureSlotIndex;
@@ -311,8 +306,6 @@ namespace Nucleus {
 
 		s_BatchData.QuadIndexCount += 6;
 	}
-
-
 
 	void BatchRenderer2D::DrawVertex(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, const float& textureIndex, const float& tilingFactor)
 	{

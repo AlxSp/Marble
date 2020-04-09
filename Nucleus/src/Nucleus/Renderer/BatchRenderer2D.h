@@ -1,7 +1,7 @@
 #pragma once
 
 #include "OrthographicCamera.h"
-#include "VertexArray.h"
+//#include "VertexArray.h"
 #include "Nucleus/Renderer/Texture.h"
 
 namespace Nucleus {

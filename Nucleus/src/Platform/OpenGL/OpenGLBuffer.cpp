@@ -18,6 +18,14 @@ namespace Nucleus {
 	///////////////////////////////////////////////////////////////////////
 	//// Vertex Buffer ////////////////////////////////////////////////////
 
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size, BufferType type){
+		NC_PROFILE_FUNCTION();
+
+		glCreateBuffers(1, &m_RendererID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, BufferTypeToOpenGLBufferType(type));
+	}
+
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size, BufferType type)
 	{
 		NC_PROFILE_FUNCTION();
@@ -48,7 +56,7 @@ namespace Nucleus {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void OpenGLVertexBuffer::StreamTo(uint32_t offset, uint32_t size, float* data)
+	void OpenGLVertexBuffer::SetData(const void* data, uint32_t size, uint32_t offset)
 	{
 		NC_PROFILE_FUNCTION();
 

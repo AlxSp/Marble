@@ -23,7 +23,7 @@ IncludeDir["stb_image"] = "Nucleus/thirdParty/stb_image"
 PostBuildCmd = {}
 PostBuildCmd["SandboxAssets"] = {
     ["EchoMessage"] = "{ECHO} Adding assets from \"%{prj.location}\".",
-    ["DeleteOld"] = "{Delete} \"%{cfg.buildtarget.directory}/assets/\"",
+    ["DeleteOld"] = "{RMDIR} \"%{cfg.buildtarget.directory}/assets/\"",
     ["AddNew"] = "{COPY} \"%{prj.location}/assets\" \"%{cfg.buildtarget.directory}/assets/\"",
 }
 
@@ -177,6 +177,7 @@ project "Sandbox"
 
         postbuildcommands {
             PostBuildCmd["SandboxAssets"]["EchoMessage"],
+            PostBuildCmd["SandboxAssets"]["DeleteOld"],
             PostBuildCmd["SandboxAssets"]["AddNew"],
         }
 
@@ -187,6 +188,7 @@ project "Sandbox"
 
         postbuildcommands {
             PostBuildCmd["SandboxAssets"]["EchoMessage"],
+            PostBuildCmd["SandboxAssets"]["DeleteOld"],
             PostBuildCmd["SandboxAssets"]["AddNew"],
         }
 

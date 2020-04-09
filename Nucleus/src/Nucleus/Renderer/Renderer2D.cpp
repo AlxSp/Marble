@@ -35,8 +35,7 @@ namespace Nucleus {
 		};
 
 
-		Ref<VertexBuffer> m_SquareVertexBuffer;
-		m_SquareVertexBuffer.reset(VertexBuffer::Create(Squarevertices, sizeof(Squarevertices)));
+		Ref<VertexBuffer> m_SquareVertexBuffer = VertexBuffer::Create(Squarevertices, sizeof(Squarevertices));
 
 		m_SquareVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_Position"},
@@ -46,8 +45,7 @@ namespace Nucleus {
 
 
 		uint32_t m_Squareindices[6] = { 0, 1, 2, 2, 3, 0 };
-		Ref<IndexBuffer> m_SquareIndexBuffer;
-		m_SquareIndexBuffer.reset(IndexBuffer::Create(m_Squareindices, sizeof(m_Squareindices) / sizeof(uint32_t)));
+		Ref<IndexBuffer> m_SquareIndexBuffer = IndexBuffer::Create(m_Squareindices, sizeof(m_Squareindices) / sizeof(uint32_t));
 		s_Data->SquareVertexArray->SetIndexBuffer(m_SquareIndexBuffer);
 
 		s_Data->WhiteTexture = Texture2D::Create(1, 1);
