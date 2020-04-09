@@ -115,7 +115,7 @@ namespace Nucleus {
 		NC_PROFILE_FUNCTION();
 
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
-		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 		s_Data->TextureShader->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
@@ -162,7 +162,7 @@ namespace Nucleus {
 		NC_PROFILE_FUNCTION();
 
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
-		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 		s_Data->TextureShader->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)

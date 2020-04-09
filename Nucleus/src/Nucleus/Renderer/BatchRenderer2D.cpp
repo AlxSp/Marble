@@ -257,7 +257,7 @@ namespace Nucleus {
 		const float tilingFactor = 1.0f; //White Texture Slot Index
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
+			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawVertex(transform * s_BatchData.QuadVertexPositions[0], color, { 0.0f, 0.0f }, textureIndex, tilingFactor);
@@ -301,7 +301,7 @@ namespace Nucleus {
 		}
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
+			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawVertex(transform * s_BatchData.QuadVertexPositions[0], tintColor, { 0.0f, 0.0f }, textureIndex, tilingFactor);
