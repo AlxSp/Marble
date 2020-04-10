@@ -53,27 +53,10 @@ void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 
 	Nucleus::BatchRenderer2D::BeginScene(m_CameraController.GetCamera());
 
-	//ocm->OnRender();
+	ocm->OnRender();
 
-	static float rotation = 0.0f;
-	rotation += ts * 5.0f;
-	Nucleus::BatchRenderer2D::DrawQuad({ -5.0f, 5.0f, 0.3f }, { 10.0f, 10.0f }, texture, 10.f);
-
-	Nucleus::BatchRenderer2D::DrawRotatedQuad({ -5.0f, -5.0f, 0.2f }, { 10.0f, 10.0f }, rotation, texture, 10.0f);
-	//Nucleus::BatchRenderer2D::DrawQuad({ 0.0f, 0.0f, 0.2f }, { 10.0f, 10.0f }, texture, 10.0f);
-	//Nucleus::BatchRenderer2D::DrawQuad({ 0.0f, 0.0f, 0.3f }, { 10.0f, 10.0f }, texture, 1.0f);
-
-	//Nucleus::BatchRenderer2D::DrawRotatedQuad({ 0.0f, 0.0f, 0.2f }, { 10.0f, 10.0f }, rotation, texture, 10.0f);
-
-	//Nucleus::BatchRenderer2D::DrawRotatedQuad({ 3.0f, 0.0f, 0.2f }, { 10.0f, 10.0f }, -rotation, {0.8f, 0.2f, 0.3f, 1.0f});
 
 	Nucleus::BatchRenderer2D::EndScene();
-
-	Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	Nucleus::Renderer2D::DrawQuad({ 5.0f, 5.0f, 0.3f }, { 10.0f, 10.0f }, texture, 10.f);
-	Nucleus::Renderer2D::DrawRotatedQuad({ 5.0f, -5.0f, 0.2f }, { 10.0f, 10.0f }, rotation, texture, 10.0f);
-	Nucleus::Renderer2D::EndScene();
-	
 }
 
 void Noise2D::OnImGuiRender()
