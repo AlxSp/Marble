@@ -12,19 +12,28 @@ Noise2D::Noise2D() : Layer("Sandbox2D"), m_CameraController(1920.0f / 1080.0f, t
 
 void Noise2D::OnAttach() {
 	NC_PROFILE_FUNCTION();
-	m_CameraController.SetZoomLevel(10.0f);
+	//m_CameraController.SetZoomLevel(10.0f);
 
 	float aspectRatio = m_CameraController.GetAspectRatio();
-	float zoomLevel = m_CameraController.GetZoomLevel() * ZoomDifference;
 
-	perspective_width = aspectRatio * 2 * zoomLevel;
-	perspective_height = 1 * 2 * zoomLevel;
+	glm::vec2 test = { 2.333, -.5 };
 
-	ocm = new ObjectContainerManager2D(m_CameraController.GetPosition(), { perspective_width, perspective_width });
-	ocm->SetPlayerView(m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel() * ZoomDifference);
-	int channel = 0;
+	test = glm::round(test);
 
-	texture = Nucleus::Texture2D::Create("assets/textures/transparentFlower.png");
+	float zoomDifference = .1f;
+
+	m_Player = Nucleus::CreateRef<Player>(Player(m_CameraController.GetPosition(), m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel()));
+
+	perspective_width = aspectRatio * 2 * zoomDifference;// *zoomLevel;
+	//perspective_height = 1 * 2;// *zoomLevel;
+
+	ocm = new ObjectContainerManager2D(m_Player, { perspective_width, perspective_width });
+
+	ocm->SetZoomDifference(zoomDifference);
+	//ocm->SetPlayerView(m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel() * ZoomDifference);
+	//int channel = 0;
+
+	//texture = Nucleus::Texture2D::Create("assets/textures/transparentFlower.png");
 }
 
 void Noise2D::OnDetach()
@@ -36,11 +45,13 @@ void Noise2D::OnDetach()
 void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 {
 	m_CameraController.OnUpdate(ts);
+	if (m_CameraController.GetZoomLevel() > 10) {
+		m_CameraController.SetZoomLevel(10);
+	}
+	m_Player->SetCameraPosition(m_CameraController.GetPosition());
+	m_Player->SetZoomLevel(m_CameraController.GetZoomLevel());
 
-	ocm->SetPlayerStatus(m_CameraController, ZoomDifference);
-	//ocm->SetPlayerView(m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel() * ZoomDifference);
-	//ocm->SetPlayerPosition(m_CameraController.GetPosition());
-	ocm->GenerateContainers();
+	//ocm->GenerateContainers();
 	ocm->OnUpdate();
 	{
 		NC_PROFILE_SCOPE("Render Prep");
@@ -61,6 +72,8 @@ void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 
 void Noise2D::OnImGuiRender()
 {
+
+	ocm->OnImGuiRender();
 	ImGui::Begin("Simplex Noise");
 	ImGui::SliderInt("Octaves", &m_Octaves, 1, 10);
 	ImGui::SliderFloat("Frequency", &m_Frequency, 0.0f, 1.0f);

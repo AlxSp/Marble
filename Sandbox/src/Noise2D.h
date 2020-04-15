@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Nucleus.h"
+#include "Player.h"
 #include "Container2D.h"
 #include "ObjectContainerManager2D.h"
 
@@ -17,18 +18,20 @@ public:
 
 private:
 	Nucleus::OrthographicCameraController m_CameraController;
+	ObjectContainerManager2D* ocm;
+
 
 	float perspective_width  = 0.0f;
 	float perspective_height = 0.0f;
 
 	float ZoomDifference = .1f;
 
-	ObjectContainerManager2D* ocm;
+	Nucleus::Ref<Player> m_Player;
+
+
 
 	Nucleus::Ref<Nucleus::Texture2D> texture;
-
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
-
 	int count = 0; 
 
 	struct ProfileResult

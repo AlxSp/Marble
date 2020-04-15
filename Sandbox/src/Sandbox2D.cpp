@@ -64,14 +64,21 @@ void Sandbox2D::OnUpdate(Nucleus::TimeStep ts)
 		
 		Nucleus::BatchRenderer2D::EndScene();
 
-		Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Nucleus::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, -45.0f, m_CheckerboardTexture, 10.0f);
-		//Nucleus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		//Nucleus::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		/*Nucleus::Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f }, -45.0f);
-		Nucleus::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_TextureShader, -45.0f, 10.0f);
-		*/
-		Nucleus::Renderer2D::EndScene();
+		//Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		//Nucleus::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, -45.0f, m_CheckerboardTexture, 10.0f);
+		////Nucleus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		////Nucleus::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		///*Nucleus::Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f }, -45.0f);
+		//Nucleus::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_TextureShader, -45.0f, 10.0f);
+		//*/
+		//Nucleus::Renderer2D::EndScene();Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		//Nucleus::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, -45.0f, m_CheckerboardTexture, 10.0f);
+		////Nucleus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		////Nucleus::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		///*Nucleus::Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f }, -45.0f);
+		//Nucleus::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_TextureShader, -45.0f, 10.0f);
+		//*/
+		//Nucleus::Renderer2D::EndScene();
 	}
 }
 

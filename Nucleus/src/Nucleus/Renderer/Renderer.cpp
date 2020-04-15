@@ -2,7 +2,6 @@
 #include "Renderer.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
-#include "Renderer2D.h"
 #include "BatchRenderer2D.h"
 
 namespace Nucleus {
@@ -14,13 +13,11 @@ namespace Nucleus {
 		NC_PROFILE_FUNCTION();
 
 		RenderCommand::Init();
-		Renderer2D::Init();
 		BatchRenderer2D::Init();
 	}
 
 	void Renderer::Shutdown()
 	{
-		Renderer2D::Shutdown();
 		BatchRenderer2D::Shutdown();
 	}
 

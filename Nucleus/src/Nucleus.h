@@ -21,7 +21,6 @@
 
 //----Renderer------//
 #include "Nucleus/Renderer/Renderer.h"
-#include "Nucleus/Renderer/Renderer2D.h"
 #include "Nucleus/Renderer/BatchRenderer2D.h"
 #include "Nucleus/Renderer/RenderCommand.h"
 
