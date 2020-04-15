@@ -62,12 +62,12 @@ void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 
 	Nucleus::Lehmer32 rng = Nucleus::Lehmer32();
 
-	Nucleus::BatchRenderer2D::BeginScene(m_CameraController.GetCamera());
+	Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 	ocm->OnRender();
 
 
-	Nucleus::BatchRenderer2D::EndScene();
+	Nucleus::Renderer2D::EndScene();
 }
 
 void Noise2D::OnImGuiRender()

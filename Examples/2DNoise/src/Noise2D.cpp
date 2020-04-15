@@ -65,13 +65,13 @@ void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 
 	m_NoiseTexture->SetData(&NoiseMap, sizeof(uint8_t) * 128 * 4 * 128);
 
-	Nucleus::BatchRenderer2D::BeginScene(m_CameraController.GetCamera());
+	Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	//Nucleus::BatchRenderer2D::SetStandardLayout();
+	//Nucleus::Renderer2D::SetStandardLayout();
 
-	Nucleus::BatchRenderer2D::DrawQuad({ -.5, 0.0f }, { 1.f, 1.f }, m_NoiseTexture);
+	Nucleus::Renderer2D::DrawQuad({ -.5, 0.0f }, { 1.f, 1.f }, m_NoiseTexture);
 
-	Nucleus::BatchRenderer2D::EndScene();
+	Nucleus::Renderer2D::EndScene();
 
 
 	Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());

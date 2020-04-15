@@ -48,7 +48,7 @@ void ObjectContainerManager2D::OnRender() {
 	{
 		element.second->OnRender();
 	}
-	Nucleus::BatchRenderer2D::DrawQuad(glm::vec3(m_Player->GetCameraPosition(), 0.1f), m_Player->GetCameraView() * ZoomDifference, { 1.0f, .0666f, .0666f, .3f });
+	Nucleus::Renderer2D::DrawQuad(glm::vec3(m_Player->GetCameraPosition(), 0.1f), m_Player->GetCameraView() * ZoomDifference, { 1.0f, .0666f, .0666f, .3f });
 }
 
 void ObjectContainerManager2D::OnImGuiRender()

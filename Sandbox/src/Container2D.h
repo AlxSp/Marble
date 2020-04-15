@@ -48,7 +48,7 @@ public:
 			}
 		}
 	}
-	virtual void OnRender() override { Nucleus::BatchRenderer2D::DrawQuad(Position, Size, m_Color); }
+	virtual void OnRender() override { Nucleus::Renderer2D::DrawQuad(Position, Size, m_Color); }
 
 private:
 	void SetLODColor(ContainerLevelofDetail& level) {
@@ -87,7 +87,7 @@ public:
 	void UpdateTexture();
 
 	void OnUpdate(Nucleus::TimeStep ts) {}
-	void OnRender() override { Nucleus::BatchRenderer2D::DrawQuad(Position, Size, NoiseTexture); }
+	void OnRender() override { Nucleus::Renderer2D::DrawQuad(Position, Size, NoiseTexture); }
 
 private:
 	uint8_t	m_Octaves = 4;

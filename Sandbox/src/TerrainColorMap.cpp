@@ -1,5 +1,6 @@
 #include "TerrainColorMap.h"
 
+
 TerrainColorMap::TerrainColorMap()
 {
 	Regions.push_back({
