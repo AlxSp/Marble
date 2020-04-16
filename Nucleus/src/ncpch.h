@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <utility>
 #include <filesystem>
+#include <csignal>
 
 #include <sstream>
 #include <string>
