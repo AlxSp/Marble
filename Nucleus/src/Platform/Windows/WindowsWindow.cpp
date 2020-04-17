@@ -5,6 +5,8 @@
 #include "Nucleus/Events/MouseEvent.h"
 #include "Nucleus/Events/KeyEvent.h"
 
+#include "Nucleus/Renderer/Renderer.h"
+//RendererAPI Headers
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Nucleus {
@@ -32,16 +34,11 @@ namespace Nucleus {
 	void WindowsWindow::Init(const WindowProps& props) {
 		NC_PROFILE_FUNCTION();
 
-
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
-		
-
 		NC_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
-
-		
 
 		if (s_GLFWWindowCount == 0) {
 			NC_PROFILE_SCOPE("glfwInit");
@@ -56,13 +53,17 @@ namespace Nucleus {
 		
 		{
 			NC_PROFILE_SCOPE("glfwCreateWindow");
+			#ifdef NC_DEBUG
+				if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+					glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+			#endif
 
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
 		}
+
 		m_Context = GraphicsContext::Create(m_Window);
 		m_Context->Init();
-
 		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
