@@ -9,6 +9,9 @@ bin-int/
 #ignore premake executables
 !thirdParty/bin/premake/    
 
+#Nucleus files
+*.log
+
 
 #Sandbox files 
 Sandbox/*.json

@@ -13,7 +13,7 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/bin/Debug-linux-x86_64/Sandbox/",
             "environment": [],
-            "externalConsole": false,
+            "externalConsole": true,
             "MIMode": "gdb",
             "preLaunchTask": "make rebuild (debug)",
             "setupCommands": [
@@ -33,7 +33,7 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/bin/Debug-linux-x86_64/Sandbox/",
             "environment": [],
-            "externalConsole": false,
+            "externalConsole": true,
             "MIMode": "gdb",
             "preLaunchTask": "make (debug)",
             "setupCommands": [
