@@ -1,9 +1,12 @@
 #!/bin/bash
-pushd ..
-echo "\nCreating .vscode dir"
+pushd "$(dirname "$0")/.."
+
+echo -e "Creating .vscode dir"
 mkdir -p .vscode
 cp -r ./scripts/vscProjectFiles/. ./.vscode/
-echo "\nGenerating GNU make files"
+
+echo "Generating GNU make files"
 ./thirdParty/bin/premake/Linux/premake5 gmake2
+
 popd
 read -p "Press enter to continue"
