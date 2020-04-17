@@ -11,6 +11,8 @@
 
 #include "Nucleus/ImGui/ImGuiLayer.h"
 
+int main(int argc, char** argv);
+
 namespace Nucleus {
 	class Application
 	{
@@ -18,7 +20,7 @@ namespace Nucleus {
 		Application();
 		virtual ~Application();
 
-		void Run();
+		
 
 		void OnEvent(Event& e);
 
@@ -29,6 +31,7 @@ namespace Nucleus {
 		inline Window& GetWindow() { return *m_Window; }
 
 	private:
+		void Run();
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 	
@@ -42,6 +45,7 @@ namespace Nucleus {
 
 	private:
 		static Application* s_Instance;
+		friend int ::main(int argc, char** argv);
 	};
 
 	//To be defined in Client
