@@ -62,6 +62,8 @@ void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 
 	Nucleus::Lehmer32 rng = Nucleus::Lehmer32();
 
+	Nucleus::Renderer2D::ResetStats();
+
 	Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 	ocm->OnRender();
@@ -74,6 +76,15 @@ void Noise2D::OnImGuiRender()
 {
 
 	ocm->OnImGuiRender();
+
+	ImGui::Begin("Renderer2D Stats");
+	auto stats = Nucleus::Renderer2D::GetStats();
+	ImGui::Text("Draw Calls: %i", stats.DrawCalls);
+	ImGui::Text("Quad Count: %i", stats.QuadCount);
+	ImGui::Text("Vertices: %i", stats.GetTotalVertexCount());
+	ImGui::Text("Indices: %i", stats.GetTotalIndexCount());
+	ImGui::End();
+
 	ImGui::Begin("Simplex Noise");
 	ImGui::SliderInt("Octaves", &m_Octaves, 1, 10);
 	ImGui::SliderFloat("Frequency", &m_Frequency, 0.0f, 1.0f);

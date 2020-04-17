@@ -170,7 +170,11 @@ namespace Nucleus {
 
 }
 
-#define NC_PROFILE 1
+#if defined NC_DEBUG
+    #define NC_PROFILE 0
+#else 
+    #define NC_PROFILE 0
+#endif
 
 #if NC_PROFILE
     // Resolve which function signature macro will be used. Note that this only

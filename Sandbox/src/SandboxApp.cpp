@@ -11,8 +11,8 @@
 class Sandbox : public Nucleus::Application {
 public:
 	Sandbox() {
-		PushLayer(new Noise2D());
-		//PushLayer(new Sandbox2D());
+		//PushLayer(new Noise2D());
+		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox() {

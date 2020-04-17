@@ -17,10 +17,10 @@ namespace Nucleus {
 	};
 
 	struct Renderer2DData {
-		const uint32_t MaxQuadCount = 10000;
-		const uint32_t MaxVertexCount = MaxQuadCount * 4;
-		const uint32_t MaxIndexCount = MaxQuadCount * 6;
-		const uint32_t MaxBufferSize = MaxVertexCount * 11;
+		static const uint32_t MaxQuadCount = 10000;
+		static const uint32_t MaxVertexCount = MaxQuadCount * 4;
+		static const uint32_t MaxIndexCount = MaxQuadCount * 6;
+		static const uint32_t MaxBufferSize = MaxVertexCount * 11;
 		static const uint32_t MaxTextures = 32;
 
 		Ref<VertexArray> QuadVertexArray;
@@ -36,7 +36,9 @@ namespace Nucleus {
 		uint32_t WhiteTextureSlot = 0;
 		uint32_t TextureSlotIndex = 1;
 
-		Ref<Shader> BatchShader;
+		Ref<Shader> TextureShader;
+
+		Renderer2D::Statistics Stats;
 	};
 
 	static Renderer2DData s_Data;
@@ -79,9 +81,9 @@ namespace Nucleus {
 		for (int i = 0; i < s_Data.MaxTextures; i++)
 			samplers[i] = i;
 
-		s_Data.BatchShader = Shader::Create("assets/shaders/BatchShader.glsl");
-		s_Data.BatchShader->Bind();
-		s_Data.BatchShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextures);
+		s_Data.TextureShader = Shader::Create("assets/shaders/BatchShader.glsl");
+		s_Data.TextureShader->Bind();
+		s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextures);
 
 		s_Data.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
 		s_Data.QuadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
@@ -103,9 +105,8 @@ namespace Nucleus {
 		s_Data.QuadBufferPtr = s_Data.QuadBuffer;
 		s_Data.QuadIndexCount = 0;
 		
-
-		s_Data.BatchShader->Bind();
-		s_Data.BatchShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		s_Data.TextureShader->Bind();
+		s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 
 		s_Data.TextureSlotIndex = 1;
 	}
@@ -146,6 +147,8 @@ namespace Nucleus {
 
 		s_Data.QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(DrawMode::Triangles, s_Data.QuadIndexCount);
+
+		s_Data.Stats.DrawCalls++;
 	}
 
 	void Renderer2D::SetStandardLayout()
@@ -169,7 +172,7 @@ namespace Nucleus {
 	{
 		NC_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount - 6) {
+		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount ) {
 			EndBatch();
 			Flush();
 			BeginBatch();
@@ -188,6 +191,7 @@ namespace Nucleus {
 
 		s_Data.QuadIndexCount += 6;
 
+		s_Data.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float& tilingFactor, const glm::vec4& tintColor)
@@ -201,7 +205,7 @@ namespace Nucleus {
 	{
 		NC_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount - 6 || s_Data.TextureSlotIndex > 31) {
+		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount  || s_Data.TextureSlotIndex > s_Data.MaxTextures - 1) {
 			EndBatch();
 			Flush();
 			BeginBatch();
@@ -232,6 +236,8 @@ namespace Nucleus {
 		DrawVertex(transform * s_Data.QuadVertexPositions[3], tintColor, { 0.0f, 1.0f }, textureIndex, tilingFactor);
 
 		s_Data.QuadIndexCount += 6;
+
+		s_Data.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float rotation, glm::vec4 color)
@@ -243,7 +249,7 @@ namespace Nucleus {
 	{
 		NC_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount - 6) {
+		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount ) {
 			EndBatch();
 			Flush();
 			BeginBatch();
@@ -262,6 +268,8 @@ namespace Nucleus {
 		DrawVertex(transform * s_Data.QuadVertexPositions[3], color, { 0.0f, 1.0f }, textureIndex, tilingFactor);
 
 		s_Data.QuadIndexCount += 6;
+		
+		s_Data.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float rotation, const Ref<Texture2D>& texture, const float tilingFactor, const glm::vec4& tintColor)
@@ -273,7 +281,7 @@ namespace Nucleus {
 	{
 		NC_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount - 6 || s_Data.TextureSlotIndex > 31) {
+		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount  || s_Data.TextureSlotIndex > s_Data.MaxTextures - 1) {
 			EndBatch();
 			Flush();
 			BeginBatch();
@@ -305,6 +313,8 @@ namespace Nucleus {
 		DrawVertex(transform * s_Data.QuadVertexPositions[3], tintColor, { 0.0f, 1.0f }, textureIndex, tilingFactor);
 
 		s_Data.QuadIndexCount += 6;
+
+		s_Data.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawVertex(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, const float& textureIndex, const float& tilingFactor)
@@ -324,8 +334,16 @@ namespace Nucleus {
 		s_Data.QuadBufferPtr[9] = textureIndex;
 
 		s_Data.QuadBufferPtr[10] = tilingFactor;
-
+	
 		s_Data.QuadBufferPtr += 11;
+	}
+
+	Renderer2D::Statistics Renderer2D::GetStats(){
+		return s_Data.Stats;
+	}
+
+	void Renderer2D::ResetStats(){
+		memset(&s_Data.Stats, 0, sizeof(Statistics));
 	}
 }
 
