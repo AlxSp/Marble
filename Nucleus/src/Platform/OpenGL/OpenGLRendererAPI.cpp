@@ -18,7 +18,7 @@ namespace Nucleus {
 		{
 			case GL_DEBUG_SEVERITY_HIGH:			NC_CORE_CRITICAL(message); return;
 			case GL_DEBUG_SEVERITY_MEDIUM:			NC_CORE_ERROR(message); return;
-			case GL_DEBUG_SEVERITY_LOW:				NC_CORE_WARNING(message); return;
+			case GL_DEBUG_SEVERITY_LOW:				NC_CORE_WARN(message); return;
 			case GL_DEBUG_SEVERITY_NOTIFICATION:	NC_CORE_TRACE(message); return;
 		}
 

@@ -75,7 +75,7 @@ namespace Nucleus {
 			data.Height = height;
 
 			WindowResizeEvent event(width, height);
-			NC_CORE_WARNING("{0}, {1}", width, height);
+			NC_CORE_WARN("{0}, {1}", width, height);
 			data.EventCallback(event);
 		});
 
