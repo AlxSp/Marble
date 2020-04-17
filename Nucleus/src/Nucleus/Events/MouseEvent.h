@@ -4,7 +4,7 @@
 
 namespace Nucleus {
 
-	class NUCLEUS_API MouseMovedEvent : public Event {
+	class MouseMovedEvent : public Event {
 	public:
 		MouseMovedEvent(float x, float y) : m_MouseX(x), m_MouseY(y) {}
 
@@ -23,7 +23,7 @@ namespace Nucleus {
 		float m_MouseX, m_MouseY;
 	};
 
-	class NUCLEUS_API MouseScrolledEvent : public Event {
+	class MouseScrolledEvent : public Event {
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset) : m_XOffset(xOffset), m_YOffset(yOffset) {}
 
@@ -42,7 +42,7 @@ namespace Nucleus {
 		float m_XOffset, m_YOffset;
 	};
 
-	class NUCLEUS_API MouseButtonEvent : public Event {
+	class MouseButtonEvent : public Event {
 	public:
 		inline int GetMouseButton() const { return m_Button; }
 
@@ -54,7 +54,7 @@ namespace Nucleus {
 		int m_Button;
 	};
 
-	class NUCLEUS_API MouseButtonPressedEvent : public MouseButtonEvent {
+	class MouseButtonPressedEvent : public MouseButtonEvent {
 	public:
 		MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}
 
@@ -67,7 +67,7 @@ namespace Nucleus {
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
-	class NUCLEUS_API MouseButtonReleasedEvent : public MouseButtonEvent {
+	class MouseButtonReleasedEvent : public MouseButtonEvent {
 	public:
 		MouseButtonReleasedEvent(int button) : MouseButtonEvent(button) {}
 

@@ -19,7 +19,7 @@ namespace Nucleus {
 	}; 
 
 	// Interface representing a desktop system based window
-	class NUCLEUS_API Window{
+	class Window{
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;
 

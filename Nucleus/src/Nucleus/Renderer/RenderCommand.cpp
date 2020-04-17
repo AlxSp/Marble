@@ -1,9 +1,10 @@
 #include "ncpch.h"
-#include "RenderCommand.h"
+#include "Nucleus/Renderer/RenderCommand.h"
+//RendererAPI Headers
 #include "Platform/OpenGL/OpenGLRendererAPI.h"
 
 namespace Nucleus {
 
-	RendererAPI* RenderCommand::s_RendererAPI = new OpenGLRendererAPI;
+	Scope<RendererAPI> RenderCommand::s_RendererAPI = RendererAPI::Create();
 
 }

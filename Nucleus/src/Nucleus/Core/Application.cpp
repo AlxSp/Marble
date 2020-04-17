@@ -1,10 +1,10 @@
 #include "ncpch.h"
-#include "Application.h"
+#include "Nucleus/Core/Application.h"
 
 #include "Nucleus/Core/Log.h"
 #include "Nucleus/Renderer/Renderer.h"
 
-#include "Input.h"
+#include "Nucleus/Core/Input.h"
 
 #include <GLFW/glfw3.h>
 

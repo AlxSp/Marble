@@ -1,5 +1,5 @@
 #include "ncpch.h"
-#include "WindowsWindow.h"
+#include "Platform/Windows/WindowsWindow.h"
 
 #include "Nucleus/Events/ApplicationEvent.h"
 #include "Nucleus/Events/MouseEvent.h"
@@ -60,7 +60,7 @@ namespace Nucleus {
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
 		}
-		m_Context = new OpenGLContext(m_Window);
+		m_Context = GraphicsContext::Create(m_Window);
 		m_Context->Init();
 
 		

@@ -4,7 +4,7 @@
 
 namespace Nucleus {
 
-	class NUCLEUS_API Input {
+	class Input {
 	public:
 		inline static bool IsKeyPressed(int keycode) { return s_Instance->isKeyPressedImpl(keycode); }
 

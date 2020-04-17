@@ -1,9 +1,6 @@
 #include <Nucleus.h>
 #include <Nucleus/Core/EntryPoint.h>
-
-#include "Platform/OpenGL/OpenGLShader.h"
-
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

@@ -39,32 +39,6 @@
 	#error "unknown platform!"
 #endif // _WIN32
 
-
-#if defined NC_PLATFORM_WINDOWS
-	#if NC_DYNAMIC_LINK
-		#ifdef NC_BUILD_DLL
-			#define NUCLEUS_API __declspec(dllexport)
-		#else
-			#define NUCLEUS_API __declspec(dllimport)
-		#endif //NC_BUILD_DLL
-	#else
-		#define NUCLEUS_API
-	#endif
-
-#elif defined NC_PLATFORM_LINUX
-	#if NC_DYNAMIC_LINK
-		#ifdef NC_BUILD_DLL
-			#define NUCLEUS_API __attribute__((visibility("default")))
-		#else
-			#define NUCLEUS_API
-		#endif
-	#else
-		#define NUCLEUS_API
-	#endif
-#else
-	#error Nucleus only supports Windows at the moment!	
-#endif //NC_PLATFORM_WINDOWS
-
 #if defined NC_DEBUG
 	#if defined NC_PLATFORM_WINDOWS
 		#define NC_DEBUGBREAK() __debugbreak()

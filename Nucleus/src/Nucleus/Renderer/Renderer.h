@@ -1,8 +1,8 @@
 #pragma once
 
-#include "RenderCommand.h"
-#include "OrthographicCamera.h"
-#include "Shader.h"
+#include "Nucleus/Renderer/RenderCommand.h"
+#include "Nucleus/Renderer/OrthographicCamera.h"
+#include "Nucleus/Renderer/Shader.h"
 
 namespace Nucleus {
 

@@ -1,15 +1,15 @@
 #pragma once
 
 #include "Nucleus/Core/Core.h"
-#include "Layer.h"
+#include "Nucleus/Core/Layer.h"
 
 #include <vector>
 
 namespace Nucleus
 {
-	class NUCLEUS_API LayerStack {
+	class LayerStack {
 	public:
-		LayerStack();
+		LayerStack() = default;
 		~LayerStack();
 
 		void PushLayer(Layer* layer);

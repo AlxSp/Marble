@@ -1,32 +1,30 @@
 #include "ncpch.h"
-#include "Shader.h"
 
-#include "Renderer.h"
+#include "Nucleus/Renderer/Shader.h"
+#include "Nucleus/Renderer/Renderer.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Nucleus {
 
-	Ref<Shader> Shader::Create(const std::string& name, const std::string & vertexSrc, const std::string & fragmentSrc) {
-		switch (Renderer::GetAPI()) {
-		case RendererAPI::API::None:
-			NC_CORE_ASSERT(false, "RendererAPI::None is currently not supported");
-			return nullptr;
-		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
+	Ref<Shader> Shader::Create(const std::string& name, const std::string & vertexSrc, const std::string & fragmentSrc) 
+	{
+		switch (Renderer::GetAPI()) 
+		{
+			case RendererAPI::API::None:	NC_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
+			case RendererAPI::API::OpenGL:	return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		}
 
 		NC_CORE_ASSERT(false, "Unknown error!");
 		return nullptr;
 	}
 
-	Ref<Shader> Shader::Create(const std::string& filepath) {
-		switch (Renderer::GetAPI()) {
-		case RendererAPI::API::None:
-			NC_CORE_ASSERT(false, "RendererAPI::None is currently not supported");
-			return nullptr;
-		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLShader>(filepath);
+	Ref<Shader> Shader::Create(const std::string& filepath) 
+	{
+		switch (Renderer::GetAPI()) 
+		{
+			case RendererAPI::API::None:	NC_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
+			case RendererAPI::API::OpenGL:	return CreateRef<OpenGLShader>(filepath);
 		}
 
 		NC_CORE_ASSERT(false, "Unknown error!");

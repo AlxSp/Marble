@@ -1,12 +1,12 @@
 #pragma once
 
 #include "ncpch.h"
-#include "Event.h"
+#include "Nucleus/Events/Event.h"
 
 
 namespace Nucleus {
 
-	class NUCLEUS_API KeyEvent : public Event {
+	class KeyEvent : public Event {
 	public:
 		inline int GetKeyCode() const { return m_KeyCode; }
 
@@ -17,7 +17,7 @@ namespace Nucleus {
 		int m_KeyCode;
 	};
 
-	class NUCLEUS_API KeyPressedEvent : public KeyEvent {
+	class KeyPressedEvent : public KeyEvent {
 	public:
 		KeyPressedEvent(int keycode, int repeatCount) :
 			KeyEvent(keycode), m_RepeatCount(repeatCount) {}
@@ -35,7 +35,7 @@ namespace Nucleus {
 		int m_RepeatCount;
 	};
 
-	class NUCLEUS_API KeyReleasedEvent : public KeyEvent {
+	class KeyReleasedEvent : public KeyEvent {
 	public:
 		KeyReleasedEvent(int keycode)
 			: KeyEvent(keycode) {}
@@ -49,7 +49,7 @@ namespace Nucleus {
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
 
-	class NUCLEUS_API KeyTypedEvent : public KeyEvent {
+	class KeyTypedEvent : public KeyEvent {
 	public:
 		KeyTypedEvent(int keycode) :
 			KeyEvent(keycode) {}

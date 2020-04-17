@@ -1,5 +1,5 @@
 #include "ncpch.h"
-#include "WindowsInput.h"
+#include "Platform/Windows/WindowsInput.h"
 
 #include "Nucleus/Core/Application.h"
 #include <GLFW/glfw3.h>

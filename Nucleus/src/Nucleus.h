@@ -1,6 +1,8 @@
 #pragma once
 
 //For use of Nucleus applications
+#include "Nucleus/Core/Core.h"
+
 #include "Nucleus/Core/Application.h"
 #include "Nucleus/Core/Layer.h"
 #include "Nucleus/Core/Log.h"

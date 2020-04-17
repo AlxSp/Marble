@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RendererAPI.h"
+#include "Nucleus/Renderer/RendererAPI.h"
 
 namespace Nucleus {
 
@@ -22,6 +22,6 @@ namespace Nucleus {
 		inline static void DrawIndexed(const DrawMode& mode, const uint32_t& count) { s_RendererAPI->DrawIndexed(mode, count); }
 
 	private:
-		static RendererAPI* s_RendererAPI;
+		static Scope<RendererAPI> s_RendererAPI;
 	};
 }

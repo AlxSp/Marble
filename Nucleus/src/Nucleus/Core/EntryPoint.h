@@ -1,4 +1,5 @@
 #pragma once
+#include "Nucleus/Core/Core.h"
 
 extern Nucleus::Application* Nucleus::CreateApplication();
 

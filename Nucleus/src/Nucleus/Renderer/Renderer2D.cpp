@@ -1,8 +1,8 @@
 #include "ncpch.h"
 
-#include "Renderer2D.h"
-#include "Shader.h"
-#include "RenderCommand.h"
+#include "Nucleus/Renderer/Renderer2D.h"
+#include "Nucleus/Renderer/Shader.h"
+#include "Nucleus/Renderer/RenderCommand.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 

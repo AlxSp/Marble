@@ -1,5 +1,5 @@
 #include "ncpch.h"
-#include "OrthographicCameraController.h"
+#include "Nucleus/Renderer/OrthographicCameraController.h"
 
 #include "Nucleus/Core/Input.h"
 #include "Nucleus/Core/KeyCodes.h"
