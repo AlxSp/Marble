@@ -20,8 +20,6 @@ namespace Nucleus {
 		Application();
 		virtual ~Application();
 
-		
-
 		void OnEvent(Event& e);
 
 		void PushLayer(Layer* layer);

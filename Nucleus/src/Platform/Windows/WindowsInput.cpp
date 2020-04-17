@@ -6,8 +6,6 @@
 
 namespace Nucleus {
 
-	Input* Input::s_Instance = new WindowsInput();
-
 	bool WindowsInput::isKeyPressedImpl(int keycode)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
