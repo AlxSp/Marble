@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "rebuild Nucleus (debug)",
+            "name": "rebuild Marble (debug)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bin/Debug-linux-x86_64/Sandbox/Sandbox",
@@ -25,7 +25,7 @@
             ]
         },
         {
-            "name": "Nucleus (debug)",
+            "name": "Marble (debug)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bin/Debug-linux-x86_64/Sandbox/Sandbox",
@@ -45,7 +45,7 @@
             ]
         },
         {
-            "name": "Nucleus (release)",
+            "name": "Marble (release)",
             "type": "cppdbg",
             "request": "launch",
             "program": "enter program name, for example ${workspaceFolder}/a.out",
@@ -65,7 +65,7 @@
             ]
         },
         {
-            "name": "Nucleus (dist)",
+            "name": "Marble (dist)",
             "type": "cppdbg",
             "request": "launch",
             "program": "enter program name, for example ${workspaceFolder}/a.out",

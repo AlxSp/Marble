@@ -9,8 +9,8 @@ void Noise2D::OnAttach()
 {
 	NC_PROFILE_FUNCTION();
 	//NoiseMap = new uint8_t[m_Width * m_Height];
-	//m_FlowerTexture = Nucleus::Texture2D::Create("assets/textures/transparentFlower.png");
-	m_NoiseTexture = Nucleus::Texture2D::Create(m_Width, m_Height);
+	//m_FlowerTexture = Marble::Texture2D::Create("assets/textures/transparentFlower.png");
+	m_NoiseTexture = Marble::Texture2D::Create(m_Width, m_Height);
 	uint32_t whiteTextureData = 0xffffffff;
 	m_NoiseTexture->SetData(&NoiseMap, sizeof(uint8_t) * m_Width * 4 * m_Height);
 }
@@ -21,18 +21,18 @@ void Noise2D::OnDetach()
 	//delete NoiseMap[];
 }
 
-void Noise2D::OnUpdate(Nucleus::TimeStep ts)
+void Noise2D::OnUpdate(Marble::TimeStep ts)
 {
 	m_CameraController.OnUpdate(ts);
 
 	{
 		NC_PROFILE_SCOPE("Render Prep");
 
-		Nucleus::RenderCommand::SetClearColor({ .8f, 1.0f, 1.0f, 1 });
-		Nucleus::RenderCommand::Clear();
+		Marble::RenderCommand::SetClearColor({ .8f, 1.0f, 1.0f, 1 });
+		Marble::RenderCommand::Clear();
 	}
 
-	Nucleus::Lehmer32 rng = Nucleus::Lehmer32();
+	Marble::Lehmer32 rng = Marble::Lehmer32();
 
 	/*for (int i = 0; i < m_Width; i++) {
 
@@ -65,27 +65,27 @@ void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 
 	m_NoiseTexture->SetData(&NoiseMap, sizeof(uint8_t) * 128 * 4 * 128);
 
-	Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	Marble::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	//Nucleus::Renderer2D::SetStandardLayout();
+	//Marble::Renderer2D::SetStandardLayout();
 
-	Nucleus::Renderer2D::DrawQuad({ -.5, 0.0f }, { 1.f, 1.f }, m_NoiseTexture);
+	Marble::Renderer2D::DrawQuad({ -.5, 0.0f }, { 1.f, 1.f }, m_NoiseTexture);
 
-	Nucleus::Renderer2D::EndScene();
+	Marble::Renderer2D::EndScene();
 
 
-	Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	Marble::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	Nucleus::Renderer2D::DrawQuad({ 1.2f, 0.5f}, { 1.f, 1.f }, m_NoiseTexture);
+	Marble::Renderer2D::DrawQuad({ 1.2f, 0.5f}, { 1.f, 1.f }, m_NoiseTexture);
 
-	Nucleus::Renderer2D::EndScene();
+	Marble::Renderer2D::EndScene();
 }
 
 void Noise2D::OnImGuiRender()
 {
 }
 
-void Noise2D::OnEvent(Nucleus::Event& e)
+void Noise2D::OnEvent(Marble::Event& e)
 {
 	m_CameraController.OnEvent(e);
 }

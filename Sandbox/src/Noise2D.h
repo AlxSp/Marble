@@ -1,23 +1,23 @@
 #pragma once
 
-#include "Nucleus.h"
+#include "Marble.h"
 #include "Player.h"
 #include "Container2D.h"
 #include "ObjectContainerManager2D.h"
 
-class Noise2D : public Nucleus::Layer {
+class Noise2D : public Marble::Layer {
 public:
 	Noise2D();
 	virtual ~Noise2D() { delete ocm; }
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 
-	void OnUpdate(Nucleus::TimeStep ts) override;
+	void OnUpdate(Marble::TimeStep ts) override;
 	virtual void OnImGuiRender() override;
-	void OnEvent(Nucleus::Event& e) override;
+	void OnEvent(Marble::Event& e) override;
 
 private:
-	Nucleus::OrthographicCameraController m_CameraController;
+	Marble::OrthographicCameraController m_CameraController;
 	ObjectContainerManager2D* ocm;
 
 
@@ -26,11 +26,11 @@ private:
 
 	float ZoomDifference = .1f;
 
-	Nucleus::Ref<Player> m_Player;
+	Marble::Ref<Player> m_Player;
 
 
 
-	Nucleus::Ref<Nucleus::Texture2D> texture;
+	Marble::Ref<Marble::Texture2D> texture;
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 	int count = 0; 
 

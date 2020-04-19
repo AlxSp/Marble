@@ -1,28 +1,28 @@
 #pragma once
 
-#include "Nucleus.h"
+#include "Marble.h"
 
-class Sandbox2D : public Nucleus::Layer {
+class Sandbox2D : public Marble::Layer {
 public:
 	Sandbox2D();
 	virtual ~Sandbox2D() = default;
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 
-	void OnUpdate(Nucleus::TimeStep ts) override;
+	void OnUpdate(Marble::TimeStep ts) override;
 	virtual void OnImGuiRender() override;
-	void OnEvent(Nucleus::Event& e) override;
+	void OnEvent(Marble::Event& e) override;
 
 private:
-	Nucleus::OrthographicCameraController m_CameraController;
+	Marble::OrthographicCameraController m_CameraController;
 
 
 	/* Temporary*/
-	Nucleus::Ref<Nucleus::VertexArray> m_QuadVertexArray;
-	Nucleus::Ref<Nucleus::Shader> m_FlatColorShader;
+	Marble::Ref<Marble::VertexArray> m_QuadVertexArray;
+	Marble::Ref<Marble::Shader> m_FlatColorShader;
 
-	Nucleus::Ref<Nucleus::Texture2D> m_FlowerTexture;
-	Nucleus::Ref<Nucleus::Texture2D> m_CheckerboardTexture;
+	Marble::Ref<Marble::Texture2D> m_FlowerTexture;
+	Marble::Ref<Marble::Texture2D> m_CheckerboardTexture;
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 

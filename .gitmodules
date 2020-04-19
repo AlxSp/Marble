@@ -1,12 +1,12 @@
-[submodule "Nucleus/thirdParty/spdlog"]
-	path = Nucleus/thirdParty/spdlog
+[submodule "Marble/thirdParty/spdlog"]
+	path = Marble/thirdParty/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "Nucleus/thirdParty/GLFW"]
-	path = Nucleus/thirdParty/GLFW
+[submodule "Marble/thirdParty/GLFW"]
+	path = Marble/thirdParty/GLFW
 	url = https://github.com/AlxSp/glfw.git
-[submodule "Nucleus/thirdParty/imgui"]
-	path = Nucleus/thirdParty/imgui
+[submodule "Marble/thirdParty/imgui"]
+	path = Marble/thirdParty/imgui
 	url = https://github.com/AlxSp/imgui.git
-[submodule "Nucleus/thirdParty/glm"]
-	path = Nucleus/thirdParty/glm
+[submodule "Marble/thirdParty/glm"]
+	path = Marble/thirdParty/glm
 	url = https://github.com/g-truc/glm

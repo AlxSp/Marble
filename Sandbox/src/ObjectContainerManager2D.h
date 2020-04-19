@@ -1,5 +1,5 @@
 #pragma once
-#include "Nucleus.h"
+#include "Marble.h"
 #include "Container2D.h"
 #include "Player.h"
 
@@ -11,10 +11,10 @@ typedef ColorContainer2D MapContainer;
 //Procedural Grid based object Container. Will have to be more flexible later 
 class ObjectContainerManager2D {
 public:
-	ObjectContainerManager2D(const Nucleus::Ref<Player> player, const glm::vec2& containerSize);
+	ObjectContainerManager2D(const Marble::Ref<Player> player, const glm::vec2& containerSize);
 	~ObjectContainerManager2D();
 
-	void SetPlayer(Nucleus::Ref<Player> player) { m_Player = player; }
+	void SetPlayer(Marble::Ref<Player> player) { m_Player = player; }
 	void SetZoomDifference(const float& diff) { ZoomDifference = diff; }
 
 	void OnUpdate();
@@ -28,7 +28,7 @@ private:
 	int deletionCount = 0;
 
 private:
-	Nucleus::Ref<Player> m_Player = nullptr;
+	Marble::Ref<Player> m_Player = nullptr;
 
 
 	float MaxViewDistance = 0.0f;

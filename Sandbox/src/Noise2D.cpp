@@ -11,7 +11,7 @@ Noise2D::Noise2D() : Layer("Sandbox2D"), m_CameraController(1920.0f / 1080.0f, t
 }
 
 void Noise2D::OnAttach() {
-	NC_PROFILE_FUNCTION();
+	MBL_PROFILE_FUNCTION();
 	//m_CameraController.SetZoomLevel(10.0f);
 
 	float aspectRatio = m_CameraController.GetAspectRatio();
@@ -22,7 +22,7 @@ void Noise2D::OnAttach() {
 
 	float zoomDifference = .1f;
 
-	m_Player = Nucleus::CreateRef<Player>(Player(m_CameraController.GetPosition(), m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel()));
+	m_Player = Marble::CreateRef<Player>(Player(m_CameraController.GetPosition(), m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel()));
 
 	perspective_width = aspectRatio * 2 * zoomDifference;// *zoomLevel;
 	//perspective_height = 1 * 2;// *zoomLevel;
@@ -33,16 +33,16 @@ void Noise2D::OnAttach() {
 	//ocm->SetPlayerView(m_CameraController.GetAspectRatio(), m_CameraController.GetZoomLevel() * ZoomDifference);
 	//int channel = 0;
 
-	//texture = Nucleus::Texture2D::Create("assets/textures/transparentFlower.png");
+	//texture = Marble::Texture2D::Create("assets/textures/transparentFlower.png");
 }
 
 void Noise2D::OnDetach()
 {
-	NC_PROFILE_FUNCTION();
+	MBL_PROFILE_FUNCTION();
 	//delete NoiseMap[];
 }
 
-void Noise2D::OnUpdate(Nucleus::TimeStep ts)
+void Noise2D::OnUpdate(Marble::TimeStep ts)
 {
 	m_CameraController.OnUpdate(ts);
 	if (m_CameraController.GetZoomLevel() > 10) {
@@ -54,22 +54,22 @@ void Noise2D::OnUpdate(Nucleus::TimeStep ts)
 	//ocm->GenerateContainers();
 	ocm->OnUpdate();
 	{
-		NC_PROFILE_SCOPE("Render Prep");
+		MBL_PROFILE_SCOPE("Render Prep");
 
-		Nucleus::RenderCommand::SetClearColor({ .8f, 1.0f, 1.0f, 1 });
-		Nucleus::RenderCommand::Clear();
+		Marble::RenderCommand::SetClearColor({ .8f, 1.0f, 1.0f, 1 });
+		Marble::RenderCommand::Clear();
 	}
 
-	Nucleus::Lehmer32 rng = Nucleus::Lehmer32();
+	Marble::Lehmer32 rng = Marble::Lehmer32();
 
-	Nucleus::Renderer2D::ResetStats();
+	Marble::Renderer2D::ResetStats();
 
-	Nucleus::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	Marble::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 	ocm->OnRender();
 
 
-	Nucleus::Renderer2D::EndScene();
+	Marble::Renderer2D::EndScene();
 }
 
 void Noise2D::OnImGuiRender()
@@ -78,7 +78,7 @@ void Noise2D::OnImGuiRender()
 	ocm->OnImGuiRender();
 
 	ImGui::Begin("Renderer2D Stats");
-	auto stats = Nucleus::Renderer2D::GetStats();
+	auto stats = Marble::Renderer2D::GetStats();
 	ImGui::Text("Draw Calls: %i", stats.DrawCalls);
 	ImGui::Text("Quad Count: %i", stats.QuadCount);
 	ImGui::Text("Vertices: %i", stats.GetTotalVertexCount());
@@ -103,7 +103,7 @@ void Noise2D::OnImGuiRender()
 	ImGui::End();
 }
 
-void Noise2D::OnEvent(Nucleus::Event& e)
+void Noise2D::OnEvent(Marble::Event& e)
 {
 	m_CameraController.OnEvent(e);
 }

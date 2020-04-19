@@ -1,5 +1,5 @@
 #pragma once
-#include "Nucleus.h"
+#include "Marble.h"
 
 enum ContainerLevelofDetail {
 	L0, L1, L2
@@ -48,7 +48,7 @@ public:
 			}
 		}
 	}
-	virtual void OnRender() override { Nucleus::Renderer2D::DrawQuad(Position, Size, m_Color); }
+	virtual void OnRender() override { Marble::Renderer2D::DrawQuad(Position, Size, m_Color); }
 
 private:
 	void SetLODColor(ContainerLevelofDetail& level) {
@@ -86,8 +86,8 @@ public:
 
 	void UpdateTexture();
 
-	void OnUpdate(Nucleus::TimeStep ts) {}
-	void OnRender() override { Nucleus::Renderer2D::DrawQuad(Position, Size, NoiseTexture); }
+	void OnUpdate(Marble::TimeStep ts) {}
+	void OnRender() override { Marble::Renderer2D::DrawQuad(Position, Size, NoiseTexture); }
 
 private:
 	uint8_t	m_Octaves = 4;
@@ -100,5 +100,5 @@ private:
 	uint8_t* TexturePixels;
 	uint32_t Detail;
 	uint8_t Channels = 4;
-	Nucleus::Ref<Nucleus::Texture2D> NoiseTexture;
+	Marble::Ref<Marble::Texture2D> NoiseTexture;
 };

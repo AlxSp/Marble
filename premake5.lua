@@ -1,4 +1,4 @@
-workspace "Nucleus"
+workspace "Marble"
     architecture "x86_64"
     startproject "Sandbox"
 
@@ -14,11 +14,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"] = "Nucleus/thirdParty/GLFW/include"
-IncludeDir["Glad"] = "Nucleus/thirdParty/Glad/include"
-IncludeDir["ImGui"] = "Nucleus/thirdParty/imgui"
-IncludeDir["glm"] = "Nucleus/thirdParty/glm"
-IncludeDir["stb_image"] = "Nucleus/thirdParty/stb_image"
+IncludeDir["GLFW"] = "Marble/thirdParty/GLFW/include"
+IncludeDir["Glad"] = "Marble/thirdParty/Glad/include"
+IncludeDir["ImGui"] = "Marble/thirdParty/imgui"
+IncludeDir["glm"] = "Marble/thirdParty/glm"
+IncludeDir["stb_image"] = "Marble/thirdParty/stb_image"
 
 PostBuildCmd = {}
 PostBuildCmd["SandboxAssets"] = {
@@ -28,13 +28,13 @@ PostBuildCmd["SandboxAssets"] = {
 }
 
 group "Dependencies"
-    include "Nucleus/thirdParty/GLFW"
-    include "Nucleus/thirdParty/Glad"
-    include "Nucleus/thirdParty/imgui"
+    include "Marble/thirdParty/GLFW"
+    include "Marble/thirdParty/Glad"
+    include "Marble/thirdParty/imgui"
 group ""
 
-project "Nucleus"
-    location "Nucleus"
+project "Marble"
+    location "Marble"
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
@@ -43,8 +43,8 @@ project "Nucleus"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    pchheader "ncpch.h"
-    pchsource "Nucleus/src/ncpch.cpp"
+    pchheader "mblpch.h"
+    pchsource "Marble/src/mblpch.cpp"
 
     files {
         "%{prj.name}/src/**.h",
@@ -133,14 +133,14 @@ project "Sandbox"
     }
 
     includedirs {
-        "Nucleus/thirdParty/spdlog/include",
-        "Nucleus/src",
-        "Nucleus/thirdParty",
+        "Marble/thirdParty/spdlog/include",
+        "Marble/src",
+        "Marble/thirdParty",
         "%{IncludeDir.glm}"
     }
 
     links {
-        "Nucleus"
+        "Marble"
     }
 
     filter "system:linux"

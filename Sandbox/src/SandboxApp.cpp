@@ -1,5 +1,5 @@
-#include <Nucleus.h>
-#include <Nucleus/Core/EntryPoint.h>
+#include <Marble.h>
+#include <Marble/Core/EntryPoint.h>
 #include <imgui/imgui.h>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -8,7 +8,7 @@
 #include "Sandbox2D.h"
 #include "Noise2D.h"
 
-class Sandbox : public Nucleus::Application {
+class Sandbox : public Marble::Application {
 public:
 	Sandbox() {
 		//PushLayer(new Noise2D());
@@ -20,6 +20,6 @@ public:
 	}
 };
 
-Nucleus::Application* Nucleus::CreateApplication() {
+Marble::Application* Marble::CreateApplication() {
 	return new Sandbox();
 }

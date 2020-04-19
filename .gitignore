@@ -9,7 +9,7 @@ bin-int/
 #ignore premake executables
 !thirdParty/bin/premake/    
 
-#Nucleus files
+#Marble files
 *.log
 
 

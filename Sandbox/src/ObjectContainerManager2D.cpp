@@ -5,7 +5,7 @@
 #include "imgui/imgui.h"
 
 
-ObjectContainerManager2D::ObjectContainerManager2D(const Nucleus::Ref<Player> player, const glm::vec2& containerSize)
+ObjectContainerManager2D::ObjectContainerManager2D(const Marble::Ref<Player> player, const glm::vec2& containerSize)
 	:  m_Player(player), ContainerSize(containerSize)
 {
 	ContainerMap[InitiationOrigin] = new MapContainer(InitiationOrigin, ContainerSize);
@@ -48,7 +48,7 @@ void ObjectContainerManager2D::OnRender() {
 	{
 		element.second->OnRender();
 	}
-	Nucleus::Renderer2D::DrawQuad(glm::vec3(m_Player->GetCameraPosition(), 0.1f), m_Player->GetCameraView() * ZoomDifference, { 1.0f, .0666f, .0666f, .3f });
+	Marble::Renderer2D::DrawQuad(glm::vec3(m_Player->GetCameraPosition(), 0.1f), m_Player->GetCameraView() * ZoomDifference, { 1.0f, .0666f, .0666f, .3f });
 }
 
 void ObjectContainerManager2D::OnImGuiRender()
