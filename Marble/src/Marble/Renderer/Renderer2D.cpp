@@ -205,7 +205,7 @@ namespace Marble {
 	{
 		MBL_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount  || s_Data.TextureSlotIndex > s_Data.MaxTextures - 1) {
+		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount) {
 			EndBatch();
 			Flush();
 			BeginBatch();
@@ -221,6 +221,12 @@ namespace Marble {
 		}
 
 		if (textureIndex == 0.0f) {
+			if (s_Data.TextureSlotIndex >= s_Data.MaxTextures) {
+				EndBatch();
+				Flush();
+				BeginBatch();
+			}
+
 			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
 
 			textureIndex = (float)s_Data.TextureSlotIndex;
@@ -281,7 +287,7 @@ namespace Marble {
 	{
 		MBL_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount  || s_Data.TextureSlotIndex > s_Data.MaxTextures - 1) {
+		if (s_Data.QuadIndexCount >= s_Data.MaxIndexCount) {
 			EndBatch();
 			Flush();
 			BeginBatch();
@@ -297,6 +303,12 @@ namespace Marble {
 		}
 
 		if (textureIndex == 0.0f) {
+			if (s_Data.TextureSlotIndex >= s_Data.MaxTextures) {
+				EndBatch();
+				Flush();
+				BeginBatch();
+			}
+
 			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
 
 			textureIndex = (float)s_Data.TextureSlotIndex;
