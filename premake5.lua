@@ -8,8 +8,6 @@ workspace "Marble"
         "Dist"
     }
 
-    
-
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
@@ -86,7 +84,6 @@ project "Marble"
         }
 
         defines {
-            "NC_BUILD_DLL",
             "GLFW_INCLUDE_NONE"
         }
 
@@ -98,7 +95,6 @@ project "Marble"
         }
 
         defines {
-            "NC_BUILD_DLL",
             "GLFW_INCLUDE_NONE"
         }
 
