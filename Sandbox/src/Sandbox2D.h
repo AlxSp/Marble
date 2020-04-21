@@ -1,6 +1,10 @@
 #pragma once
 
 #include "Marble.h"
+#include "Ball.h"
+#include "Area2D.h"
+
+#define MaxBalls 500
 
 class Sandbox2D : public Marble::Layer {
 public:
@@ -14,17 +18,29 @@ public:
 	void OnEvent(Marble::Event& e) override;
 
 private:
+	//Ball* testBall;
+	int numBalls = 100;
+
+	// struct Balls {
+	// 	std::array<glm::vec3, MaxBalls> Position;
+	// 	std::array<glm::vec2, MaxBalls> Velocity;
+	// 	std::array<float, MaxBalls> Mass;
+	// 	std::array<float, MaxBalls> Radius;
+	// 	std::array<float, MaxBalls> Rotation;
+
+	// 	Marble::Ref<Marble::Texture2D> m_Texture = Marble::Texture2D::Create("assets/textures/forward_circle.png");
+	// };
+	//std::array<Ball, 500> cellArray;
+	std::vector<Ball> cellVector;
+	float areaScale = 5.0f;
+
+	Marble::Scope<Area2D> area;// = Area2D(16.0f * areaScale, 9.0f * areaScale);
+
 	Marble::OrthographicCameraController m_CameraController;
 
-
-	/* Temporary*/
-	Marble::Ref<Marble::VertexArray> m_QuadVertexArray;
-	Marble::Ref<Marble::Shader> m_FlatColorShader;
-
-	Marble::Ref<Marble::Texture2D> m_FlowerTexture;
-	Marble::Ref<Marble::Texture2D> m_CheckerboardTexture;
-
-	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+	int FramesPerSecond = 0;
+	int FrameCounter = 0;
+	float TimeSinceLastSecond = 0.0f;
 
 	struct ProfileResult 
 	{

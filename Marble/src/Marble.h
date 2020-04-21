@@ -12,6 +12,7 @@
 #include "Marble/Core/Input.h"
 #include "Marble/Core/KeyCodes.h"
 #include "Marble/Core/MouseButtonCodes.h"
+
 #include "Marble/Renderer/OrthographicCameraController.h"
 
 #include "Marble/ImGui/ImGuiLayer.h"
@@ -19,7 +20,13 @@
 //----Mathematical------//
 #include "Marble/Random/Lehmer.h"
 #include "Marble/Noise/SimplexNoise.h"
-//----Mathematical------
+//----Mathematical
+
+//----Entity Component System------//
+#include "Marble/ECS/EntityIndex.h"
+
+//----Entity Component System
+
 
 //----Renderer------//
 #include "Marble/Renderer/Renderer.h"
