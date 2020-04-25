@@ -23,7 +23,7 @@
 //----Mathematical
 
 //----Entity Component System------//
-#include "Marble/ECS/EntityIndex.h"
+//#include "Marble/ECS/Entity/EntityIndex.h"
 
 //----Entity Component System
 

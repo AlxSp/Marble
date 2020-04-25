@@ -8,6 +8,31 @@
 #include <chrono>
 #include <random>
 
+
+struct Position {
+	float x;
+	float y;
+	float z;
+};
+
+struct Velocity {
+	float x;
+	float y;
+	float z;
+};
+
+struct Mass {
+	float x;
+};
+
+struct Radius {
+	float x;
+};
+
+struct Rotation {
+	float x;
+};
+
 float randomNumberGen(float min, float max) {
 	std::random_device rd;
 	std::mt19937 e2(rd());
@@ -25,19 +50,36 @@ Sandbox2D::Sandbox2D()
 {
 	std::cout << "Possible Threads: " << std::thread::hardware_concurrency() << std::endl;
 	m_CameraController.SetZoomLevel(25.0f);
-	//testBall = new Ball();
-	area = Marble::CreateScope<Area2D>(Area2D({m_CameraController.GetAspectRatio() * 2 * m_CameraController.GetZoomLevel(), 1 * 2 * m_CameraController.GetZoomLevel()}));
 
+	area = Marble::CreateScope<Area2D>(Area2D({m_CameraController.GetAspectRatio() * 2 * m_CameraController.GetZoomLevel(), 1 * 2 * m_CameraController.GetZoomLevel()}));
 	area->SetColorRGBA(0, 85, 130);
-	//area->SetPosition(10.0f, 0.0f);
-	//float spawnAreaWidth = area->Dimension.x * 0.5f - area->Dimension.x * 0.1f;
-	//float spawnAreaHeight = area->Dimension.y * 0.5f - area->Dimension.y * 0.1f;
-	for (int i = 0; i < numBalls; i++) {
-		cellVector.push_back(Ball({ randomNumberGen(area->leftBorder, area->rightBorder), randomNumberGen(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f))}));
-		
-		cellVector[i].SetMass(randomNumberGen(1, 5));
-		//cellVector[i].SetArea(&Area);
-		cellVector[i].SetVelocity({ randomNumberGen(-3, 3), randomNumberGen(-3, 3),  }); //randomNumberGen(-1, 1)
+
+
+
+	auto PositonID = EntityManager.Component<Position>("Position");
+	auto VelocityID = EntityManager.Component<Velocity>("Velocity");
+	auto MassID = EntityManager.Component<float>("Mass");
+	auto RadiusID = EntityManager.Component<float>("Radius");
+	auto RotationID = EntityManager.Component<float>("Rotation");
+	auto ColorID = EntityManager.Component<glm::vec4>("Color");
+
+	std::cout << PositonID << std::endl;
+	std::cout << VelocityID << std::endl;
+	std::cout << MassID << std::endl;
+	std::cout << RadiusID  << std::endl;
+	std::cout << RotationID << std::endl;
+	std::cout << ColorID  << std::endl;
+
+
+	for (int i = 0; i < numBalls; i++){
+		//m_EntityManager->CreateEntity()
+
+		balls.Position[i] = { randomNumberGen(area->leftBorder, area->rightBorder), randomNumberGen(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f))};
+		balls.Velocity[i] = { randomNumberGen(-3, 3), randomNumberGen(-3, 3), 0.0f };
+		balls.Mass[i]	  = randomNumberGen(1, 5);
+		balls.Radius[i]   = balls.Mass[i] * 0.5f;
+		balls.Color[i]	  = glm::vec4(1.0f);
+		balls.collided[i] = false;
 	}
 }
 
@@ -66,72 +108,88 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 	}
 
 	for (int i = 0; i < numBalls; i++) {
-		cellVector[i].OnUpdate(ts);
-		
-		if (cellVector[i].Position.x >= area->rightBorder) cellVector[i].Position.x = area->leftBorder;
-		if (cellVector[i].Position.x <	area->leftBorder) cellVector[i].Position.x = area->rightBorder;
-		if (cellVector[i].Position.y >= area->topBorder) cellVector[i].Position.y = area->bottomBorder;
-		if (cellVector[i].Position.y < area->bottomBorder) cellVector[i].Position.y = area->topBorder;
-		
+		if (balls.collided[i]){
+			balls.Color[i] = glm::vec4({ 1.0f, 0.0f, 0.0f, 1.0f });
+			balls.Rotation[i] = atan2f(balls.Velocity[i].y, balls.Velocity[i].x);
+		} else {
+			balls.Color[i] = glm::vec4(1.0f);
+		}
+		balls.collided[i] = false;		
 	}
-	
-	std::vector<std::pair<Ball*, Ball*>> vecCollidedPairs;
 
 	for (int i = 0; i < numBalls; i++) {
-		//cellVector[i].CheckForCollisions(cellVector, i);
+		if (balls.Position[i].x >= area->rightBorder) balls.Position[i].x = area->leftBorder;
+		if (balls.Position[i].x <	area->leftBorder) balls.Position[i].x = area->rightBorder;
+		if (balls.Position[i].y >= area->topBorder)   balls.Position[i].y = area->bottomBorder;
+		if (balls.Position[i].y < area->bottomBorder) balls.Position[i].y = area->topBorder;
+	}
+
+	float deltaTime = ts;
+	for (int i = 0; i < numBalls; i++) {
+		balls.Position[i] += balls.Velocity[i] * deltaTime;
+	}
+
+	for (int i = 0; i < numBalls; i++) {
+		if (fabs(balls.Velocity[i].x * balls.Velocity[i].x + balls.Velocity[i].y * balls.Velocity[i].y) < 0.01f) {
+			balls.Velocity[i] = glm::vec3(0.0f);
+		}
+	}
+	
+	std::vector<std::pair<int, int>> vecCollidedPairs;
+
+	for (int i = 0; i < numBalls; i++) {
 		for (int j = i + 1; j < numBalls; j++) {
-			if (i != j) {
-				if (DoCirclesOverlap(cellVector[i].Position.x, cellVector[i].Position.y, cellVector[i].Radius, cellVector[j].Position.x, cellVector[j].Position.y, cellVector[j].Radius)) {
 
-					vecCollidedPairs.push_back({&cellVector[i], &cellVector[j]});
+				if (DoCirclesOverlap(balls.Position[i].x, balls.Position[i].y, balls.Radius[i], balls.Position[j].x, balls.Position[j].y, balls.Radius[j])) {
 
-					cellVector[i].collided = true;
-					cellVector[j].collided = true;
+					vecCollidedPairs.push_back({i, j});
 
+					balls.collided[i] = true;
+					balls.collided[j] = true;
 
-					float distance = sqrtf(pow((cellVector[i].Position.x - cellVector[j].Position.x), 2.0f) + pow((cellVector[i].Position.y - cellVector[j].Position.y), 2.0f));
+					float distance = sqrtf(pow((balls.Position[i].x - balls.Position[j].x), 2.0f) + pow((balls.Position[i].y - balls.Position[j].y), 2.0f));
 
-					float overlap = (distance - cellVector[i].Radius - cellVector[j].Radius) * 0.5f;
+					float overlap = (distance - balls.Radius[i] - balls.Radius[j]) * 0.5f;
 
-					cellVector[i].Position.x -= overlap * (cellVector[i].Position.x - cellVector[j].Position.x) / distance;
-					cellVector[i].Position.y -= overlap * (cellVector[i].Position.y - cellVector[j].Position.y) / distance;
+					balls.Position[i].x -= overlap * (balls.Position[i].x - balls.Position[j].x) / distance;
+					balls.Position[i].y -= overlap * (balls.Position[i].y - balls.Position[j].y) / distance;
 
-					cellVector[j].Position.x += overlap * (cellVector[i].Position.x - cellVector[j].Position.x) / distance;
-					cellVector[j].Position.y += overlap * (cellVector[i].Position.y - cellVector[j].Position.y) / distance;
+					balls.Position[j].x += overlap * (balls.Position[i].x - balls.Position[j].x) / distance;
+					balls.Position[j].y += overlap * (balls.Position[i].y - balls.Position[j].y) / distance;
 				}
-			}
+			
 		}
 	}
 
 	for (auto collision : vecCollidedPairs) {
-		Ball* cell1 = collision.first;
-		Ball* cell2 = collision.second;
+		int i = collision.first;
+		int j = collision.second;
 		
-		float distance = sqrtf(pow((cell1->Position.x - cell2->Position.x), 2.0f) + pow((cell1->Position.y - cell2->Position.y), 2.0f));
+		float distance = sqrtf(pow((balls.Position[i].x - balls.Position[j].x), 2.0f) + pow((balls.Position[i].y - balls.Position[j].y), 2.0f));
 
-		float nx = (cell2->Position.x - cell1->Position.x) / distance;
-		float ny = (cell2->Position.y - cell1->Position.y) / distance;
+		float nx = (balls.Position[j].x - balls.Position[i].x) / distance;
+		float ny = (balls.Position[j].y - balls.Position[i].y) / distance;
 
 		float tx = -ny;
 		float ty = nx;
 
-		float dpTan1 = cell1->Velocity.x * tx + cell1->Velocity.y * ty;
-		float dpTan2 = cell2->Velocity.x * tx + cell2->Velocity.y * ty;
+		float dpTan1 = balls.Velocity[i].x * tx + balls.Velocity[i].y * ty;
+		float dpTan2 = balls.Velocity[j].x * tx + balls.Velocity[j].y * ty;
 
-		float dpNorm1 = cell1->Velocity.x * nx + cell1->Velocity.y * ny;
-		float dpNorm2 = cell2->Velocity.x * nx + cell2->Velocity.y * ny;
+		float dpNorm1 = balls.Velocity[i].x * nx + balls.Velocity[i].y * ny;
+		float dpNorm2 = balls.Velocity[j].x * nx + balls.Velocity[j].y * ny;
 
-		float m1 = (dpNorm1 * (cell1->Mass - cell2->Mass) + 2.0f * cell2->Mass * dpNorm2) / (cell1->Mass + cell2->Mass);
-		float m2 = (dpNorm2 * (cell2->Mass - cell1->Mass) + 2.0f * cell1->Mass * dpNorm1) / (cell1->Mass + cell2->Mass);
+		float m1 = (dpNorm1 * (balls.Mass[i] - balls.Mass[j]) + 2.0f * balls.Mass[j] * dpNorm2) / (balls.Mass[i] + balls.Mass[j]);
+		float m2 = (dpNorm2 * (balls.Mass[j] - balls.Mass[i]) + 2.0f * balls.Mass[i] * dpNorm1) / (balls.Mass[i] + balls.Mass[j]);
 
-		cell1->Velocity.x = tx * dpTan1 + nx * m1;
-		cell1->Velocity.y = ty * dpTan1 + ny * m1;
+		balls.Velocity[i].x = tx * dpTan1 + nx * m1;
+		balls.Velocity[i].y = ty * dpTan1 + ny * m1;
 		
-		cell2->Velocity.x = tx * dpTan2 + nx * m2;
-		cell2->Velocity.y = ty * dpTan2 + ny * m2;
-		
+		balls.Velocity[j].x = tx * dpTan2 + nx * m2;
+		balls.Velocity[j].y = ty * dpTan2 + ny * m2;
 	}
-	
+
+	//std::cout << ECS::Entity::Create() << std::endl;
 	// Render
 	{
 		MBL_PROFILE_SCOPE("Render Prep");
@@ -148,7 +206,8 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		area->OnRender();
 		//Marble::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, Area2D, { 0/255.0f, 85/255.0f, 130/255.0f, 1.0f });
 		for (int i = 0; i < numBalls; i++) {
-			cellVector[i].OnRender();
+			Marble::Renderer2D::DrawRotatedQuad(balls.Position[i], glm::vec2(balls.Radius[i] * 2), balls.Rotation[i], balls.m_Texture, 1.0f, balls.Color[i]);
+			//cellVector[i].OnRender();
 		}
 		//Marble::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.1f }, { 10.0f, 10.0f }, m_TextureShader);
 		Marble::Renderer2D::EndScene();

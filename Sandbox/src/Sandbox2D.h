@@ -1,14 +1,15 @@
 #pragma once
 
 #include "Marble.h"
-#include "Ball.h"
 #include "Area2D.h"
+#include "Marble/ECS/Entity/EntityManager.h"
+
 
 #define MaxBalls 500
 
 class Sandbox2D : public Marble::Layer {
 public:
-	Sandbox2D();
+	Sandbox2D(); 
 	virtual ~Sandbox2D() = default;
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
@@ -18,23 +19,25 @@ public:
 	void OnEvent(Marble::Event& e) override;
 
 private:
-	//Ball* testBall;
 	int numBalls = 100;
 
-	// struct Balls {
-	// 	std::array<glm::vec3, MaxBalls> Position;
-	// 	std::array<glm::vec2, MaxBalls> Velocity;
-	// 	std::array<float, MaxBalls> Mass;
-	// 	std::array<float, MaxBalls> Radius;
-	// 	std::array<float, MaxBalls> Rotation;
+	struct Balls {
+		std::array<glm::vec3, MaxBalls> Position;
+		std::array<glm::vec3, MaxBalls> Velocity;
+		std::array<float, MaxBalls> Mass;
+		std::array<float, MaxBalls> Radius;
+		std::array<float, MaxBalls> Rotation;
+		std::array<glm::vec4, MaxBalls> Color;
+		std::array<bool, MaxBalls> collided;
 
-	// 	Marble::Ref<Marble::Texture2D> m_Texture = Marble::Texture2D::Create("assets/textures/forward_circle.png");
-	// };
-	//std::array<Ball, 500> cellArray;
-	std::vector<Ball> cellVector;
-	float areaScale = 5.0f;
+		Marble::Ref<Marble::Texture2D> m_Texture = Marble::Texture2D::Create("assets/textures/forward_circle.png");
+	};
 
-	Marble::Scope<Area2D> area;// = Area2D(16.0f * areaScale, 9.0f * areaScale);
+	Balls balls;
+
+	ECS::EntityManager EntityManager;
+
+	Marble::Scope<Area2D> area;
 
 	Marble::OrthographicCameraController m_CameraController;
 
