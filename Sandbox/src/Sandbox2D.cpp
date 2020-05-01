@@ -4,6 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Marble/ECS/Entity/EntityDefinitions.h"
+#include "Marble/ECS/Memory/MemoryCaster.h"
 
 #include <chrono>
 #include <random>
@@ -33,6 +35,28 @@ struct Rotation {
 	float x;
 };
 
+struct Color {
+	float r;
+	float g;
+	float b;
+	float a;
+};
+
+struct Collided {
+	bool collided;
+};
+
+
+void UpdatePosition(ECS::EntityManager& EntityManager, float dt) {
+	EntityManager.System<Position, Velocity>();/*.each(
+	[dt](auto& pos, auto& vel) {
+		pos.x += vel.x * dt;
+		pos.y += vel.y * dt;
+	}*/
+}
+
+
+
 float randomNumberGen(float min, float max) {
 	std::random_device rd;
 	std::mt19937 e2(rd());
@@ -54,33 +78,63 @@ Sandbox2D::Sandbox2D()
 	area = Marble::CreateScope<Area2D>(Area2D({m_CameraController.GetAspectRatio() * 2 * m_CameraController.GetZoomLevel(), 1 * 2 * m_CameraController.GetZoomLevel()}));
 	area->SetColorRGBA(0, 85, 130);
 
+	//ECS::MemBlk FourBytes = stackAlloc.allocate(8);
+	//*(float*)FourBytes.ptr = 4.5f;
+	////float floating = 4.5;
+	////FourBytes.ptr = &floating;
+	///*ECS::Blk FourBytes2 = stackAlloc.allocate(4);
+	//*(double*)FourBytes2.ptr = (double)135.0;
+
+	//double valueOf1 = (*double)FourBytes.ptr;*/
+
+	////float storedVal = *(float*)FourBytes.ptr;
+	//float storedVal = ECS::GetValue<float>(FourBytes.ptr);
 
 
 	auto PositonID = EntityManager.Component<Position>("Position");
 	auto VelocityID = EntityManager.Component<Velocity>("Velocity");
-	auto MassID = EntityManager.Component<float>("Mass");
-	auto RadiusID = EntityManager.Component<float>("Radius");
-	auto RotationID = EntityManager.Component<float>("Rotation");
-	auto ColorID = EntityManager.Component<glm::vec4>("Color");
+	auto MassID = EntityManager.Component<Mass>("Mass");
+	auto RadiusID = EntityManager.Component<Radius>("Radius");
+	auto RotationID = EntityManager.Component<Rotation>("Rotation");
+	auto ColorID = EntityManager.Component<Color>("Color");
+	auto CollidedID = EntityManager.Component<Collided>("Collided");
+
+	auto PositonID2 = EntityManager.Component<Position>("Position");
 
 	std::cout << PositonID << std::endl;
 	std::cout << VelocityID << std::endl;
 	std::cout << MassID << std::endl;
 	std::cout << RadiusID  << std::endl;
 	std::cout << RotationID << std::endl;
-	std::cout << ColorID  << std::endl;
+	std::cout << ColorID << std::endl;
+
+	std::cout << PositonID2 << std::endl;
+
+
 
 
 	for (int i = 0; i < numBalls; i++){
 		//m_EntityManager->CreateEntity()
+		float ballMass = randomNumberGen(1, 5);
+
+		ECS::EntityID ballID = EntityManager.Entity();
+		
+		EntityManager.Set<Position>(ballID, { randomNumberGen(area->leftBorder, area->rightBorder), randomNumberGen(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f)) });
+		EntityManager.Set<Velocity>(ballID, { randomNumberGen(-3, 3), randomNumberGen(-3, 3), 0.0f });
+		EntityManager.Set<Mass>(ballID, { ballMass });
+		EntityManager.Set<Radius>(ballID, { ballMass * 0.5f });
+		EntityManager.Set<Color>(ballID, {1.0f, 1.0f, 1.0f, 1.0f});
+		EntityManager.Set<Collided>(ballID, { false });
 
 		balls.Position[i] = { randomNumberGen(area->leftBorder, area->rightBorder), randomNumberGen(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f))};
 		balls.Velocity[i] = { randomNumberGen(-3, 3), randomNumberGen(-3, 3), 0.0f };
-		balls.Mass[i]	  = randomNumberGen(1, 5);
-		balls.Radius[i]   = balls.Mass[i] * 0.5f;
+		balls.Mass[i] = ballMass;
+		balls.Radius[i]   = ballMass * 0.5f;
 		balls.Color[i]	  = glm::vec4(1.0f);
 		balls.collided[i] = false;
 	}
+
+	
 }
 
 void Sandbox2D::OnAttach()

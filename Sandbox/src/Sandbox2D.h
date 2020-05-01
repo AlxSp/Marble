@@ -3,6 +3,7 @@
 #include "Marble.h"
 #include "Area2D.h"
 #include "Marble/ECS/Entity/EntityManager.h"
+#include "Marble/ECS/Memory/MemoryAllocator.h"
 
 
 #define MaxBalls 500
@@ -36,6 +37,11 @@ private:
 	Balls balls;
 
 	ECS::EntityManager EntityManager;
+
+	/*ECS::StackAllocator<100> stackAlloc;
+
+	ECS::HeapAllocator<1024 * 1024 * 1024> heapAlloc;*/
+
 
 	Marble::Scope<Area2D> area;
 

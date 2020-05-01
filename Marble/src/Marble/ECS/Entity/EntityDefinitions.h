@@ -4,6 +4,8 @@
 #include <vector>
 #include <unordered_map>
 
-typedef uint64_t EntityID;
-typedef uint64_t ComponentID;
-using ArcheType = std::vector<ComponentID>;
+namespace ECS {
+	using EntityID = uint64_t;
+	using ComponentID = uint64_t;
+	using Type = std::vector<ComponentID>;
+}
