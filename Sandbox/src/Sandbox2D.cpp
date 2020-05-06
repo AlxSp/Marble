@@ -4,8 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Marble/ECS/Entity/EntityDefinitions.h"
-#include "Marble/ECS/Memory/MemoryCaster.h"
+//#include "Marble/ECS/Entity/EntityDefinitions.h"
+//#include "Marble/ECS/Memory/MemoryCaster.h"
 
 #include <chrono>
 #include <random>
@@ -47,13 +47,13 @@ struct Collided {
 };
 
 
-void UpdatePosition(ECS::EntityManager& EntityManager, float dt) {
-	EntityManager.System<Position, Velocity>();/*.each(
-	[dt](auto& pos, auto& vel) {
-		pos.x += vel.x * dt;
-		pos.y += vel.y * dt;
-	}*/
-}
+//void UpdatePosition(ECS::EntityManager& EntityManager, float dt) {
+//	EntityManager.System<Position, Velocity>().each(
+//		[dt](auto& pos, auto& vel) {
+//			pos.x += vel.x * dt;
+//			pos.y += vel.y * dt;
+//		});
+//}
 
 
 
@@ -78,18 +78,6 @@ Sandbox2D::Sandbox2D()
 	area = Marble::CreateScope<Area2D>(Area2D({m_CameraController.GetAspectRatio() * 2 * m_CameraController.GetZoomLevel(), 1 * 2 * m_CameraController.GetZoomLevel()}));
 	area->SetColorRGBA(0, 85, 130);
 
-	//ECS::MemBlk FourBytes = stackAlloc.allocate(8);
-	//*(float*)FourBytes.ptr = 4.5f;
-	////float floating = 4.5;
-	////FourBytes.ptr = &floating;
-	///*ECS::Blk FourBytes2 = stackAlloc.allocate(4);
-	//*(double*)FourBytes2.ptr = (double)135.0;
-
-	//double valueOf1 = (*double)FourBytes.ptr;*/
-
-	////float storedVal = *(float*)FourBytes.ptr;
-	//float storedVal = ECS::GetValue<float>(FourBytes.ptr);
-
 
 	auto PositonID = EntityManager.Component<Position>("Position");
 	auto VelocityID = EntityManager.Component<Velocity>("Velocity");
@@ -111,6 +99,19 @@ Sandbox2D::Sandbox2D()
 	std::cout << PositonID2 << std::endl;
 
 
+	//EntityManager.CreateArcheType<Position, Velocity, Mass, Radius, Rotation, Color, Collided>();
+
+	//EntityManager.CreateArcheType<Position, Velocity, Mass, Radius, Rotation, Color>();
+
+	//EntityManager.CreateArcheType<Position, Velocity, Mass, Radius, Rotation, Color, Collided>();
+
+	//EntityManager.CreateArcheType<Position, Velocity, Mass, Radius, Rotation, Color, Collided>();
+
+	////EntityManager.CreateArcheType2<Position, Velocity>();
+
+	//EntityManager.CreateArcheType<Velocity, Position, Mass, Radius, Rotation, Color, Collided>();
+
+	//EntityManager.CreateArcheType<>();
 
 
 	for (int i = 0; i < numBalls; i++){
@@ -177,6 +178,8 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		if (balls.Position[i].y >= area->topBorder)   balls.Position[i].y = area->bottomBorder;
 		if (balls.Position[i].y < area->bottomBorder) balls.Position[i].y = area->topBorder;
 	}
+
+	//UpdatePosition(EntityManager, ts);
 
 	float deltaTime = ts;
 	for (int i = 0; i < numBalls; i++) {
