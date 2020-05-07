@@ -99,17 +99,17 @@ project "Marble"
         }
 
     filter "configurations:Debug"
-        defines "NC_DEBUG"
+        defines "MBL_DEBUG"
         runtime "Debug"
         symbols "on"
 
     filter "configurations:Release"
-        defines "NC_RELEASE"
+        defines "MBL_RELEASE"
         runtime "Release"
         optimize "on"
 
     filter "configurations:Dist"
-        defines "NC_DIST"
+        defines "MBL_DIST"
         runtime "Release"
         optimize "on"
 
@@ -156,18 +156,18 @@ project "Sandbox"
         }
 
         defines {
-            "NC_PLATFORM_LINUX"
+            "MBL_PLATFORM_LINUX"
         }
 
     filter "system:windows"
         systemversion "latest"
 
         defines {
-            "NC_PLATFORM_WINDOWS"
+            "MBL_PLATFORM_WINDOWS"
         }
 
     filter "configurations:Debug"
-        defines "NC_DEBUG"
+        defines "MBL_DEBUG"
         runtime "Debug"
         symbols "on"
 
@@ -178,7 +178,7 @@ project "Sandbox"
         }
 
     filter "configurations:Release"
-        defines "NC_RELEASE"
+        defines "MBL_RELEASE"
         runtime "Release"
         optimize "on"
 
@@ -189,7 +189,7 @@ project "Sandbox"
         }
 
     filter "configurations:Dist"
-        defines "NC_DIST"
+        defines "MBL_DIST"
         runtime "Release"
         optimize "on"
 
