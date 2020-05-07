@@ -124,11 +124,16 @@ namespace ECS {
             return archeType;
         }
 
+        void moveComponentDataToArcheType(ArcheType* fromArcheType, ArcheType* toArcheType) {
+
+        }
+
 
         template<typename T>
         void Set(EntityID& entityID, T type) {
             ComponentID newComponentType = Componentfamily::getID<T>();
             Record& rec = EntityIndex.at(entityID);
+            ArcheType* previousArcheType = rec.archetype;
             ArcheType*& currentArcheType = rec.archetype;
 
             std::cout << "Current Components: "<< std::endl;
@@ -143,6 +148,8 @@ namespace ECS {
                 TypeEdge->add = FindOrCreateArchetype(currentArcheType, newComponentType);
             }
             currentArcheType = TypeEdge->add;
+
+            moveComponentDataToArcheType(previousArcheType, currentArcheType);
         }   
 
         template<typename T>
