@@ -152,7 +152,7 @@ namespace ECS
 
         DEBUG_MEM_INFO(ECS_FUNC_SIG, s);
     public:
-        HeapAllocator() { data = new byte[s];}
+        HeapAllocator() { data = new byte[s]; ptr = data; }
         ~HeapAllocator() { delete[] data; DEBUG_PRINT_MEM_INFO(); }
         MemBlk allocate(size_t n){
             auto n1 = allign(n);

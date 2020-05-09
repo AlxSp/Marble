@@ -13,22 +13,7 @@ namespace ECS {
 
     namespace {
         size_t TypeBlockSize = 4096;
-
     }
-
-    class Componentfamily {
-    public:
-        template<typename>
-        static uint64_t getID() noexcept {
-            static const uint64_t id = identifier();
-            return id;
-        }
-    private:
-        static uint64_t identifier() noexcept {
-            static uint64_t value = 1;
-            return value++;
-        }
-    };
 
     class family {
     public:
@@ -44,12 +29,72 @@ namespace ECS {
         }
     };
 
+    class Componentfamily {
+    public:
+        template<typename T>
+        static uint64_t getID() noexcept {
+            static const uint64_t id = identifier();
+            return id;
+        }
+
+    private:
+        static uint64_t identifier() noexcept {
+            static uint64_t value = 1;
+            return value++;
+        }
+    };
+
+    template<typename T>
+    struct ComponentMemory {
+        T* elements;
+        size_t size;
+    };
+
+    template<typename T>
+    struct Component {
+        Component(MemBlk memory) : Memory(memory) { 
+            CompMem.elements = static_cast<T*>(memory.ptr); 
+            CompMem.size = memory.size / sizeof(T);
+        }
+
+    private:
+        size_t ComponentSize = sizeof(T);
+        ComponentMemory<T> CompMem;
+        MemBlk Memory;
+    };
+
+    class ComponentObject {
+        struct Concept {
+            virtual const size_t getComponentSize() const = 0;
+            virtual const void* getPointerAt(size_t index) const = 0;
+        };
+
+        template<typename T>
+        struct Model : public Concept
+        {
+            Model(const T& componentData) : ComponentData(componentData) {}
+
+            const size_t getComponentSize() const override {
+                return ComponentData.getComponentSize();
+            }
+
+            const void* getPointerAt(size_t index) const override {
+                return ComponentData.getComponentSize(index);
+            }
+
+        private:
+            const T ComponentData;
+        };
+    };
 
 
     struct ComponentArray {
         void* elements;
         size_t size;
-    };          
+    };
+
+
+
 
     struct ArcheType;
     struct GraphEdge {
@@ -66,17 +111,17 @@ namespace ECS {
         std::unordered_map<ComponentID, GraphEdge> edges;
     };
 
-    //static void createArcheType(ArcheType* previousArcheType, ComponentID& id) {
-    //    //return new ArcheType()
-    //}
-
-    static void moveEntityToArcheType() {}
-
     struct Record {
         ArcheType* archetype;
         int rowIndex;
     };
 
+    template<typename T>
+    bool compare(std::vector<T>& v1, std::vector<T>& v2) {
+        std::sort(v1.begin(), v1.end());
+        std::sort(v2.begin(), v2.end());
+        return v1 == v2;
+    }
 
     class EntityManager 
     {
@@ -89,12 +134,6 @@ namespace ECS {
             return m_EntityIndex++;
         }
 
-        template<typename T>
-        bool compare(std::vector<T>& v1, std::vector<T>& v2) {
-            std::sort(v1.begin(), v1.end());
-            std::sort(v2.begin(), v2.end());
-            return v1 == v2;
-        }
 
         ArcheType* FindOrCreateArchetype(ArcheType* baseArcheType, ComponentID newComponentType) {
             Type components(baseArcheType->type);
@@ -124,23 +163,38 @@ namespace ECS {
             return archeType;
         }
 
-        void moveComponentDataToArcheType(ArcheType* fromArcheType, ArcheType* toArcheType) {
+        int findIndexOfComponent(ComponentID id, Type& type) {
+            for (int i = 0; i < type.size(); i++) {
+                if (type[i] == id) return i;
+            }
+            return -1;
+        }
 
+        template<typename T>
+        void moveEntityData(Record& entityRecord, ArcheType* toArcheType, T& newData) {
+            int index = findIndexOfComponent(Componentfamily::getID<T>(), toArcheType->type);
+
+            T* newComponentArrPtr = static_cast<T*>(toArcheType->components[index].ptr);
+            newComponentArrPtr[toArcheType->length] = newData;
+
+            for (int i = 0; i < entityRecord.archetype->type.size(); i++) {
+                int componentIndex = findIndexOfComponent(entityRecord.archetype->type[i], toArcheType->type);
+                //static_cast<T*>(entityRecord.archetype->components[i].ptr)[entityRecord.rowIndex] = ;
+            }
+
+            entityRecord.rowIndex = toArcheType->length;
+            entityRecord.archetype->length--;
+            entityRecord.archetype = toArcheType;
+            entityRecord.archetype->length++;
         }
 
 
         template<typename T>
-        void Set(EntityID& entityID, T type) {
+        void Add(EntityID& entityID, T type) {
+            std::cout << "\n";
             ComponentID newComponentType = Componentfamily::getID<T>();
             Record& rec = EntityIndex.at(entityID);
-            ArcheType* previousArcheType = rec.archetype;
-            ArcheType*& currentArcheType = rec.archetype;
-
-            std::cout << "Current Components: "<< std::endl;
-            for (int i = 0; i < currentArcheType->type.size(); i++) {
-                std::cout << currentArcheType->type[i] << " ";
-            }
-            std::cout << std::endl;
+            ArcheType* currentArcheType = rec.archetype;
 
             GraphEdge* TypeEdge = &currentArcheType->edges[newComponentType];
             if (!TypeEdge->add) {
@@ -149,13 +203,22 @@ namespace ECS {
             }
             currentArcheType = TypeEdge->add;
 
-            moveComponentDataToArcheType(previousArcheType, currentArcheType);
+
+            std::cout << "Current Components: " << std::endl;
+            for (int i = 0; i < currentArcheType->type.size(); i++) {
+                std::cout << currentArcheType->type[i] << " ";
+            }
+            std::cout << std::endl;
+            std::cout << "Current ArcheType Length: " << currentArcheType->length << std::endl;
+
+
+            moveEntityData(rec, currentArcheType, type);
+
         }   
 
         template<typename T>
         ComponentID Component(const std::string& name) {
             ComponentID id = Componentfamily::getID<T>();
-            //Root->edges.push_back()
             return id;
         }
 
@@ -189,6 +252,6 @@ namespace ECS {
         ArcheType* Root;
         Type AllTypes;
         std::unordered_map<EntityID, Record> EntityIndex;
-        std::vector<ArcheType* > ArcheTypes;
+        std::vector<ArcheType*> ArcheTypes;
     };
 }

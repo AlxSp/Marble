@@ -5,7 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 //#include "Marble/ECS/Entity/EntityDefinitions.h"
-//#include "Marble/ECS/Memory/MemoryCaster.h"
+#include "Marble/ECS/Memory/MemoryCaster.h"
 
 #include <chrono>
 #include <random>
@@ -56,7 +56,6 @@ struct Collided {
 //}
 
 
-
 float randomNumberGen(float min, float max) {
 	std::random_device rd;
 	std::mt19937 e2(rd());
@@ -68,6 +67,10 @@ float randomNumberGen(float min, float max) {
 auto DoCirclesOverlap = [](float x1, float y1, float r1, float x2, float y2, float r2) {
 	return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) <= (r1 + r2) * (r1 + r2);
 };
+
+Position* getPositionTypePtr() {
+	return nullptr;
+}
 
 Sandbox2D::Sandbox2D() 
 	: Layer("Sandbox2D"), m_CameraController(1920.0f / 1080.0f, true)
@@ -89,6 +92,7 @@ Sandbox2D::Sandbox2D()
 
 	auto PositonID2 = EntityManager.Component<Position>("Position");
 
+
 	std::cout << PositonID << std::endl;
 	std::cout << VelocityID << std::endl;
 	std::cout << MassID << std::endl;
@@ -98,7 +102,16 @@ Sandbox2D::Sandbox2D()
 
 	std::cout << PositonID2 << std::endl;
 
+	ECS::HeapAllocator<1024> heapData;
 
+	ECS::MemBlk blk = heapData.allocate(sizeof(Position) * 3);
+
+	Position* positionArrPtr = static_cast<Position*>(blk.ptr);
+
+	Position pos1 = {1.0f, 1.0f, 1.0f};
+	Position pos2 = { 2.0f, 2.0f, 2.0f };
+	positionArrPtr[0] = pos1;
+	positionArrPtr[1] = pos2;
 	//EntityManager.CreateArcheType<Position, Velocity, Mass, Radius, Rotation, Color, Collided>();
 
 	//EntityManager.CreateArcheType<Position, Velocity, Mass, Radius, Rotation, Color>();
@@ -118,14 +131,15 @@ Sandbox2D::Sandbox2D()
 		//m_EntityManager->CreateEntity()
 		float ballMass = randomNumberGen(1, 5);
 
+
 		ECS::EntityID ballID = EntityManager.Entity();
 		
-		EntityManager.Set<Position>(ballID, { randomNumberGen(area->leftBorder, area->rightBorder), randomNumberGen(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f)) });
-		EntityManager.Set<Velocity>(ballID, { randomNumberGen(-3, 3), randomNumberGen(-3, 3), 0.0f });
-		EntityManager.Set<Mass>(ballID, { ballMass });
-		EntityManager.Set<Radius>(ballID, { ballMass * 0.5f });
-		EntityManager.Set<Color>(ballID, {1.0f, 1.0f, 1.0f, 1.0f});
-		EntityManager.Set<Collided>(ballID, { false });
+		EntityManager.Add<Position>(ballID, { randomNumberGen(area->leftBorder, area->rightBorder), randomNumberGen(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f)) });
+		EntityManager.Add<Velocity>(ballID, { randomNumberGen(-3, 3), randomNumberGen(-3, 3), 0.0f });
+		EntityManager.Add<Mass>(ballID, { ballMass });
+		EntityManager.Add<Radius>(ballID, { ballMass * 0.5f });
+		EntityManager.Add<Color>(ballID, {1.0f, 1.0f, 1.0f, 1.0f});
+		EntityManager.Add<Collided>(ballID, { false });
 
 		balls.Position[i] = { randomNumberGen(area->leftBorder, area->rightBorder), randomNumberGen(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f))};
 		balls.Velocity[i] = { randomNumberGen(-3, 3), randomNumberGen(-3, 3), 0.0f };
