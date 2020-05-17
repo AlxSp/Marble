@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <memory>
+#include <algorithm>
 #include <typeinfo> 
 #include <typeindex>
 
@@ -24,7 +25,7 @@ namespace ECS {
         }
     private:
         static uint64_t identifier() noexcept {
-            static uint64_t value = 1;
+            static uint64_t value = 0;
             return value++;
         }
     };
@@ -56,42 +57,67 @@ namespace ECS {
             CompMem.elements = static_cast<T*>(memory.ptr); 
             CompMem.size = memory.size / sizeof(T);
         }
-
     private:
         size_t ComponentSize = sizeof(T);
         ComponentMemory<T> CompMem;
         MemBlk Memory;
     };
 
-    class ComponentObject {
-        struct Concept {
-            virtual const size_t getComponentSize() const = 0;
-            virtual const void* getPointerAt(size_t index) const = 0;
-        };
+    //class ComponentObject {
+    //    class Concept {
+    //    public:
+    //        virtual size_t getComponentSize() = 0;
+    //    };
 
-        template<typename T>
-        struct Model : public Concept
-        {
-            Model(const T& componentData) : ComponentData(componentData) {}
+    //    template<typename T>
+    //    class Model
+    //};
 
-            const size_t getComponentSize() const override {
-                return ComponentData.getComponentSize();
-            }
+    //class ComponentObject {
+    //public:
+    //    template<class T>
+    //    ComponentObject(T obj) { 
+    //        objectPtr = std::make_unique<Model<T>>(std::move(obj));
+    //    }
 
-            const void* getPointerAt(size_t index) const override {
-                return ComponentData.getComponentSize(index);
-            }
+    //    size_t getComponentSize() const {
+    //        return objectPtr->getComponentSize();
+    //    }
 
-        private:
-            const T ComponentData;
-        };
-    };
+    //    void* getPointerAt(size_t index) const {
+    //        return objectPtr->getPointerAt(index);
+    //    }
+
+    //    struct Concept {
+    //        virtual const size_t getComponentSize() const = 0;
+    //        virtual void* getPointerAt(size_t index) const = 0;
+    //    };
+
+    //    template<typename T>
+    //    struct Model : public Concept
+    //    {
+    //        explicit Model(T&& componentData) : ComponentData(std::move(componentData)) {}
+
+    //        const size_t getComponentSize() const override {
+    //            return ComponentData.getComponentSize();
+    //        }
+
+    //        void* getPointerAt(size_t index) const override {
+    //            return ComponentData.getPointerAt(index);
+    //        }
+
+    //    private:
+    //        T ComponentData;
+    //    };
+
+    //    std::unique_ptr<Concept> objectPtr;
+    //};
 
 
-    struct ComponentArray {
+    /*struct ComponentArray {
         void* elements;
         size_t size;
-    };
+    };*/
 
 
 
@@ -126,82 +152,84 @@ namespace ECS {
     class EntityManager 
     {
     public:
-        EntityManager() { Root = new ArcheType(); }
+        EntityManager() { Root = new ArcheType(); } 
         EntityManager(const EntityManager&) { delete Root; }
 
         EntityID Entity() {
-            EntityIndex.insert({ m_EntityIndex, {Root, 0} });
-            return m_EntityIndex++;
+            EntityIndex.insert({ m_EntityIndex, {Root, 0} }); //Create new Entity with the Root as inital ArcheType and 0 as index
+            return m_EntityIndex++; //Increment Entity Index 
         }
-
 
         ArcheType* FindOrCreateArchetype(ArcheType* baseArcheType, ComponentID newComponentType) {
-            Type components(baseArcheType->type);
-            components.push_back(newComponentType);
+            Type type(baseArcheType->type);     //Create new type for the ArcheType
+            type.push_back(newComponentType);   //Add new Component Type to type
 
-            std::cout << "Adding Component: " << newComponentType << std::endl;
-            for (int i = 0; i < components.size(); i++) {
-                std::cout << components[i] << " ";
+            /*std::cout << "Adding Component: " << newComponentType << std::endl;
+            for (int i = 0; i < type.size(); i++) {
+                std::cout << type[i] << " ";
             }
-            std::cout << std::endl;
-
-            for (int i = 0; i < ArcheTypes.size(); i++) {
-                if (compare(components, ArcheTypes[i]->type))
-                    return ArcheTypes[i];
+            std::cout << std::endl;*/
+            for (int i = 0; i < ArcheTypes.size(); i++) { // Go through exisitng ArcheTypes to check if ArcheType already exists
+                if (compare(type, ArcheTypes[i]->type))   // Compare type with ArcheType type 
+                    return ArcheTypes[i];                 // if ArcheTypes match return already existing ArcheType pointer
             }
-            ArcheTypes.push_back(CreateArchetype(components));
-            return ArcheTypes.back();
+            ArcheTypes.push_back(CreateArchetype(type));  // else create new ArcheType with type and add to ArcheType vector
+            return ArcheTypes.back();   //return new ArcheType pointer
         }
 
-        ArcheType* CreateArchetype(Type& components) {
-            ArcheType* archeType = new ArcheType{
-                components,
+        ArcheType* CreateArchetype(Type& type) {
+            ArcheType* archeType = new ArcheType{       // Create new ArcheType with type
+                type,
             };
-            for (int i = 0; i < archeType->type.size(); i++)
+            for (int i = 0; i < archeType->type.size(); i++)    //Allocate Memory from heap for each type
                 archeType->components.push_back(heapAlloc.allocate(TypeBlockSize));
 
-            return archeType;
+            return archeType; //return pointer of new ArcheType
         }
 
-        int findIndexOfComponent(ComponentID id, Type& type) {
-            for (int i = 0; i < type.size(); i++) {
-                if (type[i] == id) return i;
+        int findIndexOfComponent(const ComponentID& id, const Type& type) {
+            for (int i = 0; i < type.size(); i++) { //Go through Type
+                if (type[i] == id) return i;        //return index of Component in Type
             }
-            return -1;
+            return -1;  // else return -1 !!!BAD!!!
         }
 
+        //Move Entity to new ArcheType when new Component is added
         template<typename T>
-        void moveEntityData(Record& entityRecord, ArcheType* toArcheType, T& newData) {
-            int index = findIndexOfComponent(Componentfamily::getID<T>(), toArcheType->type);
+        void moveEntityData(Record& entityRecord, ArcheType* toArcheType, T& newData) { 
+            int index = findIndexOfComponent(Componentfamily::getID<T>(), toArcheType->type); //Get index of new Component in destination ArcheType
+            T* newComponentArrPtr = static_cast<T*>(toArcheType->components[index].ptr);      //Get destination pointer of new Component
+            newComponentArrPtr[toArcheType->length] = newData;  //Add new Component to Component Array
 
-            T* newComponentArrPtr = static_cast<T*>(toArcheType->components[index].ptr);
-            newComponentArrPtr[toArcheType->length] = newData;
-
-            for (int i = 0; i < entityRecord.archetype->type.size(); i++) {
-                int componentIndex = findIndexOfComponent(entityRecord.archetype->type[i], toArcheType->type);
-                //static_cast<T*>(entityRecord.archetype->components[i].ptr)[entityRecord.rowIndex] = ;
+            for (int i = 0; i < entityRecord.archetype->type.size(); i++) { //Copy remaining Components from source ArcheType to destination ArcheType
+                size_t componentSize = ComponentSizes[entityRecord.archetype->type[i]]; //Get Component byte size
+                int componentIndex = findIndexOfComponent(entityRecord.archetype->type[i], toArcheType->type); //Get index of Component in destination ArcheType
+                void* fromPtr = static_cast<char*>(entityRecord.archetype->components[i].ptr) + entityRecord.rowIndex * componentSize;  //Get pointer to component in source ArcheType
+                void* toPtr = static_cast<char*>(toArcheType->components[componentIndex].ptr) + toArcheType->length * componentSize; //Get pointer for component in destination ArcheType
+                std::memcpy(toPtr, fromPtr, componentSize); //Copy component Data
             }
-
-            entityRecord.rowIndex = toArcheType->length;
-            entityRecord.archetype->length--;
-            entityRecord.archetype = toArcheType;
-            entityRecord.archetype->length++;
+            //Ugly code !!!
+            entityRecord.rowIndex = toArcheType->length; //Set Entity index to length of destination ArcheType (end of array index)  
+            //decrease length of source ArcheType !!! Should check if Component was at end of array. If not move follow elements
+            entityRecord.archetype->length--;  
+            entityRecord.archetype = toArcheType; //Set Entity ArcheType pointer to destination ArcheType
+            entityRecord.archetype->length++; //increase length of destination/Entity ArcheType by 1
         }
 
-
+        //Add Component to the Entity
         template<typename T>
         void Add(EntityID& entityID, T type) {
             std::cout << "\n";
-            ComponentID newComponentType = Componentfamily::getID<T>();
-            Record& rec = EntityIndex.at(entityID);
-            ArcheType* currentArcheType = rec.archetype;
+            ComponentID componentID = Componentfamily::getID<T>();  //Get ID for new Component 
+            Record& rec = EntityIndex.at(entityID);                 //Get Info of Entity 
+            ArcheType* currentArcheType = rec.archetype;            //Get pointer to Entity ArcheType
 
-            GraphEdge* TypeEdge = &currentArcheType->edges[newComponentType];
-            if (!TypeEdge->add) {
+            GraphEdge* TypeEdge = &currentArcheType->edges[componentID]; //Get Edge to new Component 
+            if (!TypeEdge->add) {   // if edge does not exist 
                 std::cout << "Needs to create ADD branch" << std::endl;
-                TypeEdge->add = FindOrCreateArchetype(currentArcheType, newComponentType);
+                TypeEdge->add = FindOrCreateArchetype(currentArcheType, componentID);   //find or create destination ArcheType and set it as new Edge
             }
-            currentArcheType = TypeEdge->add;
+            currentArcheType = TypeEdge->add; //make destination ArcheType the current ArcheType
 
 
             std::cout << "Current Components: " << std::endl;
@@ -211,17 +239,45 @@ namespace ECS {
             std::cout << std::endl;
             std::cout << "Current ArcheType Length: " << currentArcheType->length << std::endl;
 
-
-            moveEntityData(rec, currentArcheType, type);
-
+            moveEntityData(rec, currentArcheType, type);    //Move Entity Component Data to destination ArcheType
         }   
 
         template<typename T>
-        ComponentID Component(const std::string& name) {
+        T* GetPtr(EntityID& entityID) { //Get Component pointer of Entity ID
+            Record& rec = EntityIndex.at(entityID); //Get Entity Record reference  
+            int index = findIndexOfComponent(Componentfamily::getID<T>(), rec.archetype->type); //Get Component Index in the Entity's ArcheType  
+            return static_cast<T*>(rec.archetype->components[index].ptr) + rec.rowIndex; //Return pointer to Component of Entity
+        }
+
+        //Is this function really necessary?
+        template<typename T>
+        T& GetRef(EntityID& entityID) { //Get Component reference of Entity ID
+            Record& rec = EntityIndex.at(entityID); //Get Entity Record reference  
+            int index = findIndexOfComponent(Componentfamily::getID<T>(), rec.archetype->type); //Get Component Index in the Entity's ArcheType  
+            return *(static_cast<T*>(rec.archetype->components[index].ptr) + rec.rowIndex); //Return reference to Component of Entity
+        }
+
+        template<typename T>
+        ComponentID AddComponent() {
+
+            //std::vector<ComponentObject> vec{ ComponentObject(Test()) }; // Object(Foo()), Object(Bar()) 
+            //Component<T> object(heapAlloc.allocate(256));
+            //ComponentObject obj(object);
+            //ComponentObject obj = ComponentObject(new Component<T>(heapAlloc.allocate(256)));
             ComponentID id = Componentfamily::getID<T>();
+            ComponentSizes.push_back(sizeof(T));
             return id;
         }
 
+        template<typename ...T>
+        constexpr std::array<ComponentID, sizeof...(T)> GetComponentTypesArr() noexcept {
+            std::array<ComponentID, sizeof...(T)> componentIDs;
+            size_t i = 0;
+            (void(componentIDs[i++] = Componentfamily::getID<T>()), ...);
+            return componentIDs;
+        }
+
+        
         //void DeleteComponent(ComponentID id);
         //template<typename ...T> //, std::enable_if_t<(sizeof...(T) > 0)> * = nullptr
         //void CreateArcheType(){
@@ -237,9 +293,95 @@ namespace ECS {
 
         //    std::cout << "Archetype" << family::getID<T...>() << "\n";
         //}
+
+        //struct
+        //Types are not sorted yet
+        template<size_t componentSetSize>
+        bool hasComponentSet(Type& sortedType, std::array<ComponentID, componentSetSize>& sortedComponentSet, std::array<uint16_t, componentSetSize>& componentIndices) {
+            uint16_t foundComponents = 0;
+            for (int i = 0; i < sortedType.size(); i++) {
+                if (sortedComponentSet[foundComponents] == sortedType[i])
+                    componentIndices[foundComponents] = i;
+                    foundComponents++;
+                if (foundComponents == componentSetSize)
+                    return true;
+            }
+            return false;
+        }
+
+        //template<class ...Components>
+        //template<size_t Index, typename ComponentType, typename ...RemainingComponents>
+        //void AddComponentPtrsToTuple(Type& type, std::tuple<Components*...>& tuple) {
+
+        //}
+
+        //template<size_t Index, typename ...T>
+        //void AddComponentPtrsToTuple(std::vector<MemBlk>& archetypeComponents, std::array<uint16_t, sizeof...(T)>& componentIndices, std::tuple<T*...>& tuple) {
+
+        //}
+
+        template<typename ...T>
+        void CreateComponentSystem(std::vector<ArcheType*>& ArcheTypes) {
+            using ComponentTuple = std::tuple<T*...>;
+            std::array<ComponentID, sizeof...(T)> componentIDs = GetComponentTypesArr<T...>();
+            std::array<uint16_t, sizeof...(T)> componentIndices;
+            std::vector<ComponentTuple> componentCollections;
+            for (int i = 0; i < ArcheTypes.size(); i++) {   //iterate over all created ArcheTypes 
+                if (ArcheTypes[i]->length > 0) {
+                    
+                    Type& type = ArcheTypes[i]->type;
+                    if (hasComponentSet<sizeof...(T)>(type, componentIDs, componentIndices)) {
+                        std::cout << "Found Matching ArcheType" << std::endl;
+                        ComponentTuple tuple;
+                        AddComponentPtrsToTuple<0, T...>
+                        //for (int j = 0; j < sizeof...(T); j++) {
+                        //    //std::get<j>(tuple) = 
+                        //}
+                        componentCollections.push_back(tuple);
+                        //AddComponentPtrsToTuple<0, T...>(type, componentCollections.back());
+                    }
+                    else {
+                        std::cout << "No Match" << std::endl;
+                    }
+                    /*if ((std::find(type.begin(), type.end(), Componentfamily::getID<T>()) != type.end()) && ...) {
+                        std::cout << "Found Matching ArcheType" << std::endl;
+                    }*/
+                }
+            }
+        }
         
         template<typename ...T>
-        void System() {}
+        void System() {
+            EntityID systemID = family::getID<T...>();
+            if (systemID < Systems.size()) {
+                //std::cout << "Found exisiting Component Collection " << std::endl;
+                //return Systems[systemID];
+            }
+            else  {
+                std::cout << "New Component Collection ID: " << systemID << std::endl;
+                Systems.push_back(new ComponentSystem<T...>(ArcheTypes));
+                //CreateComponentSystem<T...>(ArcheTypes);
+            }
+            
+            //return new ComponentSystem<T...>();
+            //using ComponentSetTuple = std::tuple<T*...>;
+            //std::array<ComponentID, sizeof...(T)> componentIDs = GetComponentTypesArr<T...>();
+            //std::vector<ComponentSetTuple> components;
+            //for (int i = 0; i < ArcheTypes.size(); i++) {   //iterate over all created ArcheTypes 
+            //    if (ArcheTypes[i]->length > 0) {
+            //        Type& type = ArcheTypes[i]->type;
+            //        if (hasComponentSet<sizeof...(T)>(type, componentIDs)) {
+            //            std::cout << "Found Matching ArcheType" << std::endl;
+            //        }
+            //        else {
+            //            std::cout << "No Match" << std::endl;
+            //        }
+            //        /*if ((std::find(type.begin(), type.end(), Componentfamily::getID<T>()) != type.end()) && ...) {
+            //            std::cout << "Found Matching ArcheType" << std::endl;
+            //        }*/
+            //    }
+            //}
+        }
 
 
 
@@ -250,7 +392,9 @@ namespace ECS {
         HeapAllocator<1024 * 1024 * 1024> heapAlloc;
 
         ArcheType* Root;
-        Type AllTypes;
+
+        std::vector<size_t> ComponentSizes{0};
+        std::vector<BaseComponentSystem*> Systems;
         std::unordered_map<EntityID, Record> EntityIndex;
         std::vector<ArcheType*> ArcheTypes;
     };

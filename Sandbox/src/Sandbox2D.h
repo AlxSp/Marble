@@ -36,6 +36,8 @@ private:
 
 	Balls balls;
 
+	Marble::Lehmer32 rng;
+
 	ECS::EntityManager EntityManager;
 
 	Marble::Scope<Area2D> area;

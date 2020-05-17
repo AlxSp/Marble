@@ -47,13 +47,16 @@ struct Collided {
 };
 
 
-//void UpdatePosition(ECS::EntityManager& EntityManager, float dt) {
-//	EntityManager.System<Position, Velocity>().each(
-//		[dt](auto& pos, auto& vel) {
-//			pos.x += vel.x * dt;
-//			pos.y += vel.y * dt;
-//		});
-//}
+void UpdatePosition(ECS::EntityManager& EntityManager, float dt) {
+	//EntityManager.System<Position, Velocity>();/*.each(
+	//	[dt](auto& pos, auto& vel) {
+	//		pos.x += vel.x * dt;
+	//		pos.y += vel.y * dt;
+	//	});*/
+
+	//EntityManager.System<Position, Mass, Velocity>();
+	EntityManager.System<Position, Velocity>();
+}
 
 
 float randomNumberGen(float min, float max) {
@@ -81,16 +84,17 @@ Sandbox2D::Sandbox2D()
 	area = Marble::CreateScope<Area2D>(Area2D({m_CameraController.GetAspectRatio() * 2 * m_CameraController.GetZoomLevel(), 1 * 2 * m_CameraController.GetZoomLevel()}));
 	area->SetColorRGBA(0, 85, 130);
 
+	rng.seed(123);
 
-	auto PositonID = EntityManager.Component<Position>("Position");
-	auto VelocityID = EntityManager.Component<Velocity>("Velocity");
-	auto MassID = EntityManager.Component<Mass>("Mass");
-	auto RadiusID = EntityManager.Component<Radius>("Radius");
-	auto RotationID = EntityManager.Component<Rotation>("Rotation");
-	auto ColorID = EntityManager.Component<Color>("Color");
-	auto CollidedID = EntityManager.Component<Collided>("Collided");
+	auto PositonID = EntityManager.AddComponent<Position>();
+	auto VelocityID = EntityManager.AddComponent<Velocity>();
+	auto MassID = EntityManager.AddComponent<Mass>();
+	auto RadiusID = EntityManager.AddComponent<Radius>();
+	auto RotationID = EntityManager.AddComponent<Rotation>();
+	auto ColorID = EntityManager.AddComponent<Color>();
+	auto CollidedID = EntityManager.AddComponent<Collided>();
 
-	auto PositonID2 = EntityManager.Component<Position>("Position");
+	auto PositonID2 = EntityManager.AddComponent<Position>();
 
 
 	std::cout << PositonID << std::endl;
@@ -125,28 +129,51 @@ Sandbox2D::Sandbox2D()
 	//EntityManager.CreateArcheType<Velocity, Position, Mass, Radius, Rotation, Color, Collided>();
 
 	//EntityManager.CreateArcheType<>();
+	std::vector<ECS::EntityID> ids;
 
+	std::vector<Position> positions;
+	//std::vector<Velocity> positions;
+	std::vector<Mass> masses;
 
 	for (int i = 0; i < numBalls; i++){
 		//m_EntityManager->CreateEntity()
-		float ballMass = randomNumberGen(1, 5);
-
+		float ballMass = rng.randFloat(1, 5);
 
 		ECS::EntityID ballID = EntityManager.Entity();
 		
-		EntityManager.Add<Position>(ballID, { randomNumberGen(area->leftBorder, area->rightBorder), randomNumberGen(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f)) });
-		EntityManager.Add<Velocity>(ballID, { randomNumberGen(-3, 3), randomNumberGen(-3, 3), 0.0f });
+		ids.push_back(ballID);
+
+		masses.push_back({ ballMass });
+		positions.push_back({ rng.randFloat(area->leftBorder, area->rightBorder), rng.randFloat(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f)) });
+		EntityManager.Add<Position>(ballID, positions[i]);
+		EntityManager.Add<Velocity>(ballID, { rng.randFloat(-3, 3), rng.randFloat(-3, 3), 0.0f });
 		EntityManager.Add<Mass>(ballID, { ballMass });
 		EntityManager.Add<Radius>(ballID, { ballMass * 0.5f });
 		EntityManager.Add<Color>(ballID, {1.0f, 1.0f, 1.0f, 1.0f});
 		EntityManager.Add<Collided>(ballID, { false });
 
-		balls.Position[i] = { randomNumberGen(area->leftBorder, area->rightBorder), randomNumberGen(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f))};
-		balls.Velocity[i] = { randomNumberGen(-3, 3), randomNumberGen(-3, 3), 0.0f };
+		balls.Position[i] = { rng.randFloat(area->leftBorder, area->rightBorder), rng.randFloat(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f))};
+		balls.Velocity[i] = { rng.randFloat(-3, 3), rng.randFloat(-3, 3), 0.0f };
 		balls.Mass[i] = ballMass;
 		balls.Radius[i]   = ballMass * 0.5f;
 		balls.Color[i]	  = glm::vec4(1.0f);
 		balls.collided[i] = false;
+	}
+
+	for (int i = 0; i < numBalls; i++) {
+		std::cout << "IDs: " << ids[i] << std::endl;
+		std::cout << "OG Mass: " << masses[i].x << std::endl;
+		Mass* getMass = EntityManager.GetPtr<Mass>(ids[i]);
+		std::cout << "Got Mass: " << getMass->x << std::endl;
+
+		std::cout << "OG Positions: " << positions[i].x << positions[i].y << positions[i].z << std::endl;
+		Position* getPos = EntityManager.GetPtr<Position>(ids[i]);
+		std::cout << "Got Positions: " << getPos->x << getPos->y << getPos->z << std::endl;
+		Position getPosR = EntityManager.GetRef<Position>(ids[i]);
+		std::cout << "Got Positions Ref: " << getPosR.x << getPosR.y << getPosR.z << std::endl;
+		getPosR.x = 10.0f;
+		std::cout << "Got Positions: " << getPos->x << getPos->y << getPos->z << std::endl;
+
 	}
 
 	
@@ -193,7 +220,7 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		if (balls.Position[i].y < area->bottomBorder) balls.Position[i].y = area->topBorder;
 	}
 
-	//UpdatePosition(EntityManager, ts);
+	UpdatePosition(EntityManager, ts);
 
 	float deltaTime = ts;
 	for (int i = 0; i < numBalls; i++) {
@@ -259,6 +286,7 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		balls.Velocity[j].x = tx * dpTan2 + nx * m2;
 		balls.Velocity[j].y = ty * dpTan2 + ny * m2;
 	}
+
 
 	//std::cout << ECS::Entity::Create() << std::endl;
 	// Render
