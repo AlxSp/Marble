@@ -20,7 +20,7 @@ public:
 	void OnEvent(Marble::Event& e) override;
 
 private:
-	int numBalls = 5;
+	int numBalls = 50;
 
 	struct Balls {
 		std::array<glm::vec3, MaxBalls> Position;
@@ -37,6 +37,9 @@ private:
 	Balls balls;
 
 	Marble::Lehmer32 rng;
+
+	std::vector<ECS::EntityID> ids;
+
 
 	ECS::EntityManager EntityManager;
 

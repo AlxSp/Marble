@@ -3,10 +3,11 @@
 #include "Marble/ECS/Entity/EntityManager.h"
 #include "Marble/ECS/Memory/MemoryAllocator.h"
 
+#include <functional>
+
 namespace ECS {
 
     struct ArcheType;
-    //struct MemBlk;
 
     template<typename ...T>
     constexpr std::array<ComponentID, sizeof...(T)> GetComponentTypesArr() noexcept {
@@ -29,33 +30,35 @@ namespace ECS {
         return false;
     }
 
-    class BaseComponentSystem
-    {
-    public:
-        virtual ~BaseComponentSystem() = default;
-        /*virtual bool Init() = 0;
-        virtual void OnUpdate(float deltaTime) = 0;*/
-    };
+    class BaseComponentSystem {};
 
     template<class ...Components>
     class ComponentSystem : public BaseComponentSystem
     {
     public:
         ComponentSystem(std::vector<ArcheType*>& ArcheTypes);
-        virtual ~ComponentSystem() override = default;
-    private:
-        template<size_t Index, typename ComponentType, typename ...RemainingComponentTypes>
-        void AddComponentPtrsToTuple(std::vector<MemBlk>& archetypeComponents, std::array<uint16_t, sizeof...(Components)>& componentIndices, std::tuple<Components*...>& tuple);
-        
-        template<size_t Index>
-        void AddComponentPtrsToTuple(std::vector<MemBlk>& archetypeComponents, std::array<uint16_t, sizeof...(Components)>& componentIndices, std::tuple<Components*...>& tuple);
-        
+        //virtual ~ComponentSystem() override = default;
+        template <typename Functor>
+        void each(Functor functor);
+
     private:
         using ComponentTuple = std::tuple<Components*...>;
-        std::vector<ComponentTuple> componentCollections;
+        using ComponentInfoTuple = std::tuple<ComponentTuple, size_t>;
+
+        //template <size_t N, >
+
+        /*template<Index>
+        void IncrementTuplePtrs(ComponentTuple& tuple, uint16_t incrementValue);*/
+
+        template<size_t Index, typename ComponentType, typename ...RemainingComponentTypes>
+        void AddComponentPtrsToTuple(std::vector<MemBlk>& archetypeComponents, std::array<uint16_t, sizeof...(Components)>& componentIndices, ComponentTuple& tuple);
+        
+        template<size_t Index>
+        void AddComponentPtrsToTuple(std::vector<MemBlk>& archetypeComponents, std::array<uint16_t, sizeof...(Components)>& componentIndices, ComponentTuple& tuple);
+        
+    private:
+        std::vector<ComponentInfoTuple> componentCollections;
         std::array<ComponentID, sizeof...(Components)> componentIDs = GetComponentTypesArr<Components...>();
-        /*virtual bool Init() override;
-        virtual void OnUpdate(float deltaTime) = 0;*/
     };
 
     template <typename... Components>
@@ -68,31 +71,37 @@ namespace ECS {
                     std::cout << "Found Matching ArcheType" << std::endl;
                     ComponentTuple tuple;
                     AddComponentPtrsToTuple<0, Components...>(ArcheTypes[i]->components, componentIndices, tuple);
-                    componentCollections.emplace_back(tuple);
+                    componentCollections.emplace_back(tuple, ArcheTypes[i]->length);
                 }
                 else {
                     std::cout << "No Match" << std::endl;
                 }
-                /*if ((std::find(type.begin(), type.end(), Componentfamily::getID<T>()) != type.end()) && ...) {
-                    std::cout << "Found Matching ArcheType" << std::endl;
-                }*/
             }
         }
     }
 
+    /*template<class ...Components>
+    template<tyIndex>
+    void IncrementTuplePtrs(ComponentTuple& tuple, uint16_t incrementValue);*/
 
+    template<class ...Components>
+    template<typename Func>
+    inline void ComponentSystem<Components...>::each(Func func)
+    {
+        for (auto& componentInfo : componentCollections) {
+            auto [componentPtrTuple, componentCount] = componentInfo;
+            
+            for (int i = 0; i < componentCount; i++) {
+                std::apply(func, componentPtrTuple);
+                std::apply([](auto& ...ptr) {((ptr += 1), ...);}, componentPtrTuple);
+            }
 
-   /* template<typename... Components>
-    class Query {
-        using ComponentTuple = std::tuple<Components*...>;
-
-    };*/
-
-
+        }
+    }
 
     template<class ...Components>
     template<size_t Index, typename ComponentType, typename ...RemainingComponentTypes>
-    inline void ComponentSystem<Components...>::AddComponentPtrsToTuple(std::vector<MemBlk>& archetypeComponents, std::array<uint16_t, sizeof...(Components)>& componentIndices, std::tuple<Components*...>& tuple)
+    inline void ComponentSystem<Components...>::AddComponentPtrsToTuple(std::vector<MemBlk>& archetypeComponents, std::array<uint16_t, sizeof...(Components)>& componentIndices, ComponentTuple& tuple)
     {
         std::get<Index>(tuple) = static_cast<ComponentType*>(archetypeComponents[componentIndices[Index]].ptr);
         AddComponentPtrsToTuple<Index + 1, RemainingComponentTypes...>(archetypeComponents, componentIndices, tuple);
@@ -100,7 +109,7 @@ namespace ECS {
 
     template<class ...Components>
     template<size_t Index>
-    inline void ComponentSystem<Components...>::AddComponentPtrsToTuple(std::vector<MemBlk>& archetypeComponents, std::array<uint16_t, sizeof...(Components)>& componentIndices, std::tuple<Components*...>& tuple) {
+    inline void ComponentSystem<Components...>::AddComponentPtrsToTuple(std::vector<MemBlk>& archetypeComponents, std::array<uint16_t, sizeof...(Components)>& componentIndices, ComponentTuple& tuple) {
         return;
     }
 

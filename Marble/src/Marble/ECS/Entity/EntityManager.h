@@ -309,58 +309,16 @@ namespace ECS {
             return false;
         }
 
-        //template<class ...Components>
-        //template<size_t Index, typename ComponentType, typename ...RemainingComponents>
-        //void AddComponentPtrsToTuple(Type& type, std::tuple<Components*...>& tuple) {
-
-        //}
-
-        //template<size_t Index, typename ...T>
-        //void AddComponentPtrsToTuple(std::vector<MemBlk>& archetypeComponents, std::array<uint16_t, sizeof...(T)>& componentIndices, std::tuple<T*...>& tuple) {
-
-        //}
-
-        template<typename ...T>
-        void CreateComponentSystem(std::vector<ArcheType*>& ArcheTypes) {
-            using ComponentTuple = std::tuple<T*...>;
-            std::array<ComponentID, sizeof...(T)> componentIDs = GetComponentTypesArr<T...>();
-            std::array<uint16_t, sizeof...(T)> componentIndices;
-            std::vector<ComponentTuple> componentCollections;
-            for (int i = 0; i < ArcheTypes.size(); i++) {   //iterate over all created ArcheTypes 
-                if (ArcheTypes[i]->length > 0) {
-                    
-                    Type& type = ArcheTypes[i]->type;
-                    if (hasComponentSet<sizeof...(T)>(type, componentIDs, componentIndices)) {
-                        std::cout << "Found Matching ArcheType" << std::endl;
-                        ComponentTuple tuple;
-                        AddComponentPtrsToTuple<0, T...>
-                        //for (int j = 0; j < sizeof...(T); j++) {
-                        //    //std::get<j>(tuple) = 
-                        //}
-                        componentCollections.push_back(tuple);
-                        //AddComponentPtrsToTuple<0, T...>(type, componentCollections.back());
-                    }
-                    else {
-                        std::cout << "No Match" << std::endl;
-                    }
-                    /*if ((std::find(type.begin(), type.end(), Componentfamily::getID<T>()) != type.end()) && ...) {
-                        std::cout << "Found Matching ArcheType" << std::endl;
-                    }*/
-                }
-            }
-        }
-        
-        template<typename ...T>
-        void System() {
-            EntityID systemID = family::getID<T...>();
+        template<typename ...Components>
+        ComponentSystem<Components...>& System() {
+            EntityID systemID = family::getID<Components...>();
             if (systemID < Systems.size()) {
-                //std::cout << "Found exisiting Component Collection " << std::endl;
-                //return Systems[systemID];
+                return *static_cast<ComponentSystem<Components...>*>(Systems[systemID]);
             }
             else  {
                 std::cout << "New Component Collection ID: " << systemID << std::endl;
-                Systems.push_back(new ComponentSystem<T...>(ArcheTypes));
-                //CreateComponentSystem<T...>(ArcheTypes);
+                Systems.push_back(new ComponentSystem<Components...>(ArcheTypes));
+                return *static_cast<ComponentSystem<Components...>*>(Systems.back());
             }
             
             //return new ComponentSystem<T...>();

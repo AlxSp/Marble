@@ -47,15 +47,13 @@ struct Collided {
 };
 
 
-void UpdatePosition(ECS::EntityManager& EntityManager, float dt) {
-	//EntityManager.System<Position, Velocity>();/*.each(
-	//	[dt](auto& pos, auto& vel) {
-	//		pos.x += vel.x * dt;
-	//		pos.y += vel.y * dt;
-	//	});*/
-
-	//EntityManager.System<Position, Mass, Velocity>();
-	EntityManager.System<Position, Velocity>();
+void UpdatePosition(ECS::EntityManager& EntityManager, float& dt) {
+	EntityManager.System<Position, Velocity>().each(
+		[&dt](auto& pos, auto& vel) {
+			pos->x += vel->x * dt;
+			pos->y += vel->y * dt;
+		}
+	);
 }
 
 
@@ -129,7 +127,6 @@ Sandbox2D::Sandbox2D()
 	//EntityManager.CreateArcheType<Velocity, Position, Mass, Radius, Rotation, Color, Collided>();
 
 	//EntityManager.CreateArcheType<>();
-	std::vector<ECS::EntityID> ids;
 
 	std::vector<Position> positions;
 	//std::vector<Velocity> positions;
@@ -162,17 +159,17 @@ Sandbox2D::Sandbox2D()
 
 	for (int i = 0; i < numBalls; i++) {
 		std::cout << "IDs: " << ids[i] << std::endl;
-		std::cout << "OG Mass: " << masses[i].x << std::endl;
+		/*std::cout << "OG Mass: " << masses[i].x << std::endl;
 		Mass* getMass = EntityManager.GetPtr<Mass>(ids[i]);
 		std::cout << "Got Mass: " << getMass->x << std::endl;
 
-		std::cout << "OG Positions: " << positions[i].x << positions[i].y << positions[i].z << std::endl;
+		std::cout << "OG Positions: " << positions[i].x << positions[i].y << positions[i].z << std::endl;*/
 		Position* getPos = EntityManager.GetPtr<Position>(ids[i]);
-		std::cout << "Got Positions: " << getPos->x << getPos->y << getPos->z << std::endl;
+		std::cout << "Got Positions: " << getPos->x << " " << getPos->y << " " << getPos->z << std::endl;
 		Position getPosR = EntityManager.GetRef<Position>(ids[i]);
-		std::cout << "Got Positions Ref: " << getPosR.x << getPosR.y << getPosR.z << std::endl;
-		getPosR.x = 10.0f;
-		std::cout << "Got Positions: " << getPos->x << getPos->y << getPos->z << std::endl;
+		std::cout << "Got Positions Ref: " << getPosR.x << " " << getPosR.y << " " << getPosR.z << std::endl;
+		/*getPosR.x = 10.0f;
+		std::cout << "Got Positions: " << getPos->x << " " << getPos->y << " " << getPos->z << std::endl;*/
 
 	}
 
@@ -194,6 +191,9 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 	MBL_PROFILE_FUNCTION();
 	// Update
 	m_CameraController.OnUpdate(ts);
+
+	float deltaTime = ts;
+
 
 	FrameCounter++;
 	TimeSinceLastSecond += ts;
@@ -220,9 +220,9 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		if (balls.Position[i].y < area->bottomBorder) balls.Position[i].y = area->topBorder;
 	}
 
-	UpdatePosition(EntityManager, ts);
 
-	float deltaTime = ts;
+	//UpdatePosition(EntityManager, deltaTime);
+
 	for (int i = 0; i < numBalls; i++) {
 		balls.Position[i] += balls.Velocity[i] * deltaTime;
 	}
@@ -249,11 +249,11 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 
 					float overlap = (distance - balls.Radius[i] - balls.Radius[j]) * 0.5f;
 
-					balls.Position[i].x -= overlap * (balls.Position[i].x - balls.Position[j].x) / distance;
-					balls.Position[i].y -= overlap * (balls.Position[i].y - balls.Position[j].y) / distance;
-
-					balls.Position[j].x += overlap * (balls.Position[i].x - balls.Position[j].x) / distance;
-					balls.Position[j].y += overlap * (balls.Position[i].y - balls.Position[j].y) / distance;
+					balls.Position[i].x += overlap * (balls.Position[j].x - balls.Position[i].x) / distance;
+					balls.Position[i].y += overlap * (balls.Position[j].y - balls.Position[i].y) / distance;
+																		   
+					balls.Position[j].x -= overlap * (balls.Position[j].x - balls.Position[i].x) / distance;
+					balls.Position[j].y -= overlap * (balls.Position[j].y - balls.Position[i].y) / distance;
 				}
 			
 		}
