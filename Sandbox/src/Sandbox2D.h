@@ -2,7 +2,7 @@
 
 #include "Marble.h"
 #include "Area2D.h"
-#include "Marble/ECS/Entity/EntityManager.h"
+//#include "Marble/ECS/Entity/EntityManager.h"
 //#include "Marble/ECS/Memory/MemoryAllocator.h"
 
 
@@ -38,10 +38,10 @@ private:
 
 	Marble::Lehmer32 rng;
 
-	std::vector<ECS::EntityID> ids;
+	/*std::vector<ECS::EntityID> ids;
 
 
-	ECS::EntityManager EntityManager;
+	ECS::EntityManager EntityManager;*/
 
 	Marble::Scope<Area2D> area;
 
