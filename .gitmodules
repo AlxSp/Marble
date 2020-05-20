@@ -14,3 +14,6 @@
 	path = Marble/thirdParty/glm
 	url = https://github.com/g-truc/glm
 	branch = master
+[submodule "Marble/thirdParty/entt"]
+	path = Marble/thirdParty/entt
+	url = https://github.com/AlxSp/entt.git
