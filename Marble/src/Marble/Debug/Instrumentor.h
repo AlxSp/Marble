@@ -181,27 +181,27 @@ namespace Marble {
 	// is resolved when the (pre)compiler starts, so the syntax highlighting
 	// could mark the wrong one in your editor!
 	#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
-		#define MBL_FUMBL_SIG __PRETTY_FUNCTION__
+		#define MBL_FUNC_SIG __PRETTY_FUNCTION__
 	#elif defined(__DMC__) && (__DMC__ >= 0x810)
-		#define MBL_FUMBL_SIG __PRETTY_FUNCTION__
+		#define MBL_FUNC_SIG __PRETTY_FUNCTION__
 	#elif defined(__FUNCSIG__)
-		#define MBL_FUMBL_SIG __FUNCSIG__
+		#define MBL_FUNC_SIG __FUNCSIG__
 	#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
-		#define MBL_FUMBL_SIG __FUNCTION__
+		#define MBL_FUNC_SIG __FUNCTION__
 	#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
-		#define MBL_FUMBL_SIG __FUMBL__
+		#define MBL_FUNC_SIG __FUNC__
 	#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
-		#define MBL_FUMBL_SIG __func__
+		#define MBL_FUNC_SIG __func__
 	#elif defined(__cplusplus) && (__cplusplus >= 201103)
-		#define MBL_FUMBL_SIG __func__
+		#define MBL_FUNC_SIG __func__
 	#else
-		#define MBL_FUMBL_SIG "MBL_FUMBL_SIG unknown!"
+		#define MBL_FUNC_SIG "MBL_FUNC_SIG unknown!"
 	#endif
 
     #define MBL_PROFILE_BEGIN_SESSION(name, filepath) ::Marble::Instrumentor::Get().BeginSession(name, filepath)
     #define MBL_PROFILE_END_SESSION() ::Marble::Instrumentor::Get().EndSession()
     #define MBL_PROFILE_SCOPE(name) ::Marble::InstrumentationTimer timer##__LINE__(name);
-    #define MBL_PROFILE_FUNCTION() MBL_PROFILE_SCOPE (MBL_FUMBL_SIG) //void __cdecl Marble::Instrumentor::Stop(void)
+    #define MBL_PROFILE_FUNCTION() MBL_PROFILE_SCOPE (MBL_FUNC_SIG) //void __cdecl Marble::Instrumentor::Stop(void)
 #else
     #define MBL_PROFILE_BEGIN_SESSION(name, filepath)
     #define MBL_PROFILE_END_SESSION()
