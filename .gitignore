@@ -1,3 +1,4 @@
+#
 #OS specific files and folders
 #macOS
 .DS_Store
@@ -17,6 +18,7 @@ bin-int/
 Sandbox/*.json
 Sandbox/*.ini
 
+#
 # IDE files and folders 
 # Visual Studio files and folder
 .vs/
@@ -28,6 +30,13 @@ Sandbox/*.ini
 # vscode files
 .vscode/
 
+#
+#Build Systems 
+#
+#CMake files
+CMakeFiles/
+cmake_install.cmake
+CMakeCache.txt
 
 #GNU Make
 Makefile
