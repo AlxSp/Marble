@@ -1,4 +1,4 @@
-#include "mblpch.h"
+//#include "mblpch.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 Project(Sandbox)
 
-add_library(Sandbox
+add_executable( Sandbox
     src/Area2D.cpp
     src/Area2D.h
     src/Ball.h
@@ -13,11 +13,19 @@ add_library(Sandbox
     src/SandboxApp.cpp
 )
 
-if(UNIX)
-    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-    target_link_libraries(Marble GL X11 Xrandr Xi dl pthread stdc++fs)
-endif(UNIX)
+target_link_libraries(Sandbox Marble)
 
-if(WIN32)
-    target_link_libraries(Marble opengl32.lib)
-endif(WIN32)
+if(UNIX)
+    target_link_libraries(Sandbox dl pthread stdc++fs)
+
+    add_custom_command(
+        TARGET Sandbox POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:Sandbox>/assets/
+    )
+    #target_compile_definitions(Sandbox PUBLIC SANDBOX_ASSETS_PATH=$<TARGET_FILE_DIR:Sandbox>)
+
+elseif(WIN32)
+    target_link_libraries(Sandbox opengl32.lib)
+endif()
+

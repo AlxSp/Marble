@@ -8,9 +8,15 @@ project(
     LANGUAGES CXX
 )
 
-add_library(Marble STATIC
+message(STATUS "CMAKE BINARY DIR of Project '${PROJECT_NAME}' is ${CMAKE_BINARY_DIR}")
+
+add_library( Marble STATIC
+    #include 
+    src/Marble.h
+    #Precompiled header
     src/mblpch.cpp
     src/mblpch.h
+    #Core
     src/Marble/Core/Application.cpp
     src/Marble/Core/Application.h
     src/Marble/Core/Core.h
@@ -27,23 +33,23 @@ add_library(Marble STATIC
     src/Marble/Core/TimeStep.h
     src/Marble/Core/Window.cpp
     src/Marble/Core/Window.h
-    
+    #Debugging
     src/Marble/Debug/Instrumentor.h
-
+    #Events
     src/Marble/Events/ApplicationEvent.h
     src/Marble/Events/Event.h
     src/Marble/Events/KeyEvent.h
     src/Marble/Events/MouseEvent.h
-
+    #ImGui implementation
     src/Marble/ImGui/ImGuiBuild.cpp
     src/Marble/ImGui/ImGuiLayer.cpp
     src/Marble/ImGui/ImGuiLayer.h
-
+    #Noise
     src/Marble/Noise/SimplexNoise.cpp
     src/Marble/Noise/SimplexNoise.h
-
+    #RNG
     src/Marble/Random/Lehmer.h
-
+    #Renderer
     src/Marble/Renderer/Buffer.cpp
     src/Marble/Renderer/Buffer.h
     src/Marble/Renderer/GraphicsContext.cpp
@@ -66,7 +72,7 @@ add_library(Marble STATIC
     src/Marble/Renderer/Texture.h
     src/Marble/Renderer/VertexArray.cpp
     src/Marble/Renderer/VertexArray.h
-
+    #OpenGL code
     src/Platform/OpenGL/OpenGLBuffer.cpp
     src/Platform/OpenGL/OpenGLBuffer.h
     src/Platform/OpenGL/OpenGLContext.cpp
@@ -79,38 +85,112 @@ add_library(Marble STATIC
     src/Platform/OpenGL/OpenGLTexture.h
     src/Platform/OpenGL/OpenGLVertexArray.cpp
     src/Platform/OpenGL/OpenGLVertexArray.h
-    
+    #Windows Platform code
     src/Platform/Windows/WindowsInput.cpp
     src/Platform/Windows/WindowsInput.h
     src/Platform/Windows/WindowsWindow.cpp
     src/Platform/Windows/WindowsWindow.h
 )
 
-target_include_directories( Marble
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/spdlog/include
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/GLFW/include
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/Glad/include
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/imgui
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glm
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/stb_image
+
+####
+# Add Glad as library
+#
+add_library( Glad STATIC
+    thirdParty/Glad/include/KHR/khrplatform.h
+    thirdParty/Glad/src/glad.c
 )
 
-target_link_libraries(Marble Glad GLFW ImGui)
+target_include_directories( Glad
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/Glad/include
+)
+####
 
-add_compile_definitions(
-    _CRT_SECURE_NO_WARNINGS
-    GLFW_INCLUDE_NONE
+####
+# Add stb_image as library
+#
+add_library( stb_image STATIC
+    thirdParty/stb_image/stb_image.cpp
+    thirdParty/stb_image/stb_image.h
+)
+
+target_include_directories( stb_image
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/stb_image
+)
+####
+
+####
+# Add imgui as library
+#
+add_library( imgui STATIC
+    thirdParty/imgui/imconfig.h
+    thirdParty/imgui/imgui.h
+    thirdParty/imgui/imgui.cpp
+    thirdParty/imgui/imgui_draw.cpp
+    thirdParty/imgui/imgui_internal.h
+    thirdParty/imgui/imgui_widgets.cpp
+    thirdParty/imgui/imstb_rectpack.h
+    thirdParty/imgui/imstb_textedit.h
+    thirdParty/imgui/imstb_truetype.h
+    thirdParty/imgui/imgui_demo.cpp
+)
+
+target_include_directories( imgui
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/imgui
+)
+####
+
+####
+# Add glfw subdirectory
+#
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+# add_compile_definitions(
+#     _CRT_SECURE_NO_WARNINGS
+#     GLFW_INCLUDE_NONE
+# )
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/GLFW)
+####
+
+####
+# Add glm subdirectory
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glm)
+####
+
+####
+# Add spdlog as subdirectory
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/spdlog)
+####
+
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_include_directories( Marble
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_link_libraries( Marble
+    glfw 
+    imgui
+    Glad
+    glm
+    spdlog
+    stb_image
 )
 
 if(UNIX)
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-    target_link_libraries(Marble GL X11 Xrandr Xi)
-endif(UNIX)
+    target_link_libraries( Marble
+        GL 
+        X11 
+        Xrandr 
+        Xi
+    )
+elseif(WIN32)
+    target_link_libraries( Marble 
+        opengl32.lib
+    )
+endif()
 
-if(WIN32)
-    target_link_libraries(Marble opengl32.lib)
-endif(WIN32)
-
-install(TARGETS Marble DESTINATION lib)
-install(FILES Marble.h DESTINATION include)
+# install(TARGETS Marble DESTINATION lib)
+# install(FILES src/Marble.h DESTINATION include)

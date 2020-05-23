@@ -6,6 +6,7 @@
 
 #include "Marble/Core/Input.h"
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 
