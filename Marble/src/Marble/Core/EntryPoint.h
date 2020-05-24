@@ -1,5 +1,5 @@
 #pragma once
-#include "Marble/Core/Core.h"
+//#include "Marble/Core/Core.h"
 
 extern Marble::Application* Marble::CreateApplication();
 

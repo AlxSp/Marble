@@ -1,5 +1,5 @@
 #include "mblpch.h"
-#include "Platform/OpenGL/OpenGLTexture.h"
+#include "RendererAPI/OpenGL/OpenGLTexture.h"
 
 #include <stb_image.h>
 

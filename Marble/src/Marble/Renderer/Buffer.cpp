@@ -2,7 +2,7 @@
 #include "Marble/Renderer/Buffer.h"
 #include "Marble/Renderer/Renderer.h"
 //RendererAPI Headers
-#include "Platform/OpenGL/OpenGLBuffer.h"
+#include "RendererAPI/OpenGL/OpenGLBuffer.h"
 
 namespace Marble {
 

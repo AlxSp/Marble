@@ -1,7 +1,7 @@
 #include "mblpch.h"
 #include "Marble/Renderer/RendererAPI.h"
 //RendererAPI Headers
-#include "Platform/OpenGL/OpenGLRendererAPI.h"
+#include "RendererAPI/OpenGL/OpenGLRendererAPI.h"
 
 namespace Marble {
 

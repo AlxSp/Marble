@@ -3,7 +3,7 @@
 #include "Marble/Renderer/Shader.h"
 #include "Marble/Renderer/Renderer.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
+#include "RendererAPI/OpenGL/OpenGLShader.h"
 
 namespace Marble {
 

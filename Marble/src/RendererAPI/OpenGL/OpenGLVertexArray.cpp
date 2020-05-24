@@ -1,5 +1,5 @@
 #include "mblpch.h"
-#include "Platform/OpenGL/OpenGLVertexArray.h"
+#include "RendererAPI/OpenGL/OpenGLVertexArray.h"
 
 #include <glad/glad.h>
 

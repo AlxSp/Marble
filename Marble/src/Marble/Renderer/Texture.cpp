@@ -3,7 +3,7 @@
 #include "Marble/Renderer/Texture.h"
 #include "Marble/Renderer/Renderer.h"
 
-#include "Platform/OpenGL/OpenGLTexture.h"
+#include "RendererAPI/OpenGL/OpenGLTexture.h"
 
 namespace Marble {
 	Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)

@@ -1,6 +1,6 @@
 #include "mblpch.h"
 
-#include "Platform/OpenGL/OpenGLContext.h"
+#include "RendererAPI/OpenGL/OpenGLContext.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

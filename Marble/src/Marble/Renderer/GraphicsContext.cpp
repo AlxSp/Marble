@@ -2,7 +2,7 @@
 #include "Marble/Renderer/Renderer.h"
 #include "Marble/Renderer/GraphicsContext.h"
 //RendererAPI Headers
-#include "Platform/OpenGL/OpenGLContext.h"
+#include "RendererAPI/OpenGL/OpenGLContext.h"
 
 namespace Marble {
 

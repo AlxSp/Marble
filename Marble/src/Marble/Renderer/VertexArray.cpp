@@ -3,7 +3,7 @@
 #include "Marble/Renderer/VertexArray.h"
 #include "Marble/Renderer/Renderer.h"
 
-#include "Platform/OpenGL/OpenGLVertexArray.h"
+#include "RendererAPI/OpenGL/OpenGLVertexArray.h"
 
 namespace Marble {
 

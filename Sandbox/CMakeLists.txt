@@ -13,7 +13,10 @@ add_executable( Sandbox
     src/SandboxApp.cpp
 )
 
+target_compile_features(Sandbox PRIVATE cxx_std_17)
+
 target_link_libraries(Sandbox Marble)
+
 
 if(UNIX)
     target_link_libraries(Sandbox dl pthread stdc++fs)
