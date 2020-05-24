@@ -193,6 +193,11 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/glm)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/spdlog)
 ####
 
+####
+# Add EnTT as subdirectory
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/EnTT)
+####
+
 #Compile Marble with c++17 <
 target_compile_features(Marble PUBLIC cxx_std_17)
 
@@ -207,6 +212,7 @@ target_link_libraries( Marble
     glm
     spdlog
     stb_image
+    EnTT
 )
 
 #Set build type dependent definitions

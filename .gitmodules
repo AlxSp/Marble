@@ -14,3 +14,7 @@
 	path = Marble/thirdParty/glm
 	url = https://github.com/g-truc/glm
 	branch = master
+[submodule "Marble/thirdParty/EnTT"]
+	path = Marble/thirdParty/EnTT
+	url = git@github.com:skypjack/entt.git
+	branch = master
