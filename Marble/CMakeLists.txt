@@ -90,6 +90,7 @@ target_sources( Marble
         src/Marble/Renderer/Renderer.h
         src/Marble/Renderer/Renderer2D.cpp
         src/Marble/Renderer/Renderer2D.h
+        src/Marble/Renderer/Renderer2DQuadShader.h
         src/Marble/Renderer/RendererAPI.cpp
         src/Marble/Renderer/RendererAPI.h
         src/Marble/Renderer/Shader.cpp
@@ -216,12 +217,10 @@ target_link_libraries( Marble
 )
 
 #Set build type dependent definitions
-if(CMAKE_BUILD_TYPE EQUAL Debug)
-    target_compile_definitions(MBL_DEBUG)
-elseif(CMAKE_BUILD_TYPE EQUAL Release)
-    target_compile_definitions(MBL_RELEASE)
-elseif(CMAKE_BUILD_TYPE EQUAL Release)
-    target_compile_definitions(MBL_DIST)
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    target_compile_definitions(Marble PUBLIC MBL_DEBUG)
+elseif(CMAKE_BUILD_TYPE MATCHES Release)
+    target_compile_definitions(Marble PUBLIC MBL_RELEASE)
 endif()
 
 if(UNIX)

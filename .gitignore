@@ -6,7 +6,7 @@ bin-int/
 
 #Marble files
 *.log
-
+*.ini
 #Sandbox files 
 Sandbox/*.json
 Sandbox/*.ini

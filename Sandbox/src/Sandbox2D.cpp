@@ -15,6 +15,10 @@ struct Position {
 	float x;
 	float y;
 	float z;
+
+	// operator glm::vec3() const {
+
+	// }
 };
 
 struct Velocity {
@@ -24,15 +28,15 @@ struct Velocity {
 };
 
 struct Mass {
-	float x;
+	float value;
 };
 
 struct Radius {
-	float x;
+	float value;
 };
 
 struct Rotation {
-	float x;
+	float value;
 };
 
 struct Color {
@@ -43,19 +47,49 @@ struct Color {
 };
 
 struct Collided {
-	bool collided;
+	bool boolean;
 };
 
 
-//void UpdatePosition(ECS::EntityManager& EntityManager, float& dt) {
-//	EntityManager.System<Position, Velocity>().each(
-//		[&dt](auto& pos, auto& vel) {
-//			pos->x += vel->x * dt;
-//			pos->y += vel->y * dt;
-//		}
-//	);
-//}
+void CheckAreaBounds(entt::registry& reg, Area2D& area2D) {
+	reg.view<Position>().each(
+		[&area2D](auto& pos){
+			if (pos.x >= area2D.rightBorder) 	pos.x = area2D.leftBorder;
+			else if (pos.x < area2D.leftBorder) 	pos.x = area2D.rightBorder;
+			if (pos.y >= area2D.topBorder)   	pos.y = area2D.bottomBorder;
+			else if (pos.y < area2D.bottomBorder) pos.y = area2D.topBorder;	
+		}
+	);
+}
 
+void UpdatePosition(entt::registry& reg, float& dt) {
+	reg.view<Position, Velocity>().each(
+		[&dt](auto& pos, auto& vel) {
+			pos.x += vel.x * dt;
+			pos.y += vel.y * dt;
+		}
+	);
+}
+
+void UpdateMinimumVelocity(entt::registry& reg) {
+	reg.view<Velocity>().each(
+		[](auto& vel){
+			if (fabs(vel.x * vel.x + vel.y * vel.y) < 0.01f) {
+				vel.x = 0.0f;
+				vel.y = 0.0f;
+				//balls.Velocity[i] = glm::vec3(0.0f);
+			}
+		}
+	);
+}
+
+void UpdateCollsion(entt::registry& reg) {
+	auto view = reg.view<Position, Radius>();
+
+	for (auto entity: view) {
+		auto [pos, vel] = view.get<Position, Radius>(entity);
+	}
+}
 
 float randomNumberGen(float min, float max) {
 	std::random_device rd;
@@ -84,70 +118,27 @@ Sandbox2D::Sandbox2D()
 
 	rng.seed(123);
 
-	//auto PositonID = EntityManager.AddComponent<Position>();
-	//auto VelocityID = EntityManager.AddComponent<Velocity>();
-	//auto MassID = EntityManager.AddComponent<Mass>();
-	//auto RadiusID = EntityManager.AddComponent<Radius>();
-	//auto RotationID = EntityManager.AddComponent<Rotation>();
-	//auto ColorID = EntityManager.AddComponent<Color>();
-	//auto CollidedID = EntityManager.AddComponent<Collided>();
 
-	//auto PositonID2 = EntityManager.AddComponent<Position>();
+	// std::vector<Position> positions;
+	// //std::vector<Velocity> positions;
+	// std::vector<Mass> masses;
 
-
-	//std::cout << PositonID << std::endl;
-	//std::cout << VelocityID << std::endl;
-	//std::cout << MassID << std::endl;
-	//std::cout << RadiusID  << std::endl;
-	//std::cout << RotationID << std::endl;
-	//std::cout << ColorID << std::endl;
-
-	//std::cout << PositonID2 << std::endl;
-
-	//ECS::HeapAllocator<1024> heapData;
-
-	//ECS::MemBlk blk = heapData.allocate(sizeof(Position) * 3);
-
-	//Position* positionArrPtr = static_cast<Position*>(blk.ptr);
-
-	//Position pos1 = {1.0f, 1.0f, 1.0f};
-	//Position pos2 = { 2.0f, 2.0f, 2.0f };
-	//positionArrPtr[0] = pos1;
-	//positionArrPtr[1] = pos2;
-	//EntityManager.CreateArcheType<Position, Velocity, Mass, Radius, Rotation, Color, Collided>();
-
-	//EntityManager.CreateArcheType<Position, Velocity, Mass, Radius, Rotation, Color>();
-
-	//EntityManager.CreateArcheType<Position, Velocity, Mass, Radius, Rotation, Color, Collided>();
-
-	//EntityManager.CreateArcheType<Position, Velocity, Mass, Radius, Rotation, Color, Collided>();
-
-	////EntityManager.CreateArcheType2<Position, Velocity>();
-
-	//EntityManager.CreateArcheType<Velocity, Position, Mass, Radius, Rotation, Color, Collided>();
-
-	//EntityManager.CreateArcheType<>();
-
-	std::vector<Position> positions;
-	//std::vector<Velocity> positions;
-	std::vector<Mass> masses;
+	//std::cout << ASSETS("textures/forward_circle.png") << std::endl;
 
 	for (int i = 0; i < numBalls; i++){
-		//m_EntityManager->CreateEntity()
+
 		float ballMass = rng.randFloat(1, 5);
 
-		//ECS::EntityID ballID = EntityManager.Entity();
-		//
-		//ids.push_back(ballID);
+		auto entity = Registry.create();
+		ballEntities[i] = entity;
 
-		//masses.push_back({ ballMass });
-		//positions.push_back({ rng.randFloat(area->leftBorder, area->rightBorder), rng.randFloat(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f)) });
-		//EntityManager.Add<Position>(ballID, positions[i]);
-		//EntityManager.Add<Velocity>(ballID, { rng.randFloat(-3, 3), rng.randFloat(-3, 3), 0.0f });
-		//EntityManager.Add<Mass>(ballID, { ballMass });
-		//EntityManager.Add<Radius>(ballID, { ballMass * 0.5f });
-		//EntityManager.Add<Color>(ballID, {1.0f, 1.0f, 1.0f, 1.0f});
-		//EntityManager.Add<Collided>(ballID, { false });
+		Registry.emplace<Position>(entity, rng.randFloat(area->leftBorder, area->rightBorder), rng.randFloat(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f))); 
+		Registry.emplace<Velocity>(entity, rng.randFloat(-3, 3), rng.randFloat(-3, 3), 0.0f);
+		Registry.emplace<Mass>(entity, ballMass);
+		Registry.emplace<Rotation>(entity, 0.0f);
+		Registry.emplace<Radius>(entity, ballMass * 0.5f);
+		Registry.emplace<Color>(entity, 1.0f, 1.0f, 1.0f, 1.0f);
+		Registry.emplace<Collided>(entity, false);
 
 		balls.Position[i] = { rng.randFloat(area->leftBorder, area->rightBorder), rng.randFloat(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f))};
 		balls.Velocity[i] = { rng.randFloat(-3, 3), rng.randFloat(-3, 3), 0.0f };
@@ -156,23 +147,6 @@ Sandbox2D::Sandbox2D()
 		balls.Color[i]	  = glm::vec4(1.0f);
 		balls.collided[i] = false;
 	}
-
-	//for (int i = 0; i < numBalls; i++) {
-	//	std::cout << "IDs: " << ids[i] << std::endl;
-	//	/*std::cout << "OG Mass: " << masses[i].x << std::endl;
-	//	Mass* getMass = EntityManager.GetPtr<Mass>(ids[i]);
-	//	std::cout << "Got Mass: " << getMass->x << std::endl;
-
-	//	std::cout << "OG Positions: " << positions[i].x << positions[i].y << positions[i].z << std::endl;*/
-	//	Position* getPos = EntityManager.GetPtr<Position>(ids[i]);
-	//	std::cout << "Got Positions: " << getPos->x << " " << getPos->y << " " << getPos->z << std::endl;
-	//	Position getPosR = EntityManager.GetRef<Position>(ids[i]);
-	//	std::cout << "Got Positions Ref: " << getPosR.x << " " << getPosR.y << " " << getPosR.z << std::endl;
-	//	/*getPosR.x = 10.0f;
-	//	std::cout << "Got Positions: " << getPos->x << " " << getPos->y << " " << getPos->z << std::endl;*/
-
-	//}
-
 	
 }
 
@@ -203,6 +177,13 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		TimeSinceLastSecond = 0;
 	}
 
+
+	CheckAreaBounds(Registry, *area);
+
+	UpdatePosition(Registry, deltaTime);
+
+	UpdateMinimumVelocity(Registry);
+
 	for (int i = 0; i < numBalls; i++) {
 		if (balls.collided[i]){
 			balls.Color[i] = glm::vec4({ 1.0f, 0.0f, 0.0f, 1.0f });
@@ -213,6 +194,7 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		balls.collided[i] = false;		
 	}
 
+
 	for (int i = 0; i < numBalls; i++) {
 		if (balls.Position[i].x >= area->rightBorder) balls.Position[i].x = area->leftBorder;
 		if (balls.Position[i].x <	area->leftBorder) balls.Position[i].x = area->rightBorder;
@@ -220,8 +202,6 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		if (balls.Position[i].y < area->bottomBorder) balls.Position[i].y = area->topBorder;
 	}
 
-
-	//UpdatePosition(EntityManager, deltaTime);
 
 	for (int i = 0; i < numBalls; i++) {
 		balls.Position[i] += balls.Velocity[i] * deltaTime;
@@ -232,48 +212,106 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 			balls.Velocity[i] = glm::vec3(0.0f);
 		}
 	}
+
+	// auto view = Registry.view<Position, Velocity, Radius, Mass, Collided>();
 	
-	for (int i = 0; i < numBalls - 1; i++) {
-		for (int j = i + 1; j < numBalls; j++) {
-			if (DoCirclesOverlap(balls.Position[i].x, balls.Position[i].y, balls.Radius[i], balls.Position[j].x, balls.Position[j].y, balls.Radius[j])) {
+	// for(auto entity = view.begin(); entity != --view.end() ; entity++)
+	// {
+	// 	auto [pos, vel, rad, mass, coll] = view.get<Position, Velocity, Radius, Mass, Collided>(*entity);
+		
+	// 	auto nestedIterator = entity;
+	// 	std::next(nestedIterator);
+	// 	for(auto entitySecond = nestedIterator; entitySecond != view.end() ; entitySecond++)
+	// 	{
+	// 		auto [posSecond, velSecond, radSecond, massSecond, collSecond] = view.get<Position, Velocity, Radius, Mass, Collided>(*entitySecond);
+	// 		if (DoCirclesOverlap(pos.x, pos.y, rad.value, posSecond.x, posSecond.y, radSecond.value)) {
 
-				balls.collided[i] = true;
-				balls.collided[j] = true;
+				
+	// 			coll.boolean = true;
+	// 			collSecond.boolean = true;
 
-				float distance = sqrtf(pow((balls.Position[i].x - balls.Position[j].x), 2.0f) + pow((balls.Position[i].y - balls.Position[j].y), 2.0f));
+	// 			float distance = sqrtf(pow((pos.x - posSecond.x), 2.0f) + pow((pos.y - posSecond.y), 2.0f));
 
-				float overlap = (distance - balls.Radius[i] - balls.Radius[j]) * 0.5f;
+	// 			float overlap = (distance - rad.value - radSecond.value) * 0.5f;
 
-				float nx = (balls.Position[j].x - balls.Position[i].x) / distance;
-				float ny = (balls.Position[j].y - balls.Position[i].y) / distance;
+	// 			float nx = (posSecond.x - pos.x) / distance;
+	// 			float ny = (posSecond.y - pos.y) / distance;
 
-				balls.Position[i].x += overlap * nx;
-				balls.Position[i].y += overlap * ny;
+	// 			pos.x += overlap * nx;
+	// 			pos.y += overlap * ny;
 																	   
-				balls.Position[j].x -= overlap * nx;
-				balls.Position[j].y -= overlap * ny;
+	// 			posSecond.x -= overlap * nx;
+	// 			posSecond.y -= overlap * ny;
 			
-				float tx = -ny;
-				float ty = nx;
+	// 			float tx = -ny;
+	// 			float ty = nx;
 
-				float dpTan1 = balls.Velocity[i].x * tx + balls.Velocity[i].y * ty;
-				float dpTan2 = balls.Velocity[j].x * tx + balls.Velocity[j].y * ty;
+	// 			float dpTan1 = vel.x * tx + vel.y * ty;
+	// 			float dpTan2 = velSecond.x * tx + velSecond.y * ty;
 
-				float dpNorm1 = balls.Velocity[i].x * nx + balls.Velocity[i].y * ny;
-				float dpNorm2 = balls.Velocity[j].x * nx + balls.Velocity[j].y * ny;
+	// 			float dpNorm1 = vel.x * nx + vel.y * ny;
+	// 			float dpNorm2 = velSecond.x * nx + velSecond.y * ny;
 
-				float m1 = (dpNorm1 * (balls.Mass[i] - balls.Mass[j]) + 2.0f * balls.Mass[j] * dpNorm2) / (balls.Mass[i] + balls.Mass[j]);
-				float m2 = (dpNorm2 * (balls.Mass[j] - balls.Mass[i]) + 2.0f * balls.Mass[i] * dpNorm1) / (balls.Mass[i] + balls.Mass[j]);
+	// 			float m1 = (dpNorm1 * (mass.value - massSecond.value) + 2.0f * massSecond.value * dpNorm2) / (mass.value + massSecond.value);
+	// 			float m2 = (dpNorm2 * (massSecond.value - mass.value) + 2.0f * mass.value * dpNorm1) / (mass.value + massSecond.value);
 
-				balls.Velocity[i].x = tx * dpTan1 + nx * m1;
-				balls.Velocity[i].y = ty * dpTan1 + ny * m1;
+	// 			vel.x = tx * dpTan1 + nx * m1;
+	// 			vel.y = ty * dpTan1 + ny * m1;
 
-				balls.Velocity[j].x = tx * dpTan2 + nx * m2;
-				balls.Velocity[j].y = ty * dpTan2 + ny * m2;
-			}
-		}
-	}
+	// 			vel.x = tx * dpTan2 + nx * m2;
+	// 			vel.y = ty * dpTan2 + ny * m2;
+
+	// 		}
+			
+	// 	}	
+	// }
+	// for (auto entity: view) {
+	// 	auto [pos, rad] = view.get<Position, Radius>(entity);
+
+
+	// }
 	
+	// for (int i = 0; i < numBalls - 1; i++) {
+	// 	for (int j = i + 1; j < numBalls; j++) {
+	// 		if (DoCirclesOverlap(balls.Position[i].x, balls.Position[i].y, balls.Radius[i], balls.Position[j].x, balls.Position[j].y, balls.Radius[j])) {
+
+	// 			balls.collided[i] = true;
+	// 			balls.collided[j] = true;
+
+	// 			float distance = sqrtf(pow((balls.Position[i].x - balls.Position[j].x), 2.0f) + pow((balls.Position[i].y - balls.Position[j].y), 2.0f));
+
+	// 			float overlap = (distance - balls.Radius[i] - balls.Radius[j]) * 0.5f;
+
+	// 			float nx = (balls.Position[j].x - balls.Position[i].x) / distance;
+	// 			float ny = (balls.Position[j].y - balls.Position[i].y) / distance;
+
+	// 			balls.Position[i].x += overlap * nx;
+	// 			balls.Position[i].y += overlap * ny;
+																	   
+	// 			balls.Position[j].x -= overlap * nx;
+	// 			balls.Position[j].y -= overlap * ny;
+			
+	// 			float tx = -ny;
+	// 			float ty = nx;
+
+	// 			float dpTan1 = balls.Velocity[i].x * tx + balls.Velocity[i].y * ty;
+	// 			float dpTan2 = balls.Velocity[j].x * tx + balls.Velocity[j].y * ty;
+
+	// 			float dpNorm1 = balls.Velocity[i].x * nx + balls.Velocity[i].y * ny;
+	// 			float dpNorm2 = balls.Velocity[j].x * nx + balls.Velocity[j].y * ny;
+
+	// 			float m1 = (dpNorm1 * (balls.Mass[i] - balls.Mass[j]) + 2.0f * balls.Mass[j] * dpNorm2) / (balls.Mass[i] + balls.Mass[j]);
+	// 			float m2 = (dpNorm2 * (balls.Mass[j] - balls.Mass[i]) + 2.0f * balls.Mass[i] * dpNorm1) / (balls.Mass[i] + balls.Mass[j]);
+
+	// 			balls.Velocity[i].x = tx * dpTan1 + nx * m1;
+	// 			balls.Velocity[i].y = ty * dpTan1 + ny * m1;
+
+	// 			balls.Velocity[j].x = tx * dpTan2 + nx * m2;
+	// 			balls.Velocity[j].y = ty * dpTan2 + ny * m2;
+	// 		}
+	// 	}
+	// }
+
 	//std::cout << ECS::Entity::Create() << std::endl;
 	// Render
 	{
@@ -290,10 +328,18 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		//testBall->OnRender();
 		area->OnRender();
 		//Marble::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, Area2D, { 0/255.0f, 85/255.0f, 130/255.0f, 1.0f });
-		for (int i = 0; i < numBalls; i++) {
-			Marble::Renderer2D::DrawRotatedQuad(balls.Position[i], glm::vec2(balls.Radius[i] * 2), balls.Rotation[i], balls.m_Texture, 1.0f, balls.Color[i]);
-			//cellVector[i].OnRender();
+		int yr = 0;
+		auto renderView = Registry.view<Position, Radius, Rotation, Color>();
+		for (auto entity: renderView){
+			auto [pos, rad, rot, color] = renderView.get<Position, Radius, Rotation, Color>(entity);
+			Marble::Renderer2D::DrawRotatedQuad(reinterpret_cast<glm::vec3&>(pos), glm::vec2(rad.value * 2), rot.value, balls.m_Texture, 1.0f, reinterpret_cast<glm::vec4&>(color));
 		}
+
+
+		// for (int i = 0; i < numBalls; i++) {
+		// 	Marble::Renderer2D::DrawRotatedQuad(balls.Position[i], glm::vec2(balls.Radius[i] * 2), balls.Rotation[i], balls.m_Texture, 1.0f, balls.Color[i]);
+		// 	//cellVector[i].OnRender();
+		// }
 		//Marble::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.1f }, { 10.0f, 10.0f }, m_TextureShader);
 		Marble::Renderer2D::EndScene();
 	}

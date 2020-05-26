@@ -2,11 +2,14 @@
 
 #include "Marble.h"
 #include "Area2D.h"
+#include <entt/entt.hpp>
+
+#include "AssetPath.h"
 //#include "Marble/ECS/Entity/EntityManager.h"
 //#include "Marble/ECS/Memory/MemoryAllocator.h"
 
 
-#define MaxBalls 500
+#define MaxBalls 50
 
 class Sandbox2D : public Marble::Layer {
 public:
@@ -31,15 +34,20 @@ private:
 		std::array<glm::vec4, MaxBalls> Color;
 		std::array<bool, MaxBalls> collided;
 
-		Marble::Ref<Marble::Texture2D> m_Texture = Marble::Texture2D::Create("assets/textures/forward_circle.png");
+		Marble::Ref<Marble::Texture2D> m_Texture = Marble::Texture2D::Create(ASSETS("textures/forward_circle.png"));
 	};
 
 	Balls balls;
 
 	Marble::Lehmer32 rng;
 
+	std::array<entt::entity, MaxBalls> ballEntities;
+
+	entt::registry Registry;
+
 	/*std::vector<ECS::EntityID> ids;
 
+	registry
 
 	ECS::EntityManager EntityManager;*/
 

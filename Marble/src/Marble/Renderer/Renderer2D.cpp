@@ -1,6 +1,7 @@
 #include "mblpch.h"
 
 #include "Marble/Renderer/Renderer2D.h"
+#include "Marble/Renderer/Renderer2DQuadShader.h"
 #include "Marble/Renderer/Shader.h"
 #include "Marble/Renderer/RenderCommand.h"
 
@@ -81,7 +82,7 @@ namespace Marble {
 		for (int i = 0; i < s_Data.MaxTextures; i++)
 			samplers[i] = i;
 
-		s_Data.TextureShader = Shader::Create("assets/shaders/BatchShader.glsl");
+		s_Data.TextureShader = Shader::Create("BatchShader", quadVertexShader, quadFragmentShader);
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextures);
 
