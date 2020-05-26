@@ -132,7 +132,7 @@ Sandbox2D::Sandbox2D()
 		auto entity = Registry.create();
 		ballEntities[i] = entity;
 
-		Registry.emplace<Position>(entity, rng.randFloat(area->leftBorder, area->rightBorder), rng.randFloat(area->bottomBorder, area->topBorder), (i / (numBalls + 1.0f))); 
+		Registry.emplace<Position>(entity, rng.randFloat(area->leftBorder, area->rightBorder), rng.randFloat(area->bottomBorder, area->topBorder), 0.2); 
 		Registry.emplace<Velocity>(entity, rng.randFloat(-3, 3), rng.randFloat(-3, 3), 0.0f);
 		Registry.emplace<Mass>(entity, ballMass);
 		Registry.emplace<Rotation>(entity, 0.0f);
@@ -328,17 +328,17 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		//testBall->OnRender();
 		area->OnRender();
 		//Marble::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, Area2D, { 0/255.0f, 85/255.0f, 130/255.0f, 1.0f });
-		int yr = 0;
 		auto renderView = Registry.view<Position, Radius, Rotation, Color>();
 		for (auto entity: renderView){
 			auto [pos, rad, rot, color] = renderView.get<Position, Radius, Rotation, Color>(entity);
 			Marble::Renderer2D::DrawRotatedQuad(reinterpret_cast<glm::vec3&>(pos), glm::vec2(rad.value * 2), rot.value, balls.m_Texture, 1.0f, reinterpret_cast<glm::vec4&>(color));
+			//std::cout << yr << ": " << pos.x << " " << pos.y << " " << pos.z << std::endl; 
 		}
 
-
+		// std::cout << "Reg render:" << std::endl;
 		// for (int i = 0; i < numBalls; i++) {
-		// 	Marble::Renderer2D::DrawRotatedQuad(balls.Position[i], glm::vec2(balls.Radius[i] * 2), balls.Rotation[i], balls.m_Texture, 1.0f, balls.Color[i]);
-		// 	//cellVector[i].OnRender();
+		// 	std::cout << i << ": " << balls.Position[i].x << " " << balls.Position[i].y << " " << balls.Position[i].z << std::endl; 
+		// 	// Marble::Renderer2D::DrawRotatedQuad(balls.Position[i], glm::vec2(balls.Radius[i] * 2), balls.Rotation[i], balls.m_Texture, 1.0f, balls.Color[i]);
 		// }
 		//Marble::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.1f }, { 10.0f, 10.0f }, m_TextureShader);
 		Marble::Renderer2D::EndScene();

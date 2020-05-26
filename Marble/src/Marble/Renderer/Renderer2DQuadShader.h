@@ -38,7 +38,10 @@ namespace Marble {
                                 uniform sampler2D u_Textures[32];
                                 
                                 void main(){
-                                    a_Color = texture(u_Textures[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color; 
+                                    vec4 texColor = texture(u_Textures[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color;
+                                    if (texColor.a < 0.1)
+                                        discard;
+                                    a_Color = texColor; 
                                 })";
 
 
