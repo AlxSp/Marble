@@ -8,8 +8,8 @@ project(
     LANGUAGES CXX
 )
 
-add_library( Marble STATIC 
-    src/Marble.h        
+add_library( Marble STATIC
+    src/Marble.h
 )
 
 #Precompiled headers
@@ -207,7 +207,7 @@ target_include_directories( Marble
 )
 
 target_link_libraries( Marble
-    glfw 
+    glfw
     imgui
     Glad
     glm
@@ -227,13 +227,13 @@ if(UNIX)
     set_target_properties( Marble PROPERTIES POSITION_INDEPENDENT_CODE ON)
     #set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     target_link_libraries( Marble
-        GL 
-        X11 
-        Xrandr 
+        GL
+        X11
+        Xrandr
         Xi
     )
 elseif(WIN32)
-    target_link_libraries( Marble 
+    target_link_libraries( Marble
         opengl32.lib
     )
 endif()
