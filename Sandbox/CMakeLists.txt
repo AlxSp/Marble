@@ -30,5 +30,12 @@ if(UNIX)
 
 elseif(WIN32)
     target_link_libraries(Sandbox opengl32.lib)
+
+    add_custom_command(
+        TARGET Sandbox POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:Sandbox>/assets/
+    )
+    target_compile_definitions(Sandbox PUBLIC SANDBOX_ASSETS_PATH="$<TARGET_FILE_DIR:Sandbox>")
 endif()
 

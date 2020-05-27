@@ -23,7 +23,7 @@ public:
 	void OnEvent(Marble::Event& e) override;
 
 private:
-	int numBalls = 50;
+	int numBalls = 10;
 
 	struct Balls {
 		std::array<glm::vec3, MaxBalls> Position;

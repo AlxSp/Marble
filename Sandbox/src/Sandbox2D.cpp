@@ -132,7 +132,7 @@ Sandbox2D::Sandbox2D()
 		auto entity = Registry.create();
 		ballEntities[i] = entity;
 
-		Registry.emplace<Position>(entity, rng.randFloat(area->leftBorder, area->rightBorder), rng.randFloat(area->bottomBorder, area->topBorder), 0.2); 
+		Registry.emplace<Position>(entity, rng.randFloat(area->leftBorder, area->rightBorder), rng.randFloat(area->bottomBorder, area->topBorder), 0.2f); 
 		Registry.emplace<Velocity>(entity, rng.randFloat(-3, 3), rng.randFloat(-3, 3), 0.0f);
 		Registry.emplace<Mass>(entity, ballMass);
 		Registry.emplace<Rotation>(entity, 0.0f);
@@ -213,19 +213,21 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 		}
 	}
 
-	// auto view = Registry.view<Position, Velocity, Radius, Mass, Collided>();
+	auto view = Registry.view<Position, Velocity, Radius, Mass, Collided>();
 	
-	// for(auto entity = view.begin(); entity != --view.end() ; entity++)
+	// for(auto entity = view.begin(); entity != --view.end() ; ++entity)
 	// {
 	// 	auto [pos, vel, rad, mass, coll] = view.get<Position, Velocity, Radius, Mass, Collided>(*entity);
 		
-	// 	auto nestedIterator = entity;
-	// 	std::next(nestedIterator);
-	// 	for(auto entitySecond = nestedIterator; entitySecond != view.end() ; entitySecond++)
+	// 	for(auto entitySecond = entity; entitySecond != view.end() ; ++entitySecond)
 	// 	{
-	// 		auto [posSecond, velSecond, radSecond, massSecond, collSecond] = view.get<Position, Velocity, Radius, Mass, Collided>(*entitySecond);
-	// 		if (DoCirclesOverlap(pos.x, pos.y, rad.value, posSecond.x, posSecond.y, radSecond.value)) {
+	// 		if (entity == entitySecond){
+	// 			continue;
+	// 		}
 
+	// 		auto [posSecond, velSecond, radSecond, massSecond, collSecond] = view.get<Position, Velocity, Radius, Mass, Collided>(*entitySecond);
+			
+	// 		if (DoCirclesOverlap(pos.x, pos.y, rad.value, posSecond.x, posSecond.y, radSecond.value)) {
 				
 	// 			coll.boolean = true;
 	// 			collSecond.boolean = true;
@@ -260,15 +262,9 @@ void Sandbox2D::OnUpdate(Marble::TimeStep ts)
 
 	// 			vel.x = tx * dpTan2 + nx * m2;
 	// 			vel.y = ty * dpTan2 + ny * m2;
-
 	// 		}
 			
 	// 	}	
-	// }
-	// for (auto entity: view) {
-	// 	auto [pos, rad] = view.get<Position, Radius>(entity);
-
-
 	// }
 	
 	// for (int i = 0; i < numBalls - 1; i++) {
