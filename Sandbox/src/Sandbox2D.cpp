@@ -118,13 +118,6 @@ Sandbox2D::Sandbox2D()
 
 	rng.seed(123);
 
-
-	// std::vector<Position> positions;
-	// //std::vector<Velocity> positions;
-	// std::vector<Mass> masses;
-
-	//std::cout << ASSETS("textures/forward_circle.png") << std::endl;
-
 	for (int i = 0; i < numBalls; i++){
 
 		float ballMass = rng.randFloat(1, 5);

@@ -35,4 +35,17 @@ namespace Marble {
 		uint32_t m_RendererID;
 		uint32_t m_Count;
 	};
+
+	class OpenGLFrameBuffer : public FrameBuffer {
+	public:
+		OpenGLFrameBuffer();
+		virtual ~OpenGLFrameBuffer();
+
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
+	
+		virtual void AttachTexture2D(uint32_t textureID) const override;
+	private:
+		uint32_t m_RendererID;
+	};
 }

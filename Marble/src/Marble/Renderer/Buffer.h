@@ -123,4 +123,26 @@ namespace Marble {
 		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count, BufferType type = BufferType::Static);
 
 	};
+
+	class FrameBuffer {
+	public:
+		virtual ~FrameBuffer() = default;
+
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
+		
+		virtual void AttachTexture2D(uint32_t textureID) const = 0;
+
+		static Ref<FrameBuffer>  Create();
+	};
+
+	// class RenderBuffer {
+	// public:
+	// 	virtual ~RenderBuffer() = default;
+
+	// 	virtual void Bind() const = 0;
+	// 	virtual void Unbind() const = 0;
+
+	// 	static Ref<RenderBuffer> Create();
+	// }
 }

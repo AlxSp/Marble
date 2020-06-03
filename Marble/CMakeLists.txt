@@ -167,9 +167,20 @@ add_library( imgui STATIC
     thirdParty/imgui/imgui_demo.cpp
 )
 
+target_compile_definitions( imgui
+    PUBLIC 
+        IMGUI_DEFINE_MATH_OPERATORS
+)
+
 target_include_directories( imgui
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/imgui
 )
+
+# target_compile_definitions( imgui 
+#     PUBLIC 
+#         IMGUI_DEFINE_PLACEMENT_NEW
+#         IMGUI_DEFINE_MATH_OPERATORS
+# )
 ####
 
 ####

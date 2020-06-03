@@ -103,4 +103,46 @@ namespace Marble {
 	
 	//// Index Buffer /////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////
+
+
+	///////////////////////////////////////////////////////////////////////
+	//// Frame Buffer /////////////////////////////////////////////////////
+
+	OpenGLFrameBuffer::OpenGLFrameBuffer()
+	{
+		MBL_PROFILE_FUNCTION();
+
+		glCreateFramebuffers(1, &m_RendererID);
+	}
+
+	OpenGLFrameBuffer::~OpenGLFrameBuffer()
+	{
+		MBL_PROFILE_FUNCTION();
+
+		glDeleteFramebuffers(1, &m_RendererID);
+	}
+
+	void OpenGLFrameBuffer::Bind() const
+	{
+		MBL_PROFILE_FUNCTION();
+
+		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);  
+	}
+
+	void OpenGLFrameBuffer::Unbind() const
+	{
+		MBL_PROFILE_FUNCTION();
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	}
+
+	void OpenGLFrameBuffer::AttachTexture2D(uint32_t textureID) const
+	{
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureID, 0);
+	}
+
+
+	//// Frame Buffer /////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 }

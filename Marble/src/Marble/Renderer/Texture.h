@@ -17,6 +17,8 @@ namespace Marble {
 		virtual void Bind(uint32_t slot = 0) const = 0;
 		//virtual void Unbind(uint32_t slot = 0) const = 0;
 
+		virtual uint32_t GetRenderID() const = 0;
+
 		virtual bool operator == (const Texture& other) const = 0;
 	};
 
