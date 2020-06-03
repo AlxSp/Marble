@@ -6,12 +6,14 @@
 #include "RendererAPI/OpenGL/OpenGLBuffer.h"
 #include "AssetPath.h"
 
+#include <filesystem>
+
 #define MaxBalls 50
 
 class Editor : public Marble::Layer {
 public:
 	Editor(); 
-	virtual ~Editor() = default;
+	virtual ~Editor(); // = default;
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 
@@ -33,6 +35,8 @@ public:
 	int32_t selectedEntityIndex = -1;
 
 private:
+	std::filesystem::path ProjectPath = "/home/Alex/dev/MarbleDev/Projects/Path";
+
 	Marble::OrthographicCameraController m_CameraController;
 
 

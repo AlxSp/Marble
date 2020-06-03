@@ -17,6 +17,13 @@ Editor::Editor()
 	EditorRenderBuffer->Unbind();
 
 	Components.push_back(new EditorComponent<Position>("Position"));
+	Components.push_back(new EditorComponent<Size2D>("Size2D"));
+	Components.push_back(new EditorComponent<ColorRGBA>("ColorRGBA"));
+	Components.push_back(new EditorComponent<Renderable>("Renderable"));
+}
+
+Editor::~Editor(){
+	
 }
 
 void Editor::OnAttach()
@@ -49,7 +56,12 @@ void Editor::OnUpdate(Marble::TimeStep ts)
 		Marble::Renderer2D::ResetStats();
 		Marble::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		Marble::Renderer2D::DrawQuad({0,0}, {1, 1}, {1,1,1,1});
+		auto view = Registry.view<Position, Size2D, ColorRGBA, Renderable>();
+
+		for(auto entity: view) {
+			Marble::Renderer2D::DrawQuad(reinterpret_cast<glm::vec3&>(view.get<Position>(entity)), reinterpret_cast<glm::vec2&>(view.get<Size2D>(entity)), reinterpret_cast<glm::vec4&>(view.get<ColorRGBA>(entity)));
+			//std::cout << "Found Entity" << std::endl;
+		}
 
 		Marble::Renderer2D::EndScene();
 	}
@@ -107,9 +119,9 @@ void Editor::OnImGuiRender()
 
 		if (entityNodeExpanded) {
 			for (auto& componentId : EntityVector[i].ComponentIDs){
-				ImGui::Indent();
+				//ImGui::Indent();
 				ImGui::Text(Components[componentId]->Name.c_str());
-				ImGui::Unindent();
+				//ImGui::Unindent();
 			}
 			ImGui::TreePop();
 		}
@@ -128,7 +140,7 @@ void Editor::OnImGuiRender()
 		ImGui::Begin(EntityVector[selectedEntityIndex].Name.c_str(), nullptr, ImGuiWindowFlags_NoCollapse);
 		bool expandedComponet = false;
 		for (auto& id : EntityVector[selectedEntityIndex].ComponentIDs ){
-			expandedComponet = ImGui::TreeNodeEx(Components[id]->Name.c_str(), ImGuiTreeNodeFlags_OpenOnArrow);
+			expandedComponet = ImGui::TreeNodeEx(Components[id]->Name.c_str(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_DefaultOpen);
 			if (expandedComponet) {
 
 				Components[id]->ShowInfo(Registry, EntityVector[selectedEntityIndex].ID);
