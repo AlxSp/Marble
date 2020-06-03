@@ -26,7 +26,9 @@ endif()
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 add_subdirectory(Marble)
+add_subdirectory(Editor)
 add_subdirectory(Sandbox)
+
 
 
 # install(TARGETS Marble DESTINATION bin)

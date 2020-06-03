@@ -8,12 +8,6 @@ add_executable( Sandbox
     src/AssetPath.h
     src/Area2D.cpp
     src/Area2D.h
-    src/Ball.h
-    src/Components.h
-    src/EditorComponent.h
-    src/EditorComponent.cpp
-    src/Editor.h
-    src/Editor.cpp
     src/Sandbox2D.cpp
     src/Sandbox2D.h
     src/SandboxApp.cpp
