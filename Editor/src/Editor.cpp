@@ -24,6 +24,21 @@ Editor::Editor()
 
 Editor::~Editor(){
 	
+	std::ostringstream storage;
+
+	auto view = Registry.view<Position, Size2D, ColorRGBA, Renderable>();
+
+	for(auto entity: view) {
+		//Marble::Renderer2D::DrawQuad(reinterpret_cast<glm::vec3&>(view.get<Position>(entity)), reinterpret_cast<glm::vec2&>(view.get<Size2D>(entity)), reinterpret_cast<glm::vec4&>(view.get<ColorRGBA>(entity)));
+		
+		//memcpy(storage, )
+		//storage << (view.get<Position>(entity));
+		
+		//std::cout << "Found Entity" << std::endl;
+	}
+	//entt::snapshot{Registry}.entities(nullptr); //.component<Position>()
+
+
 }
 
 void Editor::OnAttach()

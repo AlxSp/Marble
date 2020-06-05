@@ -8,7 +8,7 @@
 
 #include <filesystem>
 
-#define MaxBalls 50
+
 
 class Editor : public Marble::Layer {
 public:
@@ -35,14 +35,14 @@ public:
 	int32_t selectedEntityIndex = -1;
 
 private:
-	std::filesystem::path ProjectPath = "/home/Alex/dev/MarbleDev/Projects/Path";
+	std::filesystem::path ProjectPath = "/home/Alex/dev/MarbleDev/Projects/Test";
 
 	Marble::OrthographicCameraController m_CameraController;
 
 
 	entt::registry Registry;
 	std::vector<EditorEntity> EntityVector;
-	std::vector<BaseEditorComponent*> Components;// = {"Position"};
+	std::vector<BaseEditorComponent*> Components;
 
 
 	//Scene ViewPort Variables

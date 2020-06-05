@@ -2,7 +2,10 @@
 
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
-Project(Sandbox)
+Project(Sandbox
+        VERSION 0.1
+        LANGUAGES CXX
+)
 
 add_executable( Sandbox
     src/AssetPath.h

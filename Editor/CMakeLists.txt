@@ -1,15 +1,19 @@
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
-Project(Editor)
+Project(Editor
+        VERSION 0.1
+        LANGUAGES CXX
+)
 
 add_executable( Editor
     src/AssetPath.h
+    src/Archive.h
     src/Components.h
     src/EditorComponent.h
     src/EditorComponent.cpp
     src/Editor.h
     src/Editor.cpp
-    src/SandboxApp.cpp
+    src/EditorApp.cpp
 )
 
 target_compile_features(Editor PRIVATE cxx_std_17)
